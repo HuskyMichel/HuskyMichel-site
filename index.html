@@ -1,116 +1,168 @@
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
-		<meta charset="utf-8"/>
-		<link rel="icon" href="Photo de profil/titre.jpg">
-		<title>Réseaux - Management</title>
+	<meta charset="utf-8"/>
+	<link rel="icon" href="Photo de profil/titre.jpg">
+  <title>Réseaux - Management</title>
 
-	<style>
-		body{
-		background:#f5f5f5;
-		font-family:Arial, sans-serif;
-		margin:0;
-		padding:0;
-		}
+		<style>
+			body{
+			margin:0;
+			padding:0;
+			font-family:Arial, sans-serif;
+			background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+			}
 
-		.galerie{
-		display:flex;
-		justify-content:center;
-		gap:30px;
-		flex-wrap:wrap;
-		padding:40px;
-		}
+			/* HEADER */
+			.header{
+			display:flex;
+			justify-content:center;
+			padding:20px;
+			background:white;
+			box-shadow:0 4px 10px rgba(0,0,0,0.1);
+			}
 
-		.carte{
-		width:260px;
-		background:white;
-		border-radius:20px;
-		padding:20px;
-		text-align:center;
-		box-shadow:0 8px 20px rgba(0,0,0,0.15);
-		transition:0.3s;
-		animation:apparition 0.8s ease;
-		}
+			.logo{
+			width:140px;
+			transition:0.3s;
+			}
 
-		.carte:hover{
-		transform:translateY(-10px);
-		}
+			.logo:hover{
+			transform:scale(1.05);
+			}
 
-		.carte img{
-		width:100%;
-		border-radius:15px;
-		transition:0.3s;
-		}
+			/* TITRE */
+			.titre{
+			text-align:center;
+			margin-top:30px;
+			}
 
-		.carte img:hover{
-		transform:scale(1.05);
-		}
+			.intro{
+			text-align:center;
+			color:#555;
+			margin-bottom:20px;
+			}
 
-		.carte h2{
-		margin-top:15px;
-		margin-bottom:10px;
-		}
+			/* GALERIE */
+			.galerie{
+			display:flex;
+			justify-content:center;
+			gap:30px;
+			flex-wrap:wrap;
+			padding:40px;
+			}
 
-		.carte p{
-		color:#444;
-		}
+			/* CARTES */
+			.carte{
+			width:260px;
+			background:white;
+			border-radius:20px;
+			padding:20px;
+			text-align:center;
+			box-shadow:0 8px 20px rgba(0,0,0,0.12);
+			border:1px solid rgba(0,0,0,0.05);
+			transition:0.3s;
+			animation:apparition 0.8s ease;
+			}
 
-		.bouton{
-		display:inline-block;
-		margin-top:15px;
-		padding:12px 22px;
-		background:black;
-		color:white;
-		text-decoration:none;
-		border-radius:10px;
-		transition:0.3s;
-		}
+			.carte:hover{
+			transform:translateY(-12px) scale(1.02);
+			box-shadow:0 12px 30px rgba(0,0,0,0.2);
+			}
 
-		.bouton:hover{
-		background:#333;
-		transform:scale(1.05);
-		}
+			.carte img{
+			width:100%;
+			border-radius:15px;
+			transition:0.3s;
+			}
 
-		@keyframes apparition{
-		from{
-        opacity:0;
-        transform:translateY(30px);
-		}
-		to{
-        opacity:1;
-        transform:translateY(0);
-		}
-		}
-	</style>
-	
+			.carte img:hover{
+			transform:scale(1.05);
+			}
+
+			.carte h2{
+			margin-top:15px;
+			margin-bottom:10px;
+			}
+
+			.carte p{
+			color:#444;
+			}
+
+			/* BOUTON */
+			.bouton{
+			display:inline-block;
+			margin-top:15px;
+			padding:12px 22px;
+			background:black;
+			color:white;
+			text-decoration:none;
+			border-radius:10px;
+			transition:0.3s;
+			}
+
+			.bouton:hover{
+			background:#333;
+			transform:scale(1.05);
+			}
+
+			/* ANIMATION */
+			@keyframes apparition{
+			from{
+			opacity:0;
+			transform:translateY(30px);
+			}
+			to{
+			opacity:1;
+			transform:translateY(0);
+			}
+			}
+
+			/* RESPONSIVE */
+			@media (max-width: 768px){
+			.galerie{
+			flex-direction:column;
+			align-items:center;
+			}
+
+			.carte{
+			width:85%;
+			}
+			}
+		</style>
 	</head>
-	
-	<body>
-		<h1><a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" width="150" alt="photo de profil HuskyMichel"></a></h1>
-		<hr>
 
-		<center><h1>Voici les différents réseaux que manage HuskyMichel !</h1></center>
-		<hr>
-		
+	<body>
+
+		<!-- HEADER -->
+		<header class="header">
+			<a href="https://huskymichel.github.io/HuskyMichel-site/">
+			<img src="Photo de profil/Accueil.jpg" class="logo" alt="Accueil"></a>
+		</header>
+
+		<h1 class="titre">Voici les différents réseaux que manage HuskyMichel !</h1>
+		<p class="intro">Découvrez les différents projets et chaînes gérés par HuskyMichel.</p>
+
 		<div class="galerie">
+
 			<div class="carte">
-				<img src="Photo de profil/Photo de profil Gerrix.jpg" alt="photo de profil Gerrix">
+				<img src="Photo de profil/Photo de profil Gerrix.jpg" alt="Gerrix">
 				<h2>Gerrix</h2>
-				<p>Description</p>
+				<p>YouTubeur gaming +10K, lives réguliers et créer une communauté</p>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/Gerrix/gerrix.html" class="bouton">Voir le profil</a>
 			</div>
-		
+
 			<div class="carte">
-				<img src="Photo de profil/Photo de profil XSU XZENX.jpg" alt="photo de profil XSU LIFEZEN">
+				<img src="Photo de profil/Photo de profil XSU XZENX.jpg" alt="XSU LIFEZEN">
 				<h2>XSU LIFEZEN</h2>
-				<p>Maintenant je suis un youtubeur qui poste du contenu pour le plaisir et mon but c’est d’avoir une communauté avec qui partager de bons moments.</p>
+				<p>Créateur de contenu YouTube pour partager et créer une communauté.</p>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html" class="bouton">Voir le profil</a>
 			</div>
 
 			<div class="carte">
-				<img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg" alt="photo de profil Veenzoxx Officiel">
+				<img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg" alt="Veenzoxx">
 				<h2>Veenzoxx Officiel</h2>
-				<p>J’aime jouer a Fortnite faire des vidéos sur YouTube et je compte me lancer sur Twitch</p>
+				<p>Gaming Fortnite + projets YouTube et Twitch.</p>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html" class="bouton">Voir le profil</a>
 			</div>
 
