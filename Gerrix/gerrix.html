@@ -1,57 +1,241 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8"/>
-		<link rel="icon" href="Photo de profil/logo Gerrix.jpg">
-        <title>Gerrix - Réseaux</title>
-    </head>
-    <body>
-		<h1><a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" width="150" alt="photo de phofil HuskyMichel"></a></h1>
-    	<hr>
-    	<center><img src="Photo de profil/Photo de profil Gerrix.jpg" alt="photo de profil Gerrix"> <h1>Gerrix</h1></center>
-		<hr>
-		<h2><a href="https://www.youtube.com/@GerrixRR">YouTube : Gerrix</a></h2>
-		<h3>Abonné vous pour rejoindre la team RR ❤️<br>
-			<br>
-			Et on rusch les 100 000 abonné svp Abonné vous<br> 
-			<br>
-			Mon snap: guillaumeme9681<br>
-			<br>
-			Pseudo fortnite:  GerrixRR<br>
-			<br>
-			Ma passion c'est le rap freestyle 😉🤩🔥<br>
-			<br>
-			<br>
-			Mon pseudo Minecraft<br>
-			Gerrix 2<br>
-			<br>
-			Mon pseudo Roblox<br>
-			<br>
-			Gerrix_YT<br>
-			<br>
-			<br>
-			Miniature de la pp : <a href="https://www.youtube.com/@sona_officiel">@sona_officiel</a></h3><br>
-		<hr>
-		<h2><a href="https://www.tiktok.com/@gerrixrr">TikTok : Gerrix</a></h2>
-		<h3>Je suis un YouTubeur a plus de 9K😁 je fais du rocket league🏎 fortnite🔫 minecraft🟩 comme type de contenu🎮 ma chaîne YouTube c’est GerrixRR 😉</h3><br>
-		<hr>
-		<h2><a href="https://www.twitch.tv/gerrixrr">Twitch : Gerrix</a></h2>
-		<h3>Abonnez vous à ma chaîne Youtube GerrixRR</h3><br>
-		<hr>
-		<h2><a href="https://discord.com/invite/f3UJd7wrnq">Discord : Gerrix</a></h2>
-		<h3>Le serveur des RR</h3><br>
-		<hr>
-		<h2><a href="https://www.instagram.com/gu.illaume6207?igsh=MWt0bW5oNm8zbGNobA%3D%3D">Instagram : Gerrix</a></h2>
-		<h3>Mon rêve c'est d'atteindre les 1 millions d'abonnés et ma chaîne Youtube est <a href="https://www.youtube.com/@GerrixRR">@GerrixRR</a></h3><br>
-		<hr>
-		<h2><a href="https://x.com/GerrixRR?t=swlzfVlYPec76VKGPLip5g&s=09">X : Gerrix</a></h2>
-		<h3>Bonjour a tous je suis un YouTubeur a presque 10K d’abonner sur YouTube donc n’hesite pas a t'abonner sur cette chaine merci a toi 😁</h3><br>
-		<hr>
-		<h2><a href="https://www.snapchat.com/@gerrixrr?share_id=NBNuiTWs-cw&locale=fr-FR">Snapchat : Gerrix</a></h2>
-		<h3>Ajoute-moi sur Snapchat !</h3><br>
-		<hr>
-		<h2><a href="https://www.whatsapp.com/channel/0029Vb65BpXLY6cz0iDWLG2U">WhatsApp : Gerrix</a></h2>
-		<h3>Abonner vous rush 10 000 👍😁😊✨🔥</h3><br>
-		<hr>
-    </body>
+<head>
+<meta charset="utf-8"/>
+<link rel="icon" href="Photo de profil/logo Gerrix.jpg">
+<title>Gerrix - Réseaux</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+}
+
+/* ACCUEIL CENTRÉ */
+.topbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  background:white;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.home-img{
+  width:140px;
+  transition:0.3s;
+}
+
+.home-img:hover{
+  transform:scale(1.08);
+}
+
+/* PROFIL */
+.profil{
+  text-align:center;
+  margin-top:30px;
+}
+
+.profil img{
+  width:175px;
+  border-radius:15px;
+}
+
+.profil h1{
+  margin-top:10px;
+}
+
+/* GALERIE */
+.galerie{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:25px;
+  padding:40px;
+}
+
+.carte{
+  width:280px;
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  transition:0.3s;
+}
+
+.carte:hover{
+  transform:translateY(-10px) scale(1.02);
+  box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+
+.carte a{
+  display:inline-block;
+  margin-top:10px;
+  padding:12px 20px;
+  background:black;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  transition:0.3s;
+}
+
+.carte a:hover{
+  background:#333;
+  transform:scale(1.05);
+}
+
+.carte p{
+  color:#444;
+}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+  .galerie{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .carte{
+    width:85%;
+  }
+}
+
+/* FOOTER */
+.footer{
+  margin-top:60px;
+  background:white;
+  text-align:center;
+  padding:30px 20px;
+  box-shadow:0 -4px 15px rgba(0,0,0,0.1);
+  border-top-left-radius:20px;
+  border-top-right-radius:20px;
+}
+
+.footer h3{
+  margin-bottom:15px;
+}
+
+.dons{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+}
+
+.paypal-img{
+  width:110px;
+  padding:10px;
+  border-radius:15px;
+  background:#f5f5f5;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+.paypal-img:hover{
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.mini{
+  margin-top:15px;
+  color:#666;
+  font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ACCUEIL -->
+<div class="topbar">
+  <a href="https://huskymichel.github.io/HuskyMichel-site/">
+    <img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil">
+  </a>
+</div>
+
+<!-- PROFIL -->
+<div class="profil">
+  <img src="Photo de profil/Photo de profil Gerrix.jpg" alt="Gerrix">
+  <h1>Gerrix</h1>
+</div>
+
+<!-- RÉSEAUX -->
+<div class="galerie">
+
+  <div class="carte">
+    <h2>YouTube</h2>
+    <p>Chaîne principale gaming & freestyle</p>
+    <a href="https://www.youtube.com/@GerrixRR" target="_blank">Ouvrir</a>
+  </div>
+
+  <div class="carte">
+    <h2>TikTok</h2>
+    <p>Clips gaming et contenu court</p>
+    <a href="https://www.tiktok.com/@gerrixrr" target="_blank">Voir</a>
+  </div>
+
+  <div class="carte">
+    <h2>Twitch</h2>
+    <p>Lives gaming</p>
+    <a href="https://www.twitch.tv/gerrixrr" target="_blank">Regarder</a>
+  </div>
+
+  <div class="carte">
+    <h2>Discord</h2>
+    <p>Communauté RR</p>
+    <a href="https://discord.com/invite/f3UJd7wrnq" target="_blank">Rejoindre</a>
+  </div>
+
+  <div class="carte">
+    <h2>Instagram</h2>
+    <p>Photos & contenu perso</p>
+    <a href="https://www.instagram.com/gu.illaume6207?igsh=MWt0bW5oNm8zbGNobA%3D%3D" target="_blank">Voir</a>
+  </div>
+
+  <div class="carte">
+    <h2>X (Twitter)</h2>
+    <p>Actus et infos</p>
+    <a href="https://x.com/GerrixRR?t=swlzfVlYPec76VKGPLip5g&s=09" target="_blank">Ouvrir</a>
+  </div>
+
+  <div class="carte">
+    <h2>Snapchat</h2>
+    <p>Ajoute-moi 👻</p>
+    <a href="https://www.snapchat.com/@gerrixrr?share_id=NBNuiTWs-cw&locale=fr-FR" target="_blank">Ajouter</a>
+  </div>
+
+  <div class="carte">
+    <h2>WhatsApp</h2>
+    <p>Canal officiel</p>
+    <a href="https://www.whatsapp.com/channel/0029Vb65BpXLY6cz0iDWLG2U" target="_blank">Rejoindre</a>
+  </div>
+
+</div>
+
+<!-- FOOTER DONS -->
+<footer class="footer">
+
+  <h3>💰 Dons</h3>
+
+  <div class="dons">
+
+    <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
+      <img src="Photo de profil/paypal logo Veenzoxx.jpg" alt="PayPal Veenzoxx" class="paypal-img">
+    </a>
+
+    <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
+      <img src="Photo de profil/paypal logo Lifezen.jpg" alt="PayPal XSU LIFEZEN" class="paypal-img">
+    </a>
+
+  </div>
+
+  <p class="mini">Merci pour le soutien ❤️</p>
+
+</footer>
+
+</body>
 </html>
