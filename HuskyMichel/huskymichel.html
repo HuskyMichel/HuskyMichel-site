@@ -8,13 +8,15 @@
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
 }
 
+/* TOPBAR */
 .topbar{
   display:flex;
   justify-content:center;
+  align-items:center;
   padding:15px;
   background:white;
   box-shadow:0 4px 10px rgba(0,0,0,.1);
@@ -22,8 +24,14 @@ body{
 
 .home-img{
   width:140px;
+  transition:.3s;
 }
 
+.home-img:hover{
+  transform:scale(1.08);
+}
+
+/* PROFIL */
 .profil{
   text-align:center;
   margin-top:30px;
@@ -38,6 +46,7 @@ body{
   margin-top:10px;
 }
 
+/* GALERIE */
 .galerie{
   display:flex;
   flex-wrap:wrap;
@@ -46,45 +55,97 @@ body{
   padding:40px;
 }
 
-.carte{
+/* CARTES */
+.reseau{
   width:280px;
-  background:white;
+  height:160px;
   border-radius:20px;
-  padding:20px;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,.12);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
   transition:.3s;
+
+  user-select:none;
 }
 
-.carte:hover{
-  transform:translateY(-10px);
+.reseau:hover{
+  transform:translateY(-8px) scale(1.02);
 }
 
-.carte p{
-  color:#444;
+.overlay{
+  text-align:center;
+  color:white;
 }
 
-.carte a{
+.overlay h2{
+  margin-bottom:8px;
+}
+
+.overlay p{
+  color:white;
+  margin-bottom:12px;
+}
+
+.btn{
   display:inline-block;
-  margin-top:10px;
-  padding:12px 20px;
+  padding:10px 18px;
   background:black;
   color:white;
   text-decoration:none;
   border-radius:10px;
+  transition:.3s;
 }
 
-/* FOOTER AVEC COINS + OMBRE */
+.btn:hover{
+  background:#333;
+  transform:scale(1.05);
+}
+
+/* IMAGES FOND */
+.youtube{
+  background:
+  linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+  url("Photo de profil/youtube.jpg");
+}
+
+.twitch{
+  background:
+  linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+  url("Photo de profil/twitch.jpg");
+}
+
+.discord{
+  background:
+  linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+  url("Photo de profil/discord.jpg");
+}
+
+.tiktok{
+  background:
+  linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+  url("Photo de profil/tiktok.jpg");
+}
+
+/* FOOTER */
 .footer{
   margin-top:60px;
   background:white;
   text-align:center;
   padding:30px 20px;
 
+  box-shadow:0 -4px 15px rgba(0,0,0,.1);
+
   border-top-left-radius:20px;
   border-top-right-radius:20px;
-
-  box-shadow:0 -4px 15px rgba(0,0,0,0.10);
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
 }
 
 .dons{
@@ -99,12 +160,30 @@ body{
   padding:10px;
   border-radius:15px;
   background:#f5f5f5;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+  transition:.3s;
+}
+
+.paypal-img:hover{
+  transform:scale(1.08);
 }
 
 .merci{
   margin-top:18px;
   color:#666;
   font-size:15px;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+  .galerie{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .reseau{
+    width:85%;
+  }
 }
 </style>
 </head>
@@ -124,28 +203,36 @@ body{
 
 <div class="galerie">
 
-  <div class="carte">
-    <h2>YouTube</h2>
-    <p>Chaîne principale</p>
-    <a href="https://www.youtube.com/@HuskyMichel" target="_blank">Ouvrir</a>
+  <div class="reseau youtube">
+    <div class="overlay">
+      <h2>YouTube</h2>
+      <p>Chaîne principale</p>
+      <a href="https://www.youtube.com/@HuskyMichel" target="_blank" class="btn">Ouvrir</a>
+    </div>
   </div>
 
-  <div class="carte">
-    <h2>Twitch</h2>
-    <p>Lives et gaming</p>
-    <a href="https://www.twitch.tv/huskymichel23" target="_blank">Regarder</a>
+  <div class="reseau twitch">
+    <div class="overlay">
+      <h2>Twitch</h2>
+      <p>Lives et gaming</p>
+      <a href="https://www.twitch.tv/huskymichel23" target="_blank" class="btn">Regarder</a>
+    </div>
   </div>
 
-  <div class="carte">
-    <h2>Discord</h2>
-    <p>Communauté officielle</p>
-    <a href="https://discord.com/invite/rRTuePhUUY" target="_blank">Rejoindre</a>
+  <div class="reseau discord">
+    <div class="overlay">
+      <h2>Discord</h2>
+      <p>Communauté officielle</p>
+      <a href="https://discord.com/invite/rRTuePhUUY" target="_blank" class="btn">Rejoindre</a>
+    </div>
   </div>
 
-  <div class="carte">
-    <h2>TikTok</h2>
-    <p>Shorts et clips</p>
-    <a href="https://www.tiktok.com/@huskymichel" target="_blank">Voir</a>
+  <div class="reseau tiktok">
+    <div class="overlay">
+      <h2>TikTok</h2>
+      <p>Shorts et clips</p>
+      <a href="https://www.tiktok.com/@huskymichel" target="_blank" class="btn">Voir</a>
+    </div>
   </div>
 
 </div>
