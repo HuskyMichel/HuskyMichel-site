@@ -316,7 +316,7 @@ function toggleDon(){
 		</script>
 
 <script>
-fetch("https://huskymichel.goatcounter.com/counter/huskymichel.json")
+fetch("https://huskymichel.goatcounter.com/counter/TOTAL.json")
   .then(response => response.json())
   .then(data => {
     document.getElementById("compteur-visites").innerText =
@@ -324,7 +324,7 @@ fetch("https://huskymichel.goatcounter.com/counter/huskymichel.json")
   })
   .catch(() => {
     document.getElementById("compteur-visites").innerText =
-      "👁 0 vue";
+      "👁 indisponible";
   });
 </script>
 </body>
