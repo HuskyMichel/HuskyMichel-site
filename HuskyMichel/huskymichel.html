@@ -311,18 +311,15 @@ function toggleDon(){
 }
 </script>
 
-<p id="view-count">👁 Chargement...</p>
-
 <script>
-fetch('https://api.countapi.xyz/hit/huskymichel-site/test')
+fetch('https://api.countapi.xyz/hit/huskymichel-site/profil-huskymichel')
   .then(res => res.json())
   .then(data => {
     document.getElementById('view-count').textContent =
       '👁 ' + data.value + ' vues';
-    console.log(data);
   })
   .catch(error => {
-    console.log('Erreur compteur :', error);
+    console.log(error);
     document.getElementById('view-count').textContent =
       '👁 vues indisponibles';
   });
