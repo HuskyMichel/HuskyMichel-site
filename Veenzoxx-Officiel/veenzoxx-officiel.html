@@ -195,14 +195,16 @@ body{
 <!-- ACCUEIL -->
 <div class="topbar">
   <a href="https://huskymichel.github.io/HuskyMichel-site/">
-    <img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil">
-  </a>
+    <img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
 </div>
 
 <!-- PROFIL -->
 <div class="profil">
   <img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg" alt="Veenzoxx Officiel">
   <h1>Veenzoxx Officiel</h1>
+  
+  <p id="view-count">👁 Chargement...</p>
+  
 </div>
 
 <!-- RESEAUX -->
@@ -291,6 +293,19 @@ function toggleDon(){
     box.style.display = "none";
   }
 }
+</script>
+
+<script>
+fetch('https://api.countapi.xyz/hit/huskymichel-site/profil-veenzoxx')
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('view-count').textContent =
+      '👁 ' + data.value + ' vues';
+  })
+  .catch(() => {
+    document.getElementById('view-count').textContent =
+      '👁 vues indisponibles';
+  });
 </script>
 
 </body>
