@@ -143,42 +143,48 @@ body{
   border-bottom-right-radius:20px;
 }
 
+.don-widget{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:999;
+}
+
+.don-content{
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  text-align:center;
+}
+
+.don-toggle{
+  width:55px;
+  height:55px;
+  border:none;
+  border-radius:50%;
+  background:black;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
 .dons{
   display:flex;
+  gap:15px;
   justify-content:center;
-  gap:25px;
-  flex-wrap:wrap;
 }
 
 .paypal-img{
-  width:110px;
-  padding:10px;
-  border-radius:15px;
-  background:#f5f5f5;
-  box-shadow:0 5px 15px rgba(0,0,0,.1);
-  transition:.3s;
+  width:85px;
+  border-radius:12px;
 }
 
-.paypal-img:hover{
-  transform:scale(1.08);
-}
-
-.mini{
-  margin-top:15px;
+.merci{
+  font-size:13px;
   color:#666;
-  font-size:14px;
-}
-
-/* MOBILE */
-@media (max-width:768px){
-  .galerie{
-    flex-direction:column;
-    align-items:center;
-  }
-
-  .reseau{
-    width:85%;
-  }
+  margin-top:10px;
 }
 
 </style>
@@ -236,26 +242,56 @@ body{
 
 </div>
 
-<!-- FOOTER -->
-<footer class="footer">
+<div style="text-align:center; margin:20px 0 50px 0;">
 
-<h3>💰 Dons</h3>
+  <video controls playsinline
+         style="width:80%; max-width:900px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,.18);">
 
-<div class="dons">
+    <source src="Vidéo Veenzoxx/Veenzoxx présentation.mp4" type="video/mp4">
 
-<a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
-<img src="Photo de profil/paypal logo Veenzoxx.jpg" alt="PayPal Veenzoxx" class="paypal-img">
-</a>
+    Votre navigateur ne supporte pas la vidéo.
 
-<a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
-<img src="Photo de profil/paypal logo Lifezen.jpg" alt="PayPal XSU LIFEZEN" class="paypal-img">
-</a>
+  </video>
 
 </div>
 
-<p class="mini">Merci pour ton soutien ❤️</p>
+<!-- DON FLOTTANT -->
+<div class="don-widget" id="donWidget">
 
-</footer>
+  <button class="don-toggle" onclick="toggleDon()">💰</button>
+
+  <div class="don-content" id="donContent">
+
+    <h3>💰 Dons</h3>
+
+    <div class="dons">
+
+      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
+        <img src="Photo de profil/paypal logo veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
+      </a>
+
+      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
+        <img src="Photo de profil/paypal logo lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
+      </a>
+
+    </div>
+
+    <p class="merci">Merci pour le soutien ❤️</p>
+
+  </div>
+</div>
+
+<script>
+function toggleDon(){
+  const box = document.getElementById("donContent");
+
+  if(box.style.display === "none"){
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+</script>
 
 </body>
 </html>
