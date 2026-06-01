@@ -211,6 +211,7 @@ body{
 <div class="profil">
   <img src="Photo de profil/Photo de profil HuskyMichel.jpg" alt="HuskyMichel">
   <h1>HuskyMichel</h1>
+  <p id="compteur-visites">👁 Chargement...</p>
 </div>
 
 <div class="galerie">
@@ -310,6 +311,21 @@ function toggleDon(){
 
 <script data-goatcounter="https://huskymichel.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://huskymichel.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js">
+		</script>
 
+<script>
+fetch("https://huskymichel.goatcounter.com/counter/huskymichel.json")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("compteur-visites").innerText =
+      "👁 " + data.count + " vues";
+  })
+  .catch(() => {
+    document.getElementById("compteur-visites").innerText =
+      "👁 0 vue";
+  });
+</script>
 </body>
 </html>
