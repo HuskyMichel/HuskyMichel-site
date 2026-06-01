@@ -1,88 +1,88 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Accueil</title>
+	<head>
+		<meta charset="UTF-8">
+			<title>Accueil</title>
 
-<style>
-#verification-box{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(255,255,255,0.96);
+			<style>
+				#verification-box{
+				position:fixed;
+				top:0;
+				left:0;
+				width:100%;
+				height:100%;
+				background:rgba(255,255,255,0.96);
 
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+				display:flex;
+				flex-direction:column;
+				justify-content:center;
+				align-items:center;
 
-z-index:9999;
-text-align:center;
-}
+				z-index:9999;
+				text-align:center;
+				}
 
-#verification-box h2{
-font-size:28px;
-margin-bottom:20px;
-}
+				#verification-box h2{
+				font-size:28px;
+				margin-bottom:20px;
+				}
 
-#verification-box input{
-margin-right:8px;
-transform:scale(1.2);
-}
+				#verification-box input{
+				margin-right:8px;
+				transform:scale(1.2);
+				}
 
-#verification-box button{
-margin-top:20px;
-padding:12px 24px;
-border:none;
-border-radius:12px;
-background:black;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-</style>
-</head>
+				#verification-box button{
+				margin-top:20px;
+				padding:12px 24px;
+				border:none;
+				border-radius:12px;
+				background:black;
+				color:white;
+				font-size:16px;
+				cursor:pointer;
+				}
+			</style>
+	</head>
 
-<body>
+	<body>
 
-<div id="verification-box">
+		<div id="verification-box">
 
-<h2>🔒 Vérification de sécurité</h2>
+			<h2>🔒 Vérification de sécurité</h2>
 
-<label>
-<input type="checkbox" id="robotCheck">
-Je confirme être humain
-</label>
+			<label>
+				<input type="checkbox" id="robotCheck">
+				Je confirme être humain
+			</label>
 
-<button onclick="validerAcces()">Entrer</button>
+			<button onclick="validerAcces()">Entrer</button>
 
-</div>
-
-
-<!-- TON SITE EN DESSOUS -->
-<header>
-<!-- ton contenu -->
-</header>
+		</div>
 
 
-<script>
-if(localStorage.getItem("verificationOK")==="oui"){
-document.getElementById("verification-box").style.display="none";
-}
+		<!-- TON SITE EN DESSOUS -->
+		<header>
+			<!-- ton contenu -->
+		</header>
 
-function validerAcces(){
-if(document.getElementById("robotCheck").checked){
-localStorage.setItem("verificationOK","oui");
-document.getElementById("verification-box").style.display="none";
-}else{
-alert("Veuillez cocher la case avant de continuer.");
-}
-}
-</script>
 
-</body>
+			<script>
+				if(localStorage.getItem("verificationOK")==="oui"){
+				document.getElementById("verification-box").style.display="none";
+				}
+
+				function validerAcces(){
+				if(document.getElementById("robotCheck").checked){
+				localStorage.setItem("verificationOK","oui");
+				document.getElementById("verification-box").style.display="none";
+				}else{
+				alert("Veuillez cocher la case avant de continuer.");
+				}
+				}
+			</script>
+
+	</body>
 </html>
 
 <html lang="fr">
@@ -212,69 +212,49 @@ alert("Veuillez cocher la case avant de continuer.");
 			margin-top:30px;
 			}
 
-			.dons{
-			display:flex;
-			justify-content:center;
-			gap:25px;
-			flex-wrap:wrap;
-			}
+			.don-widget{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:999;
+}
 
-			/* PAYPAL AVEC MEME STYLE */
-			.paypal-img{
-			width:110px;
-			border-radius:18px;
-			padding:8px;
-			background:white;
-			box-shadow:0 8px 20px rgba(0,0,0,.12);
-			box-sizing:border-box;
-			}
+.don-content{
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  text-align:center;
+}
 
-			.merci{
-			margin-top:18px;
-			color:#666;
-			font-size:15px;
-			}
+.don-toggle{
+  width:55px;
+  height:55px;
+  border:none;
+  border-radius:50%;
+  background:black;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  margin-bottom:10px;
+}
 
-			 /* FOOTER */
-			.footer{
-			 margin-top:60px;
-  			background:white;
-			text-align:center;
-  			padding:30px 20px;
-  			box-shadow:0 -4px 15px rgba(0,0,0,0.1);
-			border-top-left-radius:20px;
-  			border-top-right-radius:20px;
-			}
+.dons{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+}
 
-			.footer h3{
-			margin-bottom:15px;
-			}
+.paypal-img{
+  width:85px;
+  border-radius:12px;
+}
 
-			.dons{
-  			display:flex;
-  			justify-content:center;
-  			gap:25px;
-  			flex-wrap:wrap;
-			}
-
-			.paypal-img{
-			width:110px;
-  			padding:10px;
-  			border-radius:15px;
-  			background:#f5f5f5;
-  			box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  			transition:0.3s;
-			}
-
-			.paypal-img:hover{
-  			transform:scale(1.08);
-  			box-shadow:0 10px 25px rgba(0,0,0,0.2);
-			}
-
-			.mini{
-  			margin-top:18px;
-  			color:#666;
-  			font-size:15px;
+.merci{
+  font-size:13px;
+  color:#666;
+  margin-top:10px;
+}
 		</style>
 	</head>
 
@@ -327,21 +307,43 @@ alert("Veuillez cocher la case avant de continuer.");
 
 		</div>
 
-		<footer class="footer">
+		<!-- DON FLOTTANT -->
+<div class="don-widget" id="donWidget">
 
-			<h3>💰 Dons</h3>
+  <button class="don-toggle" onclick="toggleDon()">💰</button>
 
-			<div class="dons">
+  <div class="don-content" id="donContent">
 
-				<a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank"><img src="Photo de profil/paypal logo Veenzoxx.jpg" class="paypal-img"></a>
+    <h3>💰 Dons</h3>
 
-				<a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank"><img src="Photo de profil/paypal logo Lifezen.jpg" class="paypal-img"></a>
+    <div class="dons">
 
-			</div>
+      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
+        <img src="Photo de profil/paypal logo veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
+      </a>
 
-			<p class="merci">Merci pour le soutien ❤️</p>
+      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
+        <img src="Photo de profil/paypal logo lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
+      </a>
 
-		</footer>
+    </div>
+
+    <p class="merci">Merci pour le soutien ❤️</p>
+
+  </div>
+</div>
+
+<script>
+function toggleDon(){
+  const box = document.getElementById("donContent");
+
+  if(box.style.display === "none"){
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+</script>
 
 	</body>
 </html>
