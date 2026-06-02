@@ -520,6 +520,7 @@ Se connecter
 
   <div id="menuProfil">
   <p onclick="voirFavoris()">❤️ Favoris</p>
+  <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
   <p onclick="logout()">🚪 Déconnexion</p>
 </div>
 </div>
@@ -751,8 +752,10 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("loginBtn").style.display = "none";
     document.getElementById("profile").style.display = "block";
 
-    document.getElementById("avatar").src =
-      user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
+    const custom = localStorage.getItem("customAvatar");
+
+document.getElementById("avatar").src =
+  custom || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
   } else {
     document.getElementById("loginBtn").style.display = "block";
     document.getElementById("profile").style.display = "none";
