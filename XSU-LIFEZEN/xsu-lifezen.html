@@ -1,215 +1,264 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="utf-8"/>
-<link rel="icon" href="Photo de profil/logo XSU XZENX.jpg">
-<title>XSU LIFEZEN - Réseaux</title>
+	<head>
+		<meta charset="utf-8"/>
+			<link rel="icon" href="Photo de profil/logo XSU XZENX.jpg">
+			<title>XSU LIFEZEN - Réseaux</title>
 
-<style>
+			<style>
 
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
-}
+				body{
+  				margin:0;
+  				font-family:Arial, sans-serif;
+  				background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
+				}
 
-/* TOPBAR */
-.topbar{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:15px;
-  background:white;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
-.home-img{
-  width:140px;
-  transition:0.3s;
-}
-
-.home-img:hover{
-  transform:scale(1.08);
-}
-
-/* PROFIL */
-.profil{
-  text-align:center;
-  margin-top:30px;
-}
-
-.profil img{
-  width:175px;
-  border-radius:15px;
-}
-
-.profil h1{
-  margin-top:10px;
-}
-
-/* GALERIE */
-.galerie{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:25px;
-  padding:40px;
-}
-
-/* CARTE IMAGE */
-.reseau{
-  width:280px;
-  height:160px;
-  border-radius:20px;
-
+				/* TOPBAR */
+				.topbar{
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:space-between;
 
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-
-  box-shadow:0 10px 25px rgba(0,0,0,0.18);
-  transition:0.3s;
-
-  user-select:none;
-}
-
-.reseau:hover{
-  transform:translateY(-8px) scale(1.02);
-}
-
-.overlay{
-  text-align:center;
-  color:white;
-}
-
-.overlay h2{
-  margin-bottom:8px;
-}
-
-.overlay p{
-  color:white;
-  margin-bottom:12px;
-}
-
-.btn{
-  display:inline-block;
-  padding:10px 18px;
-  background:black;
-  color:white;
-  text-decoration:none;
-  border-radius:10px;
-  transition:0.3s;
-}
-
-.btn:hover{
-  background:#333;
-  transform:scale(1.05);
-}
-
-/* IMAGES */
-.youtube{
-  background:
-  linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-  url("Photo de profil/youtube.jpg");
-  background-size:cover;
-  background-position:center;
-}
-
-.tiktok{
-  background:
-  linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-  url("Photo de profil/tiktok.jpg");
-  background-size:cover;
-  background-position:center;
-}
-
-.discord{
-  background:
-  linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-  url("Photo de profil/discord.jpg");
-  background-size:cover;
-  background-position:center;
-}
-
-.paypal{
-  background:
-  linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-  url("Photo de profil/paypal.jpg");
-  background-size:cover;
-  background-position:center;
-}
-
-/* FOOTER */
-.footer{
-  margin-top:60px;
+  padding:15px 25px;
   background:white;
-  text-align:center;
-  padding:30px 20px;
-  box-shadow:0 -4px 15px rgba(0,0,0,0.1);
-
-  border-top-left-radius:20px;
-  border-top-right-radius:20px;
-  border-bottom-left-radius:20px;
-  border-bottom-right-radius:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
 
-.don-widget{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:999;
+.recherche-container{
+  margin:auto;
+  width:400px;
 }
 
-.don-content{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  text-align:center;
+				.home-img{
+  				width:140px;
+  				transition:0.3s;
+				}
+
+				.home-img:hover{
+  				transform:scale(1.08);
+				}
+
+.recherche-container{
+  position:relative;
+  width:350px;
 }
 
-.don-toggle{
-  width:55px;
-  height:55px;
+#recherche{
+  width:100%;
+  padding:12px;
   border:none;
-  border-radius:50%;
-  background:black;
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-  margin-bottom:10px;
-}
-
-.dons{
-  display:flex;
-  gap:15px;
-  justify-content:center;
-}
-
-.paypal-img{
-  width:85px;
   border-radius:12px;
+  font-size:16px;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
 }
 
-.merci{
-  font-size:13px;
-  color:#666;
-  margin-top:10px;
+#resultats{
+  position:absolute;
+  width:100%;
+  background:white;
+  border-radius:12px;
+  margin-top:5px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  z-index:1000;
 }
 
-</style>
+.resultat{
+  padding:12px;
+  cursor:pointer;
+}
+
+.resultat:hover{
+  background:#f0f0f0;
+}
+
+				/* PROFIL */
+				.profil{
+  				text-align:center;
+  				margin-top:30px;
+				}
+
+				.profil img{
+  				width:175px;
+  				border-radius:15px;
+				}
+
+				.profil h1{
+  				margin-top:10px;
+				}
+
+				/* GALERIE */
+				.galerie{
+  				display:flex;
+  				flex-wrap:wrap;
+  				justify-content:center;
+  				gap:25px;
+  				padding:40px;
+				}
+
+				/* CARTE IMAGE */
+				.reseau{
+  				width:280px;
+  				height:160px;
+  				border-radius:20px;
+
+  				display:flex;
+  				align-items:center;
+  				justify-content:center;
+
+  				background-size:cover;
+ 				background-position:center;
+  				background-repeat:no-repeat;
+
+  				box-shadow:0 10px 25px rgba(0,0,0,0.18);
+  				transition:0.3s;
+
+  				user-select:none;
+				}
+
+				.reseau:hover{
+  				transform:translateY(-8px) scale(1.02);
+				}
+
+				.overlay{
+  				text-align:center;
+  				color:white;
+				}
+
+				.overlay h2{
+ 				margin-bottom:8px;
+				}
+
+				.overlay p{
+  				color:white;
+				margin-bottom:12px;
+				}
+
+				.btn{
+  				display:inline-block;
+  				padding:10px 18px;
+  				background:black;
+  				color:white;
+  				text-decoration:none;
+  				border-radius:10px;
+  				transition:0.3s;
+				}
+
+				.btn:hover{
+  				background:#333;
+  				transform:scale(1.05);
+				}
+
+				/* IMAGES */
+				.youtube{
+  				background:
+  				linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+  				url("Photo de profil/youtube.jpg");
+  				background-size:cover;
+  				background-position:center;
+				}
+
+				.tiktok{
+				background:
+  				linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+  				url("Photo de profil/tiktok.jpg");
+  				background-size:cover;
+  				background-position:center;
+				}
+
+				.discord{
+  				background:
+  				linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+  				url("Photo de profil/discord.jpg");
+  				background-size:cover;
+  				background-position:center;
+				}
+
+				.paypal{
+  				background:
+  				linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+  				url("Photo de profil/paypal.jpg");
+  				background-size:cover;
+  				background-position:center;
+				}
+
+				/* FOOTER */
+				.footer{
+  				margin-top:60px;
+  				background:white;
+  				text-align:center;
+  				padding:30px 20px;
+  				box-shadow:0 -4px 15px rgba(0,0,0,0.1);
+
+  				border-top-left-radius:20px;
+  				border-top-right-radius:20px;
+  				border-bottom-left-radius:20px;
+  				border-bottom-right-radius:20px;
+				}
+
+				.don-widget{
+  				position:fixed;
+  				right:20px;
+  				bottom:20px;
+  				z-index:999;
+				}
+
+				.don-content{
+  				background:white;
+  				padding:20px;
+  				border-radius:20px;
+  				box-shadow:0 8px 25px rgba(0,0,0,.18);
+  				text-align:center;
+				}
+
+				.don-toggle{
+  				width:55px;
+  				height:55px;
+  				border:none;
+  				border-radius:50%;
+  				background:black;
+  				color:white;
+  				font-size:24px;
+  				cursor:pointer;
+  				margin-bottom:10px;
+				}
+
+				.dons{
+  				display:flex;
+  				gap:15px;
+  				justify-content:center;
+				}
+
+				.merci{
+  				font-size:13px;
+  				color:#666;
+  				margin-top:10px;
+				}
+
+			</style>
 </head>
 
 <body>
 
 <!-- ACCUEIL -->
 <div class="topbar">
+
   <a href="https://huskymichel.github.io/HuskyMichel-site/">
     <img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil">
   </a>
+
+  <div class="recherche-container">
+
+    <input
+      type="text"
+      id="recherche"
+      placeholder="🔍 Rechercher un profil..."
+      onkeyup="chercherProfil()">
+
+    <div id="resultats"></div>
+
+  </div>
+
 </div>
 
 <!-- PROFIL -->
@@ -280,17 +329,7 @@ body{
 
     <h3>💰 Dons</h3>
 
-    <div class="dons">
-
-      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
-        <img src="Photo de profil/paypal logo Veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
-      </a>
-
-      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
-        <img src="Photo de profil/paypal logo Lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
-      </a>
-
-    </div>
+    En cours...
 
     <p class="merci">Merci pour le soutien ❤️</p>
 
@@ -307,6 +346,69 @@ function toggleDon(){
     box.style.display = "none";
   }
 }
+</script>
+
+<script>
+
+const profils = [
+
+  {
+    nom: "HuskyMichel",
+    lien: "HuskyMichel/huskymichel.html"
+  },
+
+  {
+    nom: "Veenzoxx",
+    lien: "Veenzoxx/veenzoxx.html"
+  },
+
+  {
+    nom: "XSU LIFEZEN",
+    lien: "XSU LIFEZEN/xsulifezen.html"
+  },
+
+  {
+    nom: "Gerrix",
+    lien: "Gerrix/gerrix.html"
+  }
+
+];
+
+function chercherProfil(){
+
+  const recherche =
+    document.getElementById("recherche").value.toLowerCase();
+
+  const resultats =
+    document.getElementById("resultats");
+
+  resultats.innerHTML = "";
+
+  if(recherche.length === 0){
+    return;
+  }
+
+  profils.forEach(profil => {
+
+    if(profil.nom.toLowerCase().includes(recherche)){
+
+      const div = document.createElement("div");
+
+      div.className = "resultat";
+
+      div.textContent = profil.nom;
+
+      div.onclick = () => {
+        window.location.href = profil.lien;
+      };
+
+      resultats.appendChild(div);
+    }
+
+  });
+
+}
+
 </script>
 
 </body>
