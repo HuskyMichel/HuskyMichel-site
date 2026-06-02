@@ -525,6 +525,8 @@ Se connecter
 </div>
 
 		</div>
+		
+<input type="file" id="photoInput" accept="image/*" style="display:none;">
 
 		<!-- PROFIL -->
 		<div class="profil">
@@ -761,6 +763,31 @@ document.getElementById("profile").onclick = () => {
   const menu = document.getElementById("menuProfil");
   menu.style.display = menu.style.display === "block" ? "none" : "block";
 };
+</script>
+
+<script>
+window.changerPhoto = function(){
+  document.getElementById("photoInput").click();
+};
+
+document.getElementById("photoInput").addEventListener("change", function(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const image = e.target.result;
+
+    localStorage.setItem("customAvatar", image);
+
+    document.getElementById("avatar").src = image;
+  };
+
+  reader.readAsDataURL(file);
+});
 </script>
 
 	</body>
