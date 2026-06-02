@@ -15,11 +15,17 @@ body{
 /* TOPBAR */
 .topbar{
   display:flex;
-  justify-content:center;
   align-items:center;
-  padding:15px;
+  justify-content:space-between;
+
+  padding:15px 25px;
   background:white;
   box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+
+.recherche-container{
+  margin:auto;
+  width:400px;
 }
 
 .home-img{
@@ -29,6 +35,40 @@ body{
 
 .home-img:hover{
   transform:scale(1.08);
+}
+
+.recherche-container{
+  position:relative;
+  width:350px;
+}
+
+#recherche{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+#resultats{
+  position:absolute;
+  width:100%;
+  background:white;
+  border-radius:12px;
+  margin-top:5px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  z-index:1000;
+}
+
+.resultat{
+  padding:12px;
+  cursor:pointer;
+}
+
+.resultat:hover{
+  background:#f0f0f0;
 }
 
 /* PROFIL */
@@ -187,11 +227,6 @@ body{
   justify-content:center;
 }
 
-.paypal-img{
-  width:85px;
-  border-radius:12px;
-}
-
 .merci{
   font-size:13px;
   color:#666;
@@ -203,9 +238,23 @@ body{
 <body>
 
 <div class="topbar">
+
   <a href="https://huskymichel.github.io/HuskyMichel-site/">
     <img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil">
   </a>
+
+  <div class="recherche-container">
+
+    <input
+      type="text"
+      id="recherche"
+      placeholder="🔍 Rechercher un profil..."
+      onkeyup="chercherProfil()">
+
+    <div id="resultats"></div>
+
+  </div>
+
 </div>
 
 <div class="profil">
@@ -280,17 +329,7 @@ body{
 
     <h3>💰 Dons</h3>
 
-    <div class="dons">
-
-      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
-        <img src="Photo de profil/paypal logo Veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
-      </a>
-
-      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
-        <img src="Photo de profil/paypal logo Lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
-      </a>
-
-    </div>
+    En cours...
 
     <p class="merci">Merci pour le soutien ❤️</p>
 
@@ -307,6 +346,69 @@ function toggleDon(){
     box.style.display = "none";
   }
 }
+</script>
+
+<script>
+
+const profils = [
+
+  {
+    nom: "HuskyMichel",
+    lien: "HuskyMichel/huskymichel.html"
+  },
+
+  {
+    nom: "Veenzoxx",
+    lien: "Veenzoxx/veenzoxx.html"
+  },
+
+  {
+    nom: "XSU LIFEZEN",
+    lien: "XSU LIFEZEN/xsulifezen.html"
+  },
+
+  {
+    nom: "Gerrix",
+    lien: "Gerrix/gerrix.html"
+  }
+
+];
+
+function chercherProfil(){
+
+  const recherche =
+    document.getElementById("recherche").value.toLowerCase();
+
+  const resultats =
+    document.getElementById("resultats");
+
+  resultats.innerHTML = "";
+
+  if(recherche.length === 0){
+    return;
+  }
+
+  profils.forEach(profil => {
+
+    if(profil.nom.toLowerCase().includes(recherche)){
+
+      const div = document.createElement("div");
+
+      div.className = "resultat";
+
+      div.textContent = profil.nom;
+
+      div.onclick = () => {
+        window.location.href = profil.lien;
+      };
+
+      resultats.appendChild(div);
+    }
+
+  });
+
+}
+
 </script>
 
 </body>
