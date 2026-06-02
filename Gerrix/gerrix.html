@@ -187,6 +187,36 @@
   				background:#f0f0f0;
 				}
 
+.resultat{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  cursor:pointer;
+}
+
+.resultat-photo{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+
+  transition:0.3s;
+}
+
+.resultat:hover .resultat-photo{
+  transform:scale(1.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+.resultat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  cursor:pointer;
+}
+
 				/* PROFIL */
 				.profil{
   				text-align:center;
@@ -519,28 +549,27 @@
 		<script>
 
 			const profils = [
-
-			{
-			nom: "HuskyMichel",
-			lien: "HuskyMichel/huskymichel.html"
-			},
-
-			{
-			nom: "Veenzoxx",
-			lien: "Veenzoxx/veenzoxx.html"
-			},
-	
-			{
-			nom: "XSU LIFEZEN",
-			lien: "XSU LIFEZEN/xsulifezen.html"
-			},
-
-			{
-			nom: "Gerrix",
-			lien: "Gerrix/gerrix.html"
-			}
-
-			];
+  {
+    nom: "HuskyMichel",
+    lien: "HuskyMichel/huskymichel.html",
+    photo: "Barre de recherche/Photo de profil HuskyMichel.jpg"
+  },
+  {
+    nom: "Veenzoxx Officiel",
+    lien: "Veenzoxx-Officiel/veenzoxx-officiel.html",
+    photo: "Barre de recherche/Photo de profil Veenzoxx Officiel.jpg"
+  },
+  {
+    nom: "Gerrix",
+    lien: "Gerrix/gerrix.html",
+    photo: "Barre de recherche/Photo de profil Gerrix.jpg"
+  },
+  {
+  nom: "XSU LIFEZEN",
+  lien: "XSU-LIFEZEN/xsu-lifezen.html",
+  photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
+}
+];
 
 			function chercherProfil(){
 
@@ -562,15 +591,18 @@
 
 			const div = document.createElement("div");
 
-			div.className = "resultat";
+div.className = "resultat";
 
-			div.textContent = profil.nom;
+div.innerHTML = `
+  <span>${profil.nom}</span>
+  <img src="${profil.photo}" class="resultat-photo">
+`;
 
-			div.onclick = () => {
-			window.location.href = profil.lien;
-			};
+div.onclick = () => {
+  window.location.href = profil.lien;
+};
 
-			resultats.appendChild(div);
+resultats.appendChild(div);
 			}
 
 			});
