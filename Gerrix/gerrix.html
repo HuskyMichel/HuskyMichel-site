@@ -130,12 +130,19 @@
 				/* TOPBAR */
 				.topbar{
  				display:flex;
-				justify-content:center;
   				align-items:center;
-  				padding:15px;
+  				justify-content:space-between;
+
+  				padding:15px 25px;
   				background:white;
-  				box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  				box-shadow:0 4px 10px rgba(0,0,0,.1);
 				}
+
+				.recherche-container{
+  				margin:auto;
+  				width:400px;
+				}
+
 
 				.home-img{
   				width:140px;
@@ -144,6 +151,40 @@
 
 				.home-img:hover{
   				transform:scale(1.08);
+				}
+
+				.recherche-container{
+  				position:relative;
+  				width:350px;
+				}
+
+				#recherche{
+  				width:100%;
+  				padding:12px;
+  				border:none;
+  				border-radius:12px;
+  				font-size:16px;
+  				box-shadow:0 5px 15px rgba(0,0,0,.15);
+				}
+
+				#resultats{
+  				position:absolute;
+  				width:100%;
+  				background:white;
+  				border-radius:12px;
+ 				margin-top:5px;
+  				overflow:hidden;
+  				box-shadow:0 5px 15px rgba(0,0,0,.15);
+  				z-index:1000;
+				}
+
+				.resultat{
+  				padding:12px;
+  				cursor:pointer;
+				}
+
+				.resultat:hover{
+  				background:#f0f0f0;
 				}
 
 				/* PROFIL */
@@ -286,48 +327,43 @@
 				}
 
 				.don-widget{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:999;
-}
+  				position:fixed;
+  				right:20px;
+  				bottom:20px;
+  				z-index:999;
+				}
 
-.don-content{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  text-align:center;
-}
+				.don-content{
+  				background:white;
+  				padding:20px;
+  				border-radius:20px;
+ 				box-shadow:0 8px 25px rgba(0,0,0,.18);
+  				text-align:center;
+				}
 
-.don-toggle{
-  width:55px;
-  height:55px;
-  border:none;
-  border-radius:50%;
-  background:black;
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-  margin-bottom:10px;
-}
+				.don-toggle{
+  				width:55px;
+  				height:55px;
+  				border:none;
+  				border-radius:50%;
+  				background:black;
+  				color:white;
+  				font-size:24px;
+  				cursor:pointer;
+  				margin-bottom:10px;
+				}
 
-.dons{
-  display:flex;
-  gap:15px;
-  justify-content:center;
-}
+				.dons{
+  				display:flex;
+  				gap:15px;
+  				justify-content:center;
+				}
 
-.paypal-img{
-  width:85px;
-  border-radius:12px;
-}
-
-.merci{
-  font-size:13px;
-  color:#666;
-  margin-top:10px;
-}
+				.merci{
+  				font-size:13px;
+  				color:#666;
+  				margin-top:10px;
+				}
 
 			</style>
 	</head>
@@ -336,8 +372,21 @@
 
 		<!-- TOP -->
 		<div class="topbar">
-			<a href="https://huskymichel.github.io/HuskyMichel-site/">
-			<img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
+
+			<a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
+
+			<div class="recherche-container">
+
+				<input
+				type="text"
+				id="recherche"
+				placeholder="🔍 Rechercher un profil..."
+				onkeyup="chercherProfil()">
+
+				<div id="resultats"></div>
+
+			</div>
+
 		</div>
 
 		<!-- PROFIL -->
@@ -428,54 +477,107 @@
 		
 		<div style="text-align:center; margin:20px 0 50px 0;">
 
-  <video controls playsinline
-         style="width:80%; max-width:900px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,.18);">
+			<video controls playsinline
+			style="width:80%; max-width:900px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,.18);">
 
-    <source src="Vidéo Gerrix/Gerrix présentation.mp4" type="video/mp4">
+			<source src="Vidéo Gerrix/Gerrix présentation.mp4" type="video/mp4">
 
-    Votre navigateur ne supporte pas la vidéo.
+			Votre navigateur ne supporte pas la vidéo.
 
-  </video>
+			</video>
 
-</div>
+		</div>
 
 		<!-- DON FLOTTANT -->
-<div class="don-widget" id="donWidget">
+		<div class="don-widget" id="donWidget">
 
-  <button class="don-toggle" onclick="toggleDon()">💰</button>
+			<button class="don-toggle" onclick="toggleDon()">💰</button>
 
-  <div class="don-content" id="donContent">
+			<div class="don-content" id="donContent">
 
-    <h3>💰 Dons</h3>
+				<h3>💰 Dons</h3>
 
-    <div class="dons">
+				En cours...
 
-      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
-        <img src="Photo de profil/paypal logo Veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
-      </a>
+				<p class="merci">Merci pour le soutien ❤️</p>
 
-      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
-        <img src="Photo de profil/paypal logo Lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
-      </a>
+			</div>
+		</div>
 
-    </div>
+		<script>
+			function toggleDon(){
+			const box = document.getElementById("donContent");
 
-    <p class="merci">Merci pour le soutien ❤️</p>
+			if(box.style.display === "none"){
+			box.style.display = "block";
+			} else {
+			box.style.display = "none";
+			}
+			}
+		</script>
 
-  </div>
-</div>
+		<script>
 
-<script>
-function toggleDon(){
-  const box = document.getElementById("donContent");
+			const profils = [
 
-  if(box.style.display === "none"){
-    box.style.display = "block";
-  } else {
-    box.style.display = "none";
-  }
-}
-</script>
+			{
+			nom: "HuskyMichel",
+			lien: "HuskyMichel/huskymichel.html"
+			},
+
+			{
+			nom: "Veenzoxx",
+			lien: "Veenzoxx/veenzoxx.html"
+			},
+	
+			{
+			nom: "XSU LIFEZEN",
+			lien: "XSU LIFEZEN/xsulifezen.html"
+			},
+
+			{
+			nom: "Gerrix",
+			lien: "Gerrix/gerrix.html"
+			}
+
+			];
+
+			function chercherProfil(){
+
+			const recherche =
+			document.getElementById("recherche").value.toLowerCase();
+
+			const resultats =
+			document.getElementById("resultats");
+
+			resultats.innerHTML = "";
+
+			if(recherche.length === 0){
+			return;
+			}
+
+			profils.forEach(profil => {
+
+			if(profil.nom.toLowerCase().includes(recherche)){
+
+			const div = document.createElement("div");
+
+			div.className = "resultat";
+
+			div.textContent = profil.nom;
+
+			div.onclick = () => {
+			window.location.href = profil.lien;
+			};
+
+			resultats.appendChild(div);
+			}
+
+			});
+
+			}
+
+		</script>
 
 	</body>
 </html>
