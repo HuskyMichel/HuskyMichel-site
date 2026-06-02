@@ -382,8 +382,8 @@ Se connecter
 
   <div id="menuProfil">
   <p onclick="voirFavoris()">❤️ Favoris</p>
-  <p onclick="logout()">🚪 Déconnexion</p>
   <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
+  <p onclick="logout()">🚪 Déconnexion</p>
 </div>
 </div>
 </div>
@@ -541,6 +541,54 @@ resultats.appendChild(div);
 			}
 
 		</script>
+		
+		<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
+  authDomain: "huskymichel2.firebaseapp.com",
+  projectId: "huskymichel2",
+  storageBucket: "huskymichel2.firebasestorage.app",
+  messagingSenderId: "803041103978",
+  appId: "1:803041103978:web:0415d72f91e30735a47a13"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+window.loginGoogle = () => signInWithPopup(auth, provider);
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("profile").style.display = "block";
+
+    const custom = localStorage.getItem("customAvatar");
+
+document.getElementById("avatar").src =
+  custom || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
+  } else {
+    document.getElementById("loginBtn").style.display = "block";
+    document.getElementById("profile").style.display = "none";
+  }
+});
+
+document.getElementById("profile").onclick = () => {
+  const menu = document.getElementById("menuProfil");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+};
+</script>
+
 		
 		<script>
 window.changerPhoto = function(){
