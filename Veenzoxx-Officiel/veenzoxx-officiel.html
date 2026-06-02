@@ -257,6 +257,89 @@ body{
   margin-top:10px;
 }
 
+/* ================= AVATAR ================= */
+
+#avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+#avatar:hover{
+  transform:scale(1.08);
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+			
+			/* ================= MENU PROFIL ================= */
+
+#menuProfil{
+  display:none;
+  position:absolute;
+  right:0;
+  top:55px;
+
+  background:white;
+  border-radius:14px;
+  padding:8px 0;
+  width:180px;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  overflow:hidden;
+
+  animation:menuPop 0.15s ease-out;
+}
+
+@keyframes menuPop{
+  from{
+    transform:translateY(-10px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+#menuProfil p{
+  margin:0;
+  padding:12px 15px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:0.2s;
+}
+
+#menuProfil p:hover{
+  background:#f2f2f2;
+}
+
+#menuProfil p:hover{
+  cursor:pointer;
+}
+
+/* ================= MENU FLÈCHE ================= */
+
+#userBox{
+  position:relative;
+}
+
+#menuProfil::before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:15px;
+
+  width:12px;
+  height:12px;
+  background:white;
+  transform:rotate(45deg);
+
+  box-shadow:-2px -2px 5px rgba(0,0,0,0.05);
+}
+
 </style>
 </head>
 
@@ -280,8 +363,32 @@ body{
     <div id="resultats"></div>
 
   </div>
+<div id="userBox">
+  <button id="loginBtn" onclick="loginGoogle()" style="
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:black;
+  color:white;
+  cursor:pointer;
+  font-weight:500;
+">
+Se connecter
+</button>
 
+  <div id="profile" style="display:none;">
+    <img id="avatar" style="width:40px;height:40px;border-radius:50%;">
+  </div>
+
+  <div id="menuProfil">
+  <p onclick="voirFavoris()">❤️ Favoris</p>
+  <p onclick="logout()">🚪 Déconnexion</p>
+  <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
 </div>
+</div>
+</div>
+
+<input type="file" id="photoInput" accept="image/*" style="display:none;">
 
 <!-- PROFIL -->
 <div class="profil">
@@ -434,6 +541,31 @@ resultats.appendChild(div);
 			}
 
 		</script>
+		
+		<script>
+window.changerPhoto = function(){
+  document.getElementById("photoInput").click();
+};
+
+document.getElementById("photoInput").addEventListener("change", function(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const image = e.target.result;
+
+    localStorage.setItem("customAvatar", image);
+
+    document.getElementById("avatar").src = image;
+  };
+
+  reader.readAsDataURL(file);
+});
+</script>
 
 </body>
 </html>
