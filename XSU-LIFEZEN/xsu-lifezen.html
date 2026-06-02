@@ -217,7 +217,7 @@ body{
   <img src="Photo de profil/Photo de profil XSU XZENX.jpg" alt="XSU LIFEZEN">
   <h1>XSU LIFEZEN</h1>
   
-  <p id="view-count">👁 Chargement...</p>
+  <a href="http://www.mon-compteur.fr"><img src="http://www.mon-compteur.fr/html_c02genv2-80207-1" border="0" /></a>
   
 </div>
 
@@ -307,19 +307,6 @@ function toggleDon(){
     box.style.display = "none";
   }
 }
-</script>
-
-<script>
-fetch('https://api.countapi.xyz/hit/huskymichel-site/profil-lifezen')
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById('view-count').textContent =
-      '👁 ' + data.value + ' vues';
-  })
-  .catch(() => {
-    document.getElementById('view-count').textContent =
-      '👁 vues indisponibles';
-  });
 </script>
 
 </body>
