@@ -97,17 +97,65 @@
 			background:linear-gradient(135deg,#f5f5f5,#ebebeb);
 			}
 
-			.header{
+			/* TOPBAR */
+			.topbar{
 			display:flex;
-			justify-content:center;
-			padding:20px;
+			align-items:center;
+			justify-content:space-between;
+
+			padding:15px 25px;
 			background:white;
-			box-shadow:0 4px 12px rgba(0,0,0,.08);
+			box-shadow:0 4px 10px rgba(0,0,0,.1);
 			}
 
-			.logo{
-			width:140px;
+			.recherche-container{
+  			margin:auto;
+  			width:400px;
 			}
+
+
+			.home-img{
+  			width:140px;
+  			transition:0.3s;
+			}
+
+			.home-img:hover{
+  			transform:scale(1.08);
+			}
+
+			.recherche-container{
+  			position:relative;
+ 			width:350px;
+ 			}
+
+ 			#recherche{
+   			width:100%;
+   			padding:12px;
+   			border:none;
+   			border-radius:12px;
+   			font-size:16px;
+   			box-shadow:0 5px 15px rgba(0,0,0,.15);
+ 			}
+
+ 			#resultats{
+   			position:absolute;
+   			width:100%;
+   			background:white;
+   			border-radius:12px;
+   			margin-top:5px;
+   			overflow:hidden;
+   			box-shadow:0 5px 15px rgba(0,0,0,.15);
+   			z-index:1000;
+ 			}
+
+ 			.resultat{
+   			padding:12px;
+   			 cursor:pointer;
+ 			}
+
+ 			.resultat:hover{
+   			background:#f0f0f0;
+ 			}
 
 			.titre{
 			text-align:center;
@@ -212,57 +260,66 @@
 			margin-top:30px;
 			}
 
-.don-widget{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:999;
-}
+			.don-widget{
+  			position:fixed;
+  			right:20px;
+  			bottom:20px;
+  			z-index:999;
+			}
 
-.don-content{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  text-align:center;
-}
+			.don-content{
+  			background:white;
+  			padding:20px;
+  			border-radius:20px;
+  			box-shadow:0 8px 25px rgba(0,0,0,.18);
+  			text-align:center;
+			}
 
-.don-toggle{
-  width:55px;
-  height:55px;
-  border:none;
-  border-radius:50%;
-  background:black;
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-  margin-bottom:10px;
-}
+			.don-toggle{
+ 			width:55px;
+  			height:55px;
+  			border:none;
+  			border-radius:50%;
+  			background:black;
+  			color:white;
+  			font-size:24px;
+  			cursor:pointer;
+  			margin-bottom:10px;
+			}
 
-.dons{
-  display:flex;
-  gap:15px;
-  justify-content:center;
-}
+			.dons{
+  			display:flex;
+  			gap:15px;
+  			justify-content:center;
+			}
 
-.paypal-img{
-  width:85px;
-  border-radius:12px;
-}
-
-.merci{
-  font-size:13px;
-  color:#666;
-  margin-top:10px;
-}
+			.merci{
+  			font-size:13px;
+  			color:#666;
+  			margin-top:10px;
+			}
 		</style>
 	</head>
 
 	<body>
 
-		<header class="header">
-			<a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="logo" alt="Accueil"></a>
-		</header>
+		<div class="topbar">
+
+			<a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
+
+			<div class="recherche-container">
+
+				<input
+				type="text"
+				id="recherche"
+				placeholder="🔍 Rechercher un profil..."
+				onkeyup="chercherProfil()">
+
+				<div id="resultats"></div>
+
+			</div>
+
+		</div>
 
 			<h1 class="titre">Voici les différents réseaux que manage HuskyMichel !</h1>
 			<p class="intro">Découvre les projets gérés par HuskyMichel.</p>
@@ -308,42 +365,93 @@
 		</div>
 
 		<!-- DON FLOTTANT -->
-<div class="don-widget" id="donWidget">
+		<div class="don-widget" id="donWidget">
 
-  <button class="don-toggle" onclick="toggleDon()">💰</button>
+			<button class="don-toggle" onclick="toggleDon()">💰</button>
 
-  <div class="don-content" id="donContent">
+			<div class="don-content" id="donContent">
 
-    <h3>💰 Dons</h3>
+				<h3>💰 Dons</h3>En cours...
 
-    <div class="dons">
+				<p class="merci">Merci pour le soutien ❤️</p>
 
-      <a href="https://www.paypal.com/paypalme/SkaytrozOnYoutube" target="_blank">
-        <img src="Photo de profil/paypal logo Veenzoxx.jpg" class="paypal-img" alt="PayPal Veenzoxx">
-      </a>
+			</div>
+		</div>
 
-      <a href="https://www.paypal.com/paypalme/LinoCassibba288" target="_blank">
-        <img src="Photo de profil/paypal logo Lifezen.jpg" class="paypal-img" alt="PayPal Lifezen">
-      </a>
+		<script>
+ 			function toggleDon(){
+   			const box = document.getElementById("donContent");
 
-    </div>
+   			if(box.style.display === "none"){
+     		box.style.display = "block";
+   			} else {
+			box.style.display = "none";
+			}
+			}
+		</script>
 
-    <p class="merci">Merci pour le soutien ❤️</p>
+		<script>
 
-  </div>
-</div>
+			const profils = [
 
-<script>
-function toggleDon(){
-  const box = document.getElementById("donContent");
+			{
+			nom: "HuskyMichel",
+			lien: "HuskyMichel/huskymichel.html"
+			},
 
-  if(box.style.display === "none"){
-    box.style.display = "block";
-  } else {
-    box.style.display = "none";
-  }
-}
-</script>
+			{
+			nom: "Veenzoxx",
+			lien: "Veenzoxx/veenzoxx.html"
+			},
+
+			{
+			nom: "XSU LIFEZEN",
+			lien: "XSU LIFEZEN/xsulifezen.html"
+			},
+
+			{
+			nom: "Gerrix",
+			lien: "Gerrix/gerrix.html"
+			}
+
+			];
+
+			function chercherProfil(){
+
+			const recherche =
+			document.getElementById("recherche").value.toLowerCase();
+
+			const resultats =
+			document.getElementById("resultats");
+
+			resultats.innerHTML = "";
+
+			if(recherche.length === 0){
+			return;
+			}
+
+			profils.forEach(profil => {
+
+			if(profil.nom.toLowerCase().includes(recherche)){
+
+			const div = document.createElement("div");
+
+			div.className = "resultat";
+
+			div.textContent = profil.nom;
+
+			div.onclick = () => {
+			window.location.href = profil.lien;
+			};
+
+			resultats.appendChild(div);
+			}
+
+			});
+
+			}
+
+		</script>
 
 	</body>
 </html>
