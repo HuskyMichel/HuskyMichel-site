@@ -415,6 +415,8 @@ Se connecter
 			</div>
 
 		</div>
+		
+<input type="file" id="photoInput" accept="image/*" style="display:none;">
 
 		<!-- DON FLOTTANT -->
 		<div class="don-widget" id="donWidget">
@@ -554,15 +556,28 @@ document.getElementById("profile").onclick = () => {
   menu.style.display = menu.style.display === "block" ? "none" : "block";
 };
 </script>
-<script>
-function changerPhoto(){
-  const url = prompt("Colle l'URL de ta nouvelle photo de profil :");
+window.changerPhoto = function(){
+  document.getElementById("photoInput").click();
+};
 
-  if(url){
-    localStorage.setItem("customAvatar", url);
-    document.getElementById("avatar").src = url;
-  }
-}
+document.getElementById("photoInput").addEventListener("change", function(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const image = e.target.result;
+
+    localStorage.setItem("customAvatar", image);
+
+    document.getElementById("avatar").src = image;
+  };
+
+  reader.readAsDataURL(file);
+});
 </script>
 
 	</body>
