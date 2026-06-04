@@ -340,6 +340,30 @@ body{
   box-shadow:-2px -2px 5px rgba(0,0,0,0.05);
 }
 
+.like-zone{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:10px;
+}
+
+.like-zone button{
+  border:none;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.like-zone button:hover{
+  transform:scale(1.2);
+}
+
+.like-zone span{
+  font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -394,6 +418,10 @@ Se connecter
 <div class="profil">
   <img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg" alt="Veenzoxx Officiel">
   <h1>Veenzoxx Officiel</h1>
+  <div class="like-zone">
+  <button onclick="toggleLike('Veenzoxx-Officiel')">❤️</button>
+  <span id="count-Veenzoxx-Officiel">0</span>
+</div>
   
   <a href="http://www.mon-compteur.fr"><img src="http://www.mon-compteur.fr/html_c02genv2-80206-1" border="0" /></a>
   
@@ -543,6 +571,50 @@ resultats.appendChild(div);
 		</script>
 		
 		<script type="module">
+		import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const db = getFirestore(app);
+window.toggleLike = async (profil) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Connecte-toi !");
+
+  const likeRef = doc(db, "likes", profil);
+  const userRef = doc(db, "userLikes", user.uid);
+
+  const userSnap = await getDoc(userRef);
+  let data = userSnap.exists() ? userSnap.data() : {};
+
+  const alreadyLiked = data[profil];
+
+  if (alreadyLiked) {
+    // unlike
+    await updateDoc(likeRef, {
+      count: increment(-1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: false
+    }, { merge: true });
+
+  } else {
+    // like
+    await updateDoc(likeRef, {
+      count: increment(1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: true
+    }, { merge: true });
+  }
+};
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
