@@ -326,6 +326,26 @@
   box-shadow:-2px -2px 5px rgba(0,0,0,0.05);
 }
 
+.like-zone{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:10px;
+}
+
+.like-zone button{
+  border:none;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.like-zone button:hover{
+  transform:scale(1.2);
+}
+
 		</style>
 	</head>
 
@@ -366,8 +386,8 @@ Se connecter
 
   <div id="menuProfil">
   <p onclick="voirFavoris()">❤️ Favoris</p>
-  <p onclick="logout()">🚪 Déconnexion</p>
   <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
+  <p onclick="logout()">🚪 Déconnexion</p>
 </div>
 </div>
 
@@ -382,20 +402,38 @@ Se connecter
 				<img src="Photo de profil/Photo de profil Gerrix.jpg">
 				<h2>Gerrix</h2>
 				<p>YouTubeur gaming +10K, lives réguliers et communauté active.</p>
-				<a href="https://huskymichel.github.io/HuskyMichel-site/Gerrix/gerrix.html" class="bouton">Voir le profil</a>
+
+<div class="like-zone">
+  <button onclick="toggleLike('Gerrix')">❤️</button>
+  <span id="count-Gerrix">0</span>
+</div>
+
+<a href="https://huskymichel.github.io/HuskyMichel-site/Gerrix/gerrix.html" class="bouton">Voir le profil</a>
 			</div>
 
 			<div class="carte">
 				<img src="Photo de profil/Photo de profil XSU LIFEZEN.jpg">
 				<h2>XSU LIFEZEN</h2>
 				<p>Créateur de contenu YouTube et communautaire.</p>
-				<a href="https://huskymichel.github.io/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html" class="bouton">Voir le profil</a>
+
+<div class="like-zone">
+  <button onclick="toggleLike('XSU LIFEZEN')">❤️</button>
+  <span id="count-XSU LIFEZEN">0</span>
+</div>
+
+<a href="https://huskymichel.github.io/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html" class="bouton">Voir le profil</a>
+				
 			</div>
 
 			<div class="carte">
 				<img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg">
 				<h2>Veenzoxx Officiel</h2>
 				<p>Gaming Fortnite, YouTube et Twitch.</p>
+
+<div class="like-zone">
+  <button onclick="toggleLike('Veenzoxx-Officiel')">❤️</button>
+  <span id="count-Veenzoxx-Officiel">0</span>
+</div>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html" class="bouton">Voir le profil</a>
 			</div>
 
@@ -410,7 +448,10 @@ Se connecter
 				</div>
 				<p>Créateur du serveur et manager des différents projets.</p>
 
-				<a href="https://huskymichel.github.io/HuskyMichel-site/HuskyMichel/huskymichel.html" class="bouton">Voir le profil</a>
+<div class="like-zone">
+  <button onclick="toggleLike('HuskyMichel')">❤️</button>
+  <span id="count-HuskyMichel">0</span>
+  <a href="https://huskymichel.github.io/HuskyMichel-site/HuskyMichel/huskymichel.html" class="bouton">Voir le profil</a>
 
 			</div>
 
@@ -510,6 +551,16 @@ resultats.appendChild(div);
 		</script>
 
 <script type="module">
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
@@ -518,6 +569,12 @@ import {
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -529,6 +586,74 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function listenLikes(profil){
+  const ref = doc(db, "likes", profil);
+
+  onSnapshot(ref, (snap) => {
+    const data = snap.data();
+    const count = data?.count || 0;
+
+    const el = document.getElementById(`count-${profil}`);
+    if (el) el.innerText = count;
+  });
+}
+
+listenLikes("Gerrix");
+listenLikes("XSU-LIFEZEN");
+listenLikes("Veenzoxx-Officiel");
+listenLikes("HuskyMichel");
+
+window.toggleLike = async (profil) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Connecte-toi !");
+
+  const likeRef = doc(db, "likes", profil);
+  const userRef = doc(db, "userLikes", user.uid);
+
+  const snap = await getDoc(userRef);
+  let data = snap.exists() ? snap.data() : {};
+
+  const alreadyLiked = data[profil];
+
+  if (alreadyLiked) {
+    await updateDoc(likeRef, {
+      count: increment(-1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: false
+    }, { merge: true });
+
+  } else {
+    await updateDoc(likeRef, {
+      count: increment(1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: true
+    }, { merge: true });
+  }
+};
+
+function listenLikes(profil){
+  const ref = doc(db, "likes", profil);
+
+  onSnapshot(ref, (snap) => {
+    const data = snap.data();
+    const count = data?.count || 0;
+
+    const el = document.getElementById(`count-${profil}`);
+    if (el) el.innerText = count;
+  });
+}
+
+listenLikes("Gerrix");
+listenLikes("XSU-LIFEZEN");
+listenLikes("Veenzoxx-Officiel");
+listenLikes("HuskyMichel");
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
