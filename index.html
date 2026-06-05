@@ -243,6 +243,24 @@
   			margin-top:10px;
 			}
 			
+			.heart-float {
+  position: absolute;
+  font-size: 20px;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.8);
+    opacity: 0;
+  }
+}
+			
 			/* ================= AVATAR ================= */
 
 #avatar{
@@ -417,8 +435,8 @@ Se connecter
 				<p>Créateur de contenu YouTube et communautaire.</p>
 
 <div class="like-zone">
-  <button onclick="toggleLike('XSU LIFEZEN')">❤️</button>
-  <span id="count-XSU LIFEZEN">0</span>
+  <button onclick="toggleLike('XSU_LIFEZEN')">❤️</button>
+  <span id="count-XSU_LIFEZEN">0</span>
 </div>
 
 <a href="https://huskymichel.github.io/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html" class="bouton">Voir le profil</a>
@@ -431,8 +449,8 @@ Se connecter
 				<p>Gaming Fortnite, YouTube et Twitch.</p>
 
 <div class="like-zone">
-  <button onclick="toggleLike('Veenzoxx-Officiel')">❤️</button>
-  <span id="count-Veenzoxx-Officiel">0</span>
+  <button onclick="toggleLike('Veenzoxx_Officiel')">❤️</button>
+  <span id="count-Veenzoxx_Officiel">0</span>
 </div>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html" class="bouton">Voir le profil</a>
 			</div>
@@ -595,8 +613,8 @@ function listenLikes(profil){
 }
 
 listenLikes("Gerrix");
-listenLikes("LIFEZEN");
-listenLikes("Veenzoxx");
+listenLikes("XSU_LIFEZEN");
+listenLikes("Veenzoxx_Officiel");
 listenLikes("HuskyMichel");
 
 window.toggleLike = async (profil) => {
@@ -632,8 +650,8 @@ window.toggleLike = async (profil) => {
 };
 
 listenLikes("Gerrix");
-listenLikes("LIFEZEN");
-listenLikes("Veenzoxx");
+listenLikes("XSU_LIFEZEN");
+listenLikes("Veenzoxx_Officiel");
 listenLikes("HuskyMichel");
 
 const auth = getAuth(app);
