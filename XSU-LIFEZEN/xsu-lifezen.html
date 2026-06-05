@@ -375,7 +375,7 @@
 			</style>
 </head>
 
-<body>
+	<body>
 
 <!-- ACCUEIL -->
 <div class="topbar">
@@ -422,7 +422,7 @@ Se connecter
 
 <input type="file" id="photoInput" accept="image/*" style="display:none;">
 
-<!-- PROFIL -->
+		<!-- PROFIL -->
 <div class="profil">
   <img src="Photo de profil/Photo de profil XSU LIFEZEN.jpg" alt="XSU LIFEZEN">
   <h1>XSU LIFEZEN</h1>
@@ -501,39 +501,39 @@ Se connecter
   </div>
 </div>
 
-<script>
-function toggleDon(){
-  const box = document.getElementById("donContent");
+		<script>
+ 			function toggleDon(){
+   			const box = document.getElementById("donContent");
 
-  if(box.style.display === "none"){
-    box.style.display = "block";
-  } else {
-    box.style.display = "none";
-  }
-}
-</script>
+   			if(box.style.display === "none"){
+     		box.style.display = "block";
+   			} else {
+			box.style.display = "none";
+			}
+			}
+		</script>
 
-<script>
+		<script>
 
-			const profils = [
+  const profils = [
   {
     nom: "HuskyMichel",
-    lien: "HuskyMichel/huskymichel.html",
+    lien: "/HuskyMichel-site/HuskyMichel/huskymichel.html",
     photo: "Barre de recherche/Photo de profil HuskyMichel.jpg"
   },
   {
     nom: "Veenzoxx Officiel",
-    lien: "Veenzoxx-Officiel/veenzoxx-officiel.html",
+    lien: "/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html",
     photo: "Barre de recherche/Photo de profil Veenzoxx Officiel.jpg"
   },
   {
     nom: "Gerrix",
-    lien: "Gerrix/gerrix.html",
+    lien: "/HuskyMichel-site/Gerrix/gerrix.html",
     photo: "Barre de recherche/Photo de profil Gerrix.jpg"
   },
   {
   nom: "XSU LIFEZEN",
-  lien: "XSU-LIFEZEN/xsu-lifezen.html",
+  lien: "/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html",
   photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
 }
 ];
@@ -582,47 +582,13 @@ resultats.appendChild(div);
 import {
   getFirestore,
   doc,
+  onSnapshot,
   getDoc,
   setDoc,
   updateDoc,
-  increment,
-  onSnapshot
+  increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const db = getFirestore(app);
-window.toggleLike = async (profil) => {
-  const user = auth.currentUser;
-  if (!user) return alert("Connecte-toi !");
-
-  const likeRef = doc(db, "likes", profil);
-  const userRef = doc(db, "userLikes", user.uid);
-
-  const userSnap = await getDoc(userRef);
-  let data = userSnap.exists() ? userSnap.data() : {};
-
-  const alreadyLiked = data[profil];
-
-  if (alreadyLiked) {
-    // unlike
-    await updateDoc(likeRef, {
-      count: increment(-1)
-    });
-
-    await setDoc(userRef, {
-      [profil]: false
-    }, { merge: true });
-
-  } else {
-    // like
-    await updateDoc(likeRef, {
-      count: increment(1)
-    });
-
-    await setDoc(userRef, {
-      [profil]: true
-    }, { merge: true });
-  }
-};
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
@@ -642,6 +608,56 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function listenLikes(profil){
+  const ref = doc(db, "likes", profil);
+
+  onSnapshot(ref, (snap) => {
+    const data = snap.data();
+    const count = data?.count || 0;
+
+    const el = document.getElementById(`count-${profil}`);
+    if (el) el.innerText = count;
+  });
+}
+
+listenLikes("XSU_LIFEZEN");
+
+window.toggleLike = async (profil) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Connecte-toi !");
+
+  const likeRef = doc(db, "likes", profil);
+  const userRef = doc(db, "userLikes", user.uid);
+
+  const snap = await getDoc(userRef);
+  let data = snap.exists() ? snap.data() : {};
+
+  const alreadyLiked = data[profil];
+
+  if (alreadyLiked) {
+    await updateDoc(likeRef, {
+      count: increment(-1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: false
+    }, { merge: true });
+
+  } else {
+    await updateDoc(likeRef, {
+      count: increment(1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: true
+    }, { merge: true });
+  }
+};
+
+listenLikes("XSU_LIFEZEN");
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -655,8 +671,9 @@ onAuthStateChanged(auth, (user) => {
 
     const custom = localStorage.getItem("customAvatar");
 
-document.getElementById("avatar").src =
-  custom || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
+    document.getElementById("avatar").src =
+      custom || user.photoURL || "https://ui-avatars.com/api/?name=" + user.displayName;
+
   } else {
     document.getElementById("loginBtn").style.display = "block";
     document.getElementById("profile").style.display = "none";
@@ -668,8 +685,6 @@ document.getElementById("profile").onclick = () => {
   menu.style.display = menu.style.display === "block" ? "none" : "block";
 };
 </script>
-
-
 <script>
 window.changerPhoto = function(){
   document.getElementById("photoInput").click();
@@ -695,5 +710,5 @@ document.getElementById("photoInput").addEventListener("change", function(event)
 });
 </script>
 
-</body>
+	</body>
 </html>
