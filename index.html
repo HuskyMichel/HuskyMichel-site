@@ -364,36 +364,6 @@
   transform:scale(1.2);
 }
 
-.like-btn{
-  border:none;
-  background:none;
-  font-size:28px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.like-btn.liked{
-  animation:heartPop 0.5s ease;
-}
-
-@keyframes heartPop{
-  0%{
-    transform:scale(1);
-  }
-
-  30%{
-    transform:scale(1.6);
-  }
-
-  60%{
-    transform:scale(0.9);
-  }
-
-  100%{
-    transform:scale(1);
-  }
-}
-
 		</style>
 	</head>
 
@@ -452,11 +422,7 @@ Se connecter
 				<p>YouTubeur gaming +10K, lives réguliers et communauté active.</p>
 
 <div class="like-zone">
-  <button
-class="like-btn"
-onclick="toggleLike('Gerrix', this)">
-❤️
-</button>
+  <button onclick="toggleLike('Gerrix')">❤️</button>
   <span id="count-Gerrix">0</span>
 </div>
 
@@ -469,11 +435,7 @@ onclick="toggleLike('Gerrix', this)">
 				<p>Créateur de contenu YouTube et communautaire.</p>
 
 <div class="like-zone">
-  <button
-class="like-btn"
-onclick="toggleLike('XSU LIFEZEN', this)">
-❤️
-</button>
+  <button onclick="toggleLike('XSU_LIFEZEN')">❤️</button>
   <span id="count-XSU_LIFEZEN">0</span>
 </div>
 
@@ -487,11 +449,7 @@ onclick="toggleLike('XSU LIFEZEN', this)">
 				<p>Gaming Fortnite, YouTube et Twitch.</p>
 
 <div class="like-zone">
-  <<button
-class="like-btn"
-onclick="toggleLike('Veenzoxx-Officiel', this)">
-❤️
-</button>
+  <button onclick="toggleLike('Veenzoxx_Officiel')">❤️</button>
   <span id="count-Veenzoxx_Officiel">0</span>
 </div>
 				<a href="https://huskymichel.github.io/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html" class="bouton">Voir le profil</a>
@@ -509,11 +467,7 @@ onclick="toggleLike('Veenzoxx-Officiel', this)">
 				<p>Créateur du serveur et manager des différents projets.</p>
 
 <div class="like-zone">
-  <button
-class="like-btn"
-onclick="toggleLike('HuskyMichel', this)">
-❤️
-</button>
+  <button onclick="toggleLike('HuskyMichel')">❤️</button>
   <span id="count-HuskyMichel">0</span>
   </div>
   <a href="https://huskymichel.github.io/HuskyMichel-site/HuskyMichel/huskymichel.html" class="bouton">Voir le profil</a>
@@ -662,7 +616,7 @@ listenLikes("XSU_LIFEZEN");
 listenLikes("Veenzoxx_Officiel");
 listenLikes("HuskyMichel");
 
-window.toggleLike = async (profil, btn) => {
+window.toggleLike = async (profil) => {
   const user = auth.currentUser;
   if (!user) return alert("Connecte-toi !");
 
@@ -691,9 +645,6 @@ window.toggleLike = async (profil, btn) => {
     await setDoc(userRef, {
       [profil]: true
     }, { merge: true });
-	btn.classList.remove("liked");
-void btn.offsetWidth;
-btn.classList.add("liked");
   }
 };
 
