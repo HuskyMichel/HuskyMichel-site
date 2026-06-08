@@ -4,522 +4,457 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<link rel="icon" href="../Photo de profil/titre.jpg">
-
-<title>Mon Profil</title>
+<link rel="icon" href="Photo de profil/titre.jpg"><title>Mon profil</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+/* BOUTON */
+				.reseau .btn{
+  				display:inline-block;
+  				margin-top:10px;
 
+  				padding:10px 18px;
+  				background:black;
+  				color:white;
+  				text-decoration:none;
+  				border-radius:10px;
+
+  				transition:0.3s;
+				}
+
+				.reseau .btn:hover{
+  				transform:scale(1.05);
+  				background:#333;
+				}
+
+/* ===== RESET ===== */
 body{
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
-min-height:100vh;
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
 }
 
-/* =======================
-TOPBAR
-======================= */
-
+/* ===== TOPBAR ===== */
 .topbar{
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-padding:15px 25px;
-
-background:white;
-
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-position:sticky;
-top:0;
-z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px;
+  background:white;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
 
+/* HOME */
 .home-img{
-width:140px;
-transition:.3s;
-cursor:pointer;
+  width:120px;
+  cursor:pointer;
 }
 
-.home-img:hover{
-transform:scale(1.08);
-}
-
-/* =======================
-RECHERCHE
-======================= */
-
+/* SEARCH */
 .recherche-container{
-
-position:relative;
-
-width:400px;
-max-width:45%;
+  position:relative;
+  width:300px;
 }
 
 #recherche{
-
-width:100%;
-
-padding:12px 15px;
-
-border:none;
-
-border-radius:12px;
-
-font-size:16px;
-
-box-shadow:0 5px 15px rgba(0,0,0,.12);
-
-outline:none;
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
 
 #resultats{
-
-position:absolute;
-
-top:50px;
-left:0;
-
-width:100%;
-
-background:white;
-
-border-radius:12px;
-
-overflow:hidden;
-
-box-shadow:0 8px 25px rgba(0,0,0,.12);
-
-z-index:999;
+  position:absolute;
+  width:100%;
+  background:white;
+  border-radius:10px;
+  margin-top:5px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+  z-index:999;
 }
 
+/* RESULTATS */
 .resultat{
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-padding:12px;
-
-cursor:pointer;
-
-transition:.2s;
+  padding:10px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
 }
 
-.resultat:hover{
-background:#f5f5f5;
+/* ===== PROFIL ===== */
+.profil{
+  text-align:center;
+  padding:30px;
 }
 
-.resultat-photo{
-
-width:40px;
-height:40px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-transition:.3s;
+.profil img{
+  width:140px;
+  border-radius:50%;
 }
 
-.resultat:hover .resultat-photo{
-
-transform:scale(1.1);
-
-box-shadow:0 5px 15px rgba(0,0,0,.18);
+/* ===== FAVORIS ===== */
+#favContainer{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px;
+  padding:20px;
 }
 
-/* =======================
-MENU UTILISATEUR
-======================= */
-
-#userBox{
-position:relative;
+/* CARD */
+.card{
+  width:200px;
+  background:white;
+  border-radius:15px;
+  padding:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+
+/* LOGIN */
 #loginBtn{
-
-padding:10px 16px;
-
-border:none;
-
-border-radius:12px;
-
-background:black;
-
-color:white;
-
-cursor:pointer;
-
-font-weight:600;
-
-transition:.2s;
-}
-
-#loginBtn:hover{
-transform:scale(1.05);
-}
-
-#profile{
-display:none;
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  background:black;
+  color:white;
+  cursor:pointer;
 }
 
 #avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  display:none;
+}
 
-width:45px;
-height:45px;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
+}
 
-border-radius:50%;
+/* TOPBAR */
+				.topbar{
+ 				display:flex;
+  				align-items:center;
+  				justify-content:space-between;
 
-cursor:pointer;
+  				padding:15px 25px;
+  				background:white;
+  				box-shadow:0 4px 10px rgba(0,0,0,.1);
+				}
 
-object-fit:cover;
+				.recherche-container{
+  				margin:auto;
+  				width:400px;
+				}
 
-transition:.3s;
+
+				.home-img{
+  				width:140px;
+  				transition:0.3s;
+				}
+
+				.home-img:hover{
+  				transform:scale(1.08);
+				}
+
+				.recherche-container{
+  				position:relative;
+  				width:350px;
+				}
+
+				#recherche{
+  				width:100%;
+  				padding:12px;
+  				border:none;
+  				border-radius:12px;
+  				font-size:16px;
+  				box-shadow:0 5px 15px rgba(0,0,0,.15);
+				}
+
+				#resultats{
+  				position:absolute;
+  				width:100%;
+  				background:white;
+  				border-radius:12px;
+ 				margin-top:5px;
+  				overflow:hidden;
+  				box-shadow:0 5px 15px rgba(0,0,0,.15);
+  				z-index:1000;
+				}
+
+				.resultat{
+  				padding:12px;
+  				cursor:pointer;
+				}
+
+				.resultat:hover{
+  				background:#f0f0f0;
+				}
+
+.resultat{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  cursor:pointer;
+}
+
+.resultat-photo{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+
+  transition:0.3s;
+}
+
+.resultat:hover .resultat-photo{
+  transform:scale(1.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+.resultat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  cursor:pointer;
+}
+/* ================= RECHERCHE ================= */
+.recherche-container{
+  position:relative;
+  width:320px;
+}
+
+#recherche{
+  width:100%;
+  padding:10px 12px;
+  border:none;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+  outline:none;
+}
+
+#resultats{
+  position:absolute;
+  top:45px;
+  width:100%;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  z-index:999;
+  overflow:hidden;
+}
+
+.resultat{
+  padding:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.resultat:hover{
+  background:#f2f2f2;
+}
+
+/* ================= LOGIN ================= */
+#loginBtn{
+  padding:10px 15px;
+  border:none;
+  border-radius:12px;
+  background:black;
+  color:white;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+#loginBtn:hover{
+  transform:scale(1.05);
+}
+
+#avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 #avatar:hover{
-
-transform:scale(1.08);
-
-box-shadow:0 6px 20px rgba(0,0,0,.18);
+  transform:scale(1.08);
 }
 
-#menuProfil{
-
-display:none;
-
-position:absolute;
-
-top:60px;
-right:0;
-
-width:220px;
-
-background:white;
-
-border-radius:15px;
-
-overflow:hidden;
-
-box-shadow:0 10px 25px rgba(0,0,0,.15);
-
-animation:menuPop .15s ease-out;
+/* ================= PROFIL ================= */
+.profil{
+  text-align:center;
+  padding:40px 20px;
 }
 
-@keyframes menuPop{
-
-from{
-opacity:0;
-transform:translateY(-10px);
+.profil img{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid white;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  transition:0.3s;
 }
 
-to{
-opacity:1;
-transform:translateY(0);
+.profil img:hover{
+  transform:scale(1.05);
 }
 
+#nom{
+  margin-top:15px;
+  font-size:28px;
+  font-weight:bold;
 }
 
-#menuProfil p{
-
-padding:14px;
-
-cursor:pointer;
-
-transition:.2s;
+#email{
+  color:#666;
+  margin-top:5px;
 }
 
-#menuProfil p:hover{
-background:#f3f3f3;
+/* ================= FAVORIS ================= */
+#favContainer{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  padding:25px;
 }
 
-#menuProfil::before{
-
-content:"";
-
-position:absolute;
-
-top:-6px;
-right:15px;
-
-width:12px;
-height:12px;
-
-background:white;
-
-transform:rotate(45deg);
+/* CARD FAVORIS */
+.card{
+  width:220px;
+  background:white;
+  border-radius:18px;
+  padding:15px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  transition:0.3s;
+  text-align:center;
 }
 
-/* =======================
-HEADER PROFIL
-======================= */
-
-.header-profil{
-
-width:100%;
-
-display:flex;
-justify-content:center;
-
-padding:40px 20px;
+.card:hover{
+  transform:translateY(-8px);
 }
 
-.carte-profil{
-
-background:white;
-
-width:95%;
-max-width:1000px;
-
-border-radius:25px;
-
-padding:30px;
-
-box-shadow:0 8px 25px rgba(0,0,0,.12);
-
-text-align:center;
+.card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  border-radius:12px;
 }
 
-.photo-profil{
-
-width:180px;
-height:180px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-border:6px solid white;
-
-box-shadow:0 10px 25px rgba(0,0,0,.15);
+.card h3{
+  margin:10px 0;
+  font-size:18px;
 }
 
-.nom-profil{
-
-margin-top:20px;
-
-font-size:35px;
-
-font-weight:bold;
+.card a{
+  display:inline-block;
+  padding:8px 12px;
+  background:black;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  transition:0.2s;
 }
 
-.email-profil{
-
-margin-top:10px;
-
-color:#666;
+.card a:hover{
+  background:#333;
 }
 
-/* =======================
-STATISTIQUES
-======================= */
-
-.stats{
-
-display:flex;
-
-justify-content:center;
-
-gap:30px;
-
-margin-top:25px;
-
-flex-wrap:wrap;
+/* ================= TITRE ================= */
+h2{
+  text-align:center;
+  margin-top:20px;
 }
 
-.stat{
+/* ================= RESPONSIVE ================= */
+@media (max-width:800px){
 
-background:#f8f8f8;
+  .topbar{
+    flex-direction:column;
+    gap:10px;
+  }
 
-padding:15px 25px;
+  .recherche-container{
+    width:100%;
+  }
 
-border-radius:15px;
+  #favContainer{
+    gap:15px;
+  }
 
-min-width:140px;
+  .card{
+    width:90%;
+    max-width:300px;
+  }
 }
 
-.stat h2{
-
-font-size:24px;
-
-margin-bottom:5px;
+/* FOOTER */
+.footer{
+  margin-top:60px;
+  background:white;
+  text-align:center;
+  padding:30px 20px;
+  box-shadow:0 -4px 15px rgba(0,0,0,0.1);
+  border-top-left-radius:20px;
+  border-top-right-radius:20px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
 }
-
-.stat p{
-color:#666;
-}
-
-/* =======================
-SECTION FAVORIS
-======================= */
-
-.section{
-
-padding:30px;
-}
-
-.section-title{
-
-text-align:center;
-
-font-size:30px;
-
-margin-bottom:30px;
-}
-
-#favorisContainer{
-
-display:flex;
-
-justify-content:center;
-
-flex-wrap:wrap;
-
-gap:25px;
-}
-
-/* =======================
-CARTE FAVORI
-======================= */
-
-.favori-card{
-
-width:260px;
-
-background:white;
-
-border-radius:20px;
-
-padding:20px;
-
-text-align:center;
-
-box-shadow:0 8px 20px rgba(0,0,0,.12);
-
-transition:.3s;
-}
-
-.favori-card:hover{
-
-transform:translateY(-8px);
-}
-
-.favori-card img{
-
-width:100%;
-
-height:180px;
-
-object-fit:cover;
-
-border-radius:15px;
-}
-
-.favori-card h3{
-
-margin-top:15px;
-}
-
-.favori-card a{
-
-display:inline-block;
-
-margin-top:15px;
-
-padding:12px 20px;
-
-background:black;
-
-color:white;
-
-text-decoration:none;
-
-border-radius:10px;
-}
-
-/* =======================
-DONS
-======================= */
 
 .don-widget{
-
-position:fixed;
-
-right:20px;
-bottom:20px;
-
-z-index:999;
-}
-
-.don-toggle{
-
-width:60px;
-height:60px;
-
-border:none;
-
-border-radius:50%;
-
-background:black;
-
-color:white;
-
-font-size:24px;
-
-cursor:pointer;
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:999;
 }
 
 .don-content{
-
-display:none;
-
-margin-bottom:10px;
-
-background:white;
-
-padding:20px;
-
-border-radius:20px;
-
-box-shadow:0 8px 25px rgba(0,0,0,.18);
-
-text-align:center;
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  text-align:center;
 }
 
-/* =======================
-RESPONSIVE
-======================= */
-
-@media(max-width:900px){
-
-.topbar{
-flex-wrap:wrap;
-gap:15px;
+.don-toggle{
+  width:55px;
+  height:55px;
+  border:none;
+  border-radius:50%;
+  background:black;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  margin-bottom:10px;
 }
 
-.recherche-container{
-max-width:100%;
-width:100%;
+.dons{
+  display:flex;
+  gap:15px;
+  justify-content:center;
 }
 
-.nom-profil{
-font-size:28px;
+.paypal-img{
+  width:85px;
+  border-radius:12px;
 }
 
-.stats{
-gap:15px;
-}
-
+.merci{
+  font-size:13px;
+  color:#666;
+  margin-top:10px;
 }
 
 </style>
@@ -527,256 +462,60 @@ gap:15px;
 
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
 
-<a href="https://huskymichel.github.io/HuskyMichel-site/">
-<img src="../Photo de profil/Accueil.jpg"
-class="home-img">
-</a>
+  <a href="../index.html">
+    <img src="../Photo de profil/Accueil.jpg" class="home-img">
+  </a>
 
-<div class="recherche-container">
+  <div class="recherche-container">
+    <input id="recherche" placeholder="🔍 Rechercher un profil..." onkeyup="search()">
+    <div id="resultats"></div>
+  </div>
 
-<input
-type="text"
-id="recherche"
-placeholder="🔍 Rechercher un profil..."
-onkeyup="chercherProfil()">
-
-<div id="resultats"></div>
-
-</div>
-
-<div id="userBox">
-
-<button id="loginBtn"
-onclick="loginGoogle()">
-Se connecter
-</button>
-
-<div id="profile">
-
-<img id="avatar">
+  <div>
+    <button id="loginBtn">Se connecter</button>
+    <img id="avatar">
+  </div>
 
 </div>
 
-<div id="menuProfil">
+<!-- PROFIL -->
+<div class="profil">
 
-<p onclick="window.location.href='profil.html'">
-👤 Mon profil
-</p>
+  <img id="photoProfil" src="../Photo de profil/default.jpg">
 
-<p onclick="changerPhoto()">
-🖼️ Changer photo
-</p>
+  <h2 id="nom">Invité</h2>
 
-<p onclick="logout()">
-🚪 Déconnexion
-</p>
+  <p id="email">Non connecté</p>
 
 </div>
 
+<!-- FAVORIS -->
+<h2 style="text-align:center;">❤️ Mes favoris</h2>
+
+<div id="favContainer"></div>
+
+<!-- FIN PARTIE 1 -->
+
+<!-- DON FLOTTANT -->
+<div class="don-widget" id="donWidget">
+
+  <button class="don-toggle" onclick="toggleDon()">💰</button>
+
+  <div class="don-content" id="donContent">
+
+    <h3>💰 Dons</h3>
+
+    En cours...
+
+    <p class="merci">Merci pour le soutien ❤️</p>
+
+  </div>
 </div>
-
-</div>
-
-<input
-type="file"
-id="photoInput"
-accept="image/*"
-style="display:none;">
-
-<div class="header-profil">
-
-<div class="carte-profil">
-
-<img
-id="photoProfil"
-class="photo-profil"
-src="../Photo de profil/Photo de profil HuskyMichel.jpg">
-
-<h1
-id="nomProfil"
-class="nom-profil">
-Chargement...
-</h1>
-
-<p
-id="emailProfil"
-class="email-profil">
-Connexion requise
-</p>
-
-<div class="stats">
-
-<div class="stat">
-<h2 id="nbFavoris">0</h2>
-<p>Favoris</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="section">
-
-<h2 class="section-title">
-❤️ Mes créateurs favoris
-</h2>
-
-<div id="favorisContainer">
-
-</div>
-
-</div>
-
-<!-- =========================
-DONS FLOTTANTS
-========================= -->
-
-<div class="don-widget">
-
-<button
-class="don-toggle"
-onclick="toggleDon()">
-💰
-</button>
-
-<div
-id="donContent"
-class="don-content">
-
-<h3>
-💰 Dons
-</h3>
-
-<p>
-En cours...
-</p>
-
-<p style="margin-top:10px;color:#666;">
-Merci pour le soutien ❤️
-</p>
-
-</div>
-
-</div>
-
-<script>
-
-function toggleDon(){
-
-const box =
-document.getElementById("donContent");
-
-if(box.style.display==="block"){
-
-box.style.display="none";
-
-}else{
-
-box.style.display="block";
-
-}
-
-}
-
-</script>
-
-<script>
-
-const profils = [
-
-{
-nom:"HuskyMichel",
-lien:"../HuskyMichel/huskymichel.html",
-photo:"../Photo de profil/Photo de profil HuskyMichel.jpg"
-},
-
-{
-nom:"Gerrix",
-lien:"../Gerrix/gerrix.html",
-photo:"../Photo de profil/Photo de profil Gerrix.jpg"
-},
-
-{
-nom:"XSU LIFEZEN",
-lien:"../XSU-LIFEZEN/xsu-lifezen.html",
-photo:"../Photo de profil/Photo de profil XSU LIFEZEN.jpg"
-},
-
-{
-nom:"Veenzoxx Officiel",
-lien:"../Veenzoxx-Officiel/veenzoxx-officiel.html",
-photo:"../Photo de profil/Photo de profil Veenzoxx Officiel.jpg"
-}
-
-];
-
-function chercherProfil(){
-
-const recherche =
-document
-.getElementById("recherche")
-.value
-.toLowerCase();
-
-const resultats =
-document.getElementById("resultats");
-
-resultats.innerHTML="";
-
-if(recherche.length===0){
-return;
-}
-
-profils.forEach(profil=>{
-
-if(
-profil.nom
-.toLowerCase()
-.includes(recherche)
-){
-
-const div =
-document.createElement("div");
-
-div.className="resultat";
-
-div.innerHTML=`
-
-<span>${profil.nom}</span>
-
-<img
-src="${profil.photo}"
-class="resultat-photo">
-
-`;
-
-div.onclick=()=>{
-
-window.location.href=
-profil.lien;
-
-};
-
-resultats.appendChild(div);
-
-}
-
-});
-
-}
-
-</script>
 
 <script type="module">
-
-const profils = [
-  { nom:"Gerrix", photo:"...", lien:"..." },
-  { nom:"Veenzoxx Officiel", photo:"...", lien:"..." }
-];
 
 import {
   getFirestore,
@@ -784,37 +523,55 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const db = getFirestore();
+
+/* ================= PROFILS ================= */
+const profils = [
+  {
+    nom: "HuskyMichel",
+    lien: "/HuskyMichel-site/HuskyMichel/huskymichel.html",
+    photo: "Barre de recherche/Photo de profil HuskyMichel.jpg"
+  },
+  {
+    nom: "Veenzoxx Officiel",
+    lien: "/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html",
+    photo: "Barre de recherche/Photo de profil Veenzoxx Officiel.jpg"
+  },
+  {
+    nom: "Gerrix",
+    lien: "/HuskyMichel-site/Gerrix/gerrix.html",
+    photo: "Barre de recherche/Photo de profil Gerrix.jpg"
+  },
+  {
+  nom: "XSU LIFEZEN",
+  lien: "/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html",
+  photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
+}
+];
+
+/* ================= FAVORIS ================= */
 async function chargerFavoris(uid){
 
   const ref = doc(db, "userFavorites", uid);
   const snap = await getDoc(ref);
 
-  const container = document.getElementById("favorisContainer");
-  const compteur = document.getElementById("nbFavoris");
-
+  const container = document.getElementById("favContainer");
   container.innerHTML = "";
 
-  if(!snap.exists()){
-    compteur.innerText = "0";
-    return;
-  }
+  if(!snap.exists()) return;
 
   const data = snap.data();
 
-  let count = 0;
-
-  Object.keys(data).forEach((nom) => {
+  for(const nom in data){
 
     if(data[nom] === true){
-
-      count++;
 
       const profil = profils.find(p => p.nom === nom);
 
       if(profil){
 
         const card = document.createElement("div");
-        card.className = "favori-card";
+        card.className = "card";
 
         card.innerHTML = `
           <img src="${profil.photo}">
@@ -825,388 +582,114 @@ async function chargerFavoris(uid){
         container.appendChild(card);
       }
     }
-  });
-
-  compteur.innerText = count;
+  }
 }
 
-import {
-initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+/* ================= RECHERCHE ================= */
+window.search = function(){
 
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
+  const val = document.getElementById("recherche").value.toLowerCase();
+  const box = document.getElementById("resultats");
+
+  box.innerHTML = "";
+
+  if(val.length === 0) return;
+
+  profils.forEach(p => {
+
+    if(p.nom.toLowerCase().includes(val)){
+
+      const div = document.createElement("div");
+      div.className = "resultat";
+
+      div.innerHTML = `<span>${p.nom}</span>`;
+
+      div.onclick = () => {
+        window.location.href = p.lien;
+      };
+
+      box.appendChild(div);
+    }
+  });
+};
+
+</script>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-getFirestore,
-doc,
-getDoc
+  getFirestore,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ======================
-CONFIG FIREBASE
-====================== */
-
+/* ================= FIREBASE CONFIG ================= */
 const firebaseConfig = {
-  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
-  authDomain: "huskymichel2.firebaseapp.com",
-  projectId: "huskymichel2",
-  storageBucket: "huskymichel2.firebasestorage.app",
-  messagingSenderId: "803041103978",
-  appId: "1:803041103978:web:0415d72f91e30735a47a13"
+  apiKey: "XXX",
+  authDomain: "XXX",
+  projectId: "XXX",
+  storageBucket: "XXX",
+  messagingSenderId: "XXX",
+  appId: "XXX"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-const provider =
-new GoogleAuthProvider();
-
-/* ======================
-CONNEXION
-====================== */
-
-window.loginGoogle = async () => {
-
-try{
-
-await signInWithPopup(
-auth,
-provider
-);
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Erreur de connexion"
-);
-
-}
-
+/* ================= LOGIN ================= */
+window.loginGoogle = function(){
+  signInWithPopup(auth, provider);
 };
 
-/* ======================
-DECONNEXION
-====================== */
-
-window.logout = async () => {
-
-await signOut(auth);
-
-window.location.reload();
-
+/* ================= LOGOUT ================= */
+window.logout = function(){
+  signOut(auth);
 };
 
-/* ======================
-ETAT UTILISATEUR
-====================== */
+/* ================= PROFILS (pour favoris) ================= */
+const profils = [
+  { nom:"Gerrix", lien:"../Gerrix/gerrix.html", photo:"../Photo de profil/Gerrix.jpg" },
+  { nom:"Lifezen", lien:"../Lifezen/lifezen.html", photo:"../Photo de profil/Lifezen.jpg" },
+  { nom:"Veenzoxx", lien:"../Veenzoxx/veenzoxx.html", photo:"../Photo de profil/Veenzoxx.jpg" }
+];
 
-onAuthStateChanged(
-auth,
-async(user)=>{
+/* ================= AUTH STATE ================= */
+onAuthStateChanged(auth, async (user) => {
 
-if(user){
+  if(user){
 
-document
-.getElementById("loginBtn")
-.style.display="none";
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("avatar").style.display = "block";
 
-document
-.getElementById("profile")
-.style.display="block";
+    document.getElementById("avatar").src = user.photoURL;
+    document.getElementById("photoProfil").src = user.photoURL;
+    document.getElementById("nom").innerText = user.displayName;
+    document.getElementById("email").innerText = user.email;
 
-/* PHOTO */
+    chargerFavoris(user.uid);
 
-const customAvatar =
-localStorage.getItem(
-"customAvatar"
-);
+  } else {
 
-document
-.getElementById("avatar")
-.src =
-customAvatar ||
-user.photoURL;
+    document.getElementById("loginBtn").style.display = "block";
+    document.getElementById("avatar").style.display = "none";
 
-/* PROFIL */
-
-document
-.getElementById("photoProfil")
-.src =
-customAvatar ||
-user.photoURL;
-
-document
-.getElementById("nomProfil")
-.innerText =
-user.displayName;
-
-document
-.getElementById("emailProfil")
-.innerText =
-user.email;
-
-/* MENU */
-
-document
-.getElementById("profile")
-.onclick=()=>{
-
-const menu=
-document.getElementById(
-"menuProfil"
-);
-
-menu.style.display=
-menu.style.display==="block"
-?
-"none"
-:
-"block";
-
-};
-
-/* FAVORIS */
-
-chargerFavoris(user.uid);
-
-}else{
-
-document
-.getElementById("loginBtn")
-.style.display="block";
-
-document
-.getElementById("profile")
-.style.display="none";
-
-document
-.getElementById("nomProfil")
-.innerText=
-"Non connecté";
-
-document
-.getElementById("emailProfil")
-.innerText=
-"Connecte-toi";
-
-}
-
-});
-
-/* ======================
-CHANGER PHOTO
-====================== */
-
-window.changerPhoto=
-function(){
-
-document
-.getElementById(
-"photoInput"
-)
-.click();
-
-};
-
-document
-.getElementById(
-"photoInput"
-)
-.addEventListener(
-"change",
-function(event){
-
-const file=
-event.target.files[0];
-
-if(!file)return;
-
-const reader=
-new FileReader();
-
-reader.onload=
-function(e){
-
-const image=
-e.target.result;
-
-localStorage.setItem(
-"customAvatar",
-image
-);
-
-document
-.getElementById("avatar")
-.src=image;
-
-document
-.getElementById("photoProfil")
-.src=image;
-
-};
-
-reader.readAsDataURL(
-file
-);
-
-}
-);
-
-/* ======================
-OUVRIR PROFIL
-====================== */
-
-window.ouvrirProfil=
-function(){
-
-window.location.href=
-"profil.html";
-
-};
-
-</script>
-
-<script>
-window.changerPhoto = function(){
-  document.getElementById("photoInput").click();
-};
-
-const photoInput = document.getElementById("photoInput");
-
-if(photoInput){
-  photoInput.addEventListener("change", function(event){
-
-    const file = event.target.files[0];
-
-    if(!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-      const image = e.target.result;
-
-      localStorage.setItem("customAvatar", image);
-
-      const avatar = document.getElementById("avatar");
-
-      if(avatar){
-        avatar.src = image;
-      }
-    };
-
-    reader.readAsDataURL(file);
-  });
-}
-</script>
-
-<script>
-function toggleDon(){
-
-  const box = document.getElementById("donContent");
-
-  if(!box) return;
-
-  if(box.style.display === "none"){
-    box.style.display = "block";
-  }else{
-    box.style.display = "none";
-  }
-}
-</script>
-
-<script>
-document.addEventListener("click", function(event){
-
-  const menu = document.getElementById("menuProfil");
-  const userBox = document.getElementById("userBox");
-
-  if(!menu || !userBox) return;
-
-  if(!userBox.contains(event.target)){
-    menu.style.display = "none";
+    document.getElementById("nom").innerText = "Invité";
+    document.getElementById("email").innerText = "Non connecté";
   }
 
 });
-</script>
 
-<script>
-window.ouvrirProfil = function(){
-
-  window.location.href =
-  "/HuskyMichel-site/Profil/profil.html";
-
-};
-</script>
-
-<script>
-window.voirFavoris = function(){
-
-  const section =
-  document.getElementById("listeFavoris");
-
-  if(section){
-    section.scrollIntoView({
-      behavior:"smooth"
-    });
-  }
-
-};
-</script>
-
-<script>
-function afficherProfilLike(nom, photo, lien){
-
-  const liste =
-  document.getElementById("listeFavoris");
-
-  if(!liste) return;
-
-  const carte =
-  document.createElement("div");
-
-  carte.className = "favori-card";
-
-  carte.innerHTML = `
-    <img src="${photo}">
-    <h3>${nom}</h3>
-    <a href="${lien}">
-      Voir le profil
-    </a>
-  `;
-
-  liste.appendChild(carte);
-
-}
-</script>
-
-<script>
-window.addEventListener("load", () => {
-
-  const avatar =
-  document.getElementById("avatar");
-
-  const custom =
-  localStorage.getItem("customAvatar");
-
-  if(custom && avatar){
-    avatar.src = custom;
-  }
-
-});
 </script>
 
 </body>
