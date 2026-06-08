@@ -410,7 +410,7 @@ Se connecter
   </div>
 
   <div id="menuProfil">
-  <p onclick="voirFavoris()">❤️ Favoris</p>
+  <p onclick="ouvrirProfil()">👤 Mon profil</p>
   <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
   <p onclick="logout()">🚪 Déconnexion</p>
 </div>
@@ -516,6 +516,12 @@ Se connecter
 			}
 			}
 		</script>
+
+<script>
+window.ouvrirProfil = function(){
+  window.location.href = "/HuskyMichel-site/Profil/profil.html";
+};
+</script>
 
 		<script>
 
