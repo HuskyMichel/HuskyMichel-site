@@ -1,696 +1,349 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="icon" href="Photo de profil/titre.jpg"><title>Mon profil</title>
 
 <style>
 
-/* BOUTON */
-				.reseau .btn{
-  				display:inline-block;
-  				margin-top:10px;
-
-  				padding:10px 18px;
-  				background:black;
-  				color:white;
-  				text-decoration:none;
-  				border-radius:10px;
-
-  				transition:0.3s;
-				}
-
-				.reseau .btn:hover{
-  				transform:scale(1.05);
-  				background:#333;
-				}
-
-/* ===== RESET ===== */
 body{
-  margin:0;
-  font-family:Arial;
-  background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
-}
-
-/* ===== TOPBAR ===== */
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:15px;
-  background:white;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-}
-
-/* HOME */
-.home-img{
-  width:120px;
-  cursor:pointer;
-}
-
-/* SEARCH */
-.recherche-container{
-  position:relative;
-  width:300px;
-}
-
-#recherche{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-}
-
-#resultats{
-  position:absolute;
-  width:100%;
-  background:white;
-  border-radius:10px;
-  margin-top:5px;
-  box-shadow:0 5px 15px rgba(0,0,0,.1);
-  z-index:999;
-}
-
-/* RESULTATS */
-.resultat{
-  padding:10px;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-}
-
-/* ===== PROFIL ===== */
-.profil{
-  text-align:center;
-  padding:30px;
-}
-
-.profil img{
-  width:140px;
-  border-radius:50%;
-}
-
-/* ===== FAVORIS ===== */
-#favContainer{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:15px;
-  padding:20px;
-}
-
-/* CARD */
-.card{
-  width:200px;
-  background:white;
-  border-radius:15px;
-  padding:15px;
-  box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-.card img{
-  width:100%;
-  border-radius:10px;
-}
-
-/* LOGIN */
-#loginBtn{
-  padding:10px 15px;
-  border:none;
-  border-radius:10px;
-  background:black;
-  color:white;
-  cursor:pointer;
-}
-
-#avatar{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  display:none;
-}
-
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#f5f5f5,#e8e8e8);
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#f5f5f5,#ebebeb);
 }
 
 /* TOPBAR */
-				.topbar{
- 				display:flex;
-  				align-items:center;
-  				justify-content:space-between;
 
-  				padding:15px 25px;
-  				background:white;
-  				box-shadow:0 4px 10px rgba(0,0,0,.1);
-				}
-
-				.recherche-container{
-  				margin:auto;
-  				width:400px;
-				}
-
-
-				.home-img{
-  				width:140px;
-  				transition:0.3s;
-				}
-
-				.home-img:hover{
-  				transform:scale(1.08);
-				}
-
-				.recherche-container{
-  				position:relative;
-  				width:350px;
-				}
-
-				#recherche{
-  				width:100%;
-  				padding:12px;
-  				border:none;
-  				border-radius:12px;
-  				font-size:16px;
-  				box-shadow:0 5px 15px rgba(0,0,0,.15);
-				}
-
-				#resultats{
-  				position:absolute;
-  				width:100%;
-  				background:white;
-  				border-radius:12px;
- 				margin-top:5px;
-  				overflow:hidden;
-  				box-shadow:0 5px 15px rgba(0,0,0,.15);
-  				z-index:1000;
-				}
-
-				.resultat{
-  				padding:12px;
-  				cursor:pointer;
-				}
-
-				.resultat:hover{
-  				background:#f0f0f0;
-				}
-
-.resultat{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px;
-  cursor:pointer;
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:15px 25px;
+background:white;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
 
-.resultat-photo{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  object-fit:cover;
-
-  transition:0.3s;
+.home-img{
+width:140px;
+transition:0.3s;
 }
 
-.resultat:hover .resultat-photo{
-  transform:scale(1.15);
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
+.home-img:hover{
+transform:scale(1.08);
 }
 
-.resultat{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px;
-  cursor:pointer;
-}
-/* ================= RECHERCHE ================= */
-.recherche-container{
-  position:relative;
-  width:320px;
+/* PROFIL */
+
+.profil-container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
 }
 
-#recherche{
-  width:100%;
-  padding:10px 12px;
-  border:none;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.12);
-  outline:none;
+.profil-header{
+text-align:center;
+margin-bottom:50px;
 }
 
-#resultats{
-  position:absolute;
-  top:45px;
-  width:100%;
-  background:white;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,.12);
-  z-index:999;
-  overflow:hidden;
+.profil-photo{
+width:180px;
+height:180px;
+border-radius:50%;
+object-fit:cover;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
-.resultat{
-  padding:10px;
-  cursor:pointer;
-  transition:0.2s;
+.profil-nom{
+margin-top:20px;
+font-size:32px;
+font-weight:bold;
 }
 
-.resultat:hover{
-  background:#f2f2f2;
+.profil-email{
+color:#666;
+margin-top:10px;
 }
 
-/* ================= LOGIN ================= */
-#loginBtn{
-  padding:10px 15px;
-  border:none;
-  border-radius:12px;
-  background:black;
-  color:white;
-  cursor:pointer;
-  transition:0.2s;
+/* SECTION */
+
+.section{
+margin-top:50px;
 }
 
-#loginBtn:hover{
-  transform:scale(1.05);
+.section h2{
+text-align:center;
+margin-bottom:30px;
 }
 
-#avatar{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  cursor:pointer;
-  transition:0.2s;
+/* LIKES */
+
+#likesContainer{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:25px;
 }
 
-#avatar:hover{
-  transform:scale(1.08);
+.carte{
+width:250px;
+background:white;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 8px 20px rgba(0,0,0,.12);
 }
 
-/* ================= PROFIL ================= */
-.profil{
-  text-align:center;
-  padding:40px 20px;
+.carte img{
+width:100%;
+border-radius:15px;
 }
 
-.profil img{
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  object-fit:cover;
-  border:4px solid white;
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
-  transition:0.3s;
+.bouton{
+display:inline-block;
+margin-top:15px;
+padding:10px 20px;
+background:black;
+color:white;
+text-decoration:none;
+border-radius:10px;
 }
 
-.profil img:hover{
-  transform:scale(1.05);
-}
+/* FUTUR */
 
-#nom{
-  margin-top:15px;
-  font-size:28px;
-  font-weight:bold;
-}
-
-#email{
-  color:#666;
-  margin-top:5px;
-}
-
-/* ================= FAVORIS ================= */
-#favContainer{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:20px;
-  padding:25px;
-}
-
-/* CARD FAVORIS */
-.card{
-  width:220px;
-  background:white;
-  border-radius:18px;
-  padding:15px;
-  box-shadow:0 6px 18px rgba(0,0,0,.12);
-  transition:0.3s;
-  text-align:center;
-}
-
-.card:hover{
-  transform:translateY(-8px);
-}
-
-.card img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-  border-radius:12px;
-}
-
-.card h3{
-  margin:10px 0;
-  font-size:18px;
-}
-
-.card a{
-  display:inline-block;
-  padding:8px 12px;
-  background:black;
-  color:white;
-  text-decoration:none;
-  border-radius:10px;
-  transition:0.2s;
-}
-
-.card a:hover{
-  background:#333;
-}
-
-/* ================= TITRE ================= */
-h2{
-  text-align:center;
-  margin-top:20px;
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width:800px){
-
-  .topbar{
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .recherche-container{
-    width:100%;
-  }
-
-  #favContainer{
-    gap:15px;
-  }
-
-  .card{
-    width:90%;
-    max-width:300px;
-  }
-}
-
-/* FOOTER */
-.footer{
-  margin-top:60px;
-  background:white;
-  text-align:center;
-  padding:30px 20px;
-  box-shadow:0 -4px 15px rgba(0,0,0,0.1);
-  border-top-left-radius:20px;
-  border-top-right-radius:20px;
-  border-bottom-left-radius:20px;
-  border-bottom-right-radius:20px;
-}
-
-.don-widget{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:999;
-}
-
-.don-content{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  text-align:center;
-}
-
-.don-toggle{
-  width:55px;
-  height:55px;
-  border:none;
-  border-radius:50%;
-  background:black;
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-  margin-bottom:10px;
-}
-
-.dons{
-  display:flex;
-  gap:15px;
-  justify-content:center;
-}
-
-.paypal-img{
-  width:85px;
-  border-radius:12px;
-}
-
-.merci{
-  font-size:13px;
-  color:#666;
-  margin-top:10px;
+.placeholder{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+text-align:center;
+box-shadow:0 6px 15px rgba(0,0,0,.08);
 }
 
 </style>
+
 </head>
 
 <body>
 
 <!-- TOPBAR -->
+
 <div class="topbar">
 
-  <a href="../index.html">
-    <img src="../Photo de profil/Accueil.jpg" class="home-img">
+  <a href="index.html">
+    <img src="Photo de profil/Accueil.jpg" class="home-img">
   </a>
-
-  <div class="recherche-container">
-    <input id="recherche" placeholder="🔍 Rechercher un profil..." onkeyup="search()">
-    <div id="resultats"></div>
-  </div>
-
-  <div>
-    <button id="loginBtn">Se connecter</button>
-    <img id="avatar">
-  </div>
 
 </div>
 
 <!-- PROFIL -->
-<div class="profil">
 
-  <img id="photoProfil" src="../Photo de profil/default.jpg">
+<div class="profil-container">
 
-  <h2 id="nom">Invité</h2>
+  <div class="profil-header">
 
-  <p id="email">Non connecté</p>
+    <img id="profilPhoto" class="profil-photo">
 
-</div>
+    <div id="profilNom" class="profil-nom">
+      Chargement...
+    </div>
 
-<!-- FAVORIS -->
-<h2 style="text-align:center;">❤️ Mes favoris</h2>
-
-<div id="favContainer"></div>
-
-<!-- FIN PARTIE 1 -->
-
-<!-- DON FLOTTANT -->
-<div class="don-widget" id="donWidget">
-
-  <button class="don-toggle" onclick="toggleDon()">💰</button>
-
-  <div class="don-content" id="donContent">
-
-    <h3>💰 Dons</h3>
-
-    En cours...
-
-    <p class="merci">Merci pour le soutien ❤️</p>
+    <div id="profilEmail" class="profil-email">
+      Chargement...
+    </div>
 
   </div>
+
+  <!-- PROFILS LIKÉS -->
+
+  <div class="section">
+
+    <h2>❤️ Profils likés</h2>
+
+    <div id="likesContainer"></div>
+
+  </div>
+
+  <!-- FUTURES CATÉGORIES -->
+
+  <div class="section">
+
+    <h2>⭐ Catégories futures</h2>
+
+    <div class="placeholder">
+      Cette zone servira plus tard pour les favoris, badges, collections et autres fonctionnalités.
+    </div>
+
+  </div>
+
 </div>
 
+</body>
+
 <script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getFirestore,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const db = getFirestore();
-
-/* ================= PROFILS ================= */
-const profils = [
-  {
-    nom: "HuskyMichel",
-    lien: "/HuskyMichel-site/HuskyMichel/huskymichel.html",
-    photo: "Barre de recherche/Photo de profil HuskyMichel.jpg"
-  },
-  {
-    nom: "Veenzoxx Officiel",
-    lien: "/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html",
-    photo: "Barre de recherche/Photo de profil Veenzoxx Officiel.jpg"
-  },
-  {
-    nom: "Gerrix",
-    lien: "/HuskyMichel-site/Gerrix/gerrix.html",
-    photo: "Barre de recherche/Photo de profil Gerrix.jpg"
-  },
-  {
-  nom: "XSU LIFEZEN",
-  lien: "/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html",
-  photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
-}
-];
-
-/* ================= FAVORIS ================= */
-async function chargerFavoris(uid){
-
-  const ref = doc(db, "userFavorites", uid);
-  const snap = await getDoc(ref);
-
-  const container = document.getElementById("favContainer");
-  container.innerHTML = "";
-
-  if(!snap.exists()) return;
-
-  const data = snap.data();
-
-  for(const nom in data){
-
-    if(data[nom] === true){
-
-      const profil = profils.find(p => p.nom === nom);
-
-      if(profil){
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-          <img src="${profil.photo}">
-          <h3>${profil.nom}</h3>
-          <a href="${profil.lien}">Voir le profil</a>
-        `;
-
-        container.appendChild(card);
-      }
-    }
-  }
-}
-
-/* ================= RECHERCHE ================= */
-window.search = function(){
-
-  const val = document.getElementById("recherche").value.toLowerCase();
-  const box = document.getElementById("resultats");
-
-  box.innerHTML = "";
-
-  if(val.length === 0) return;
-
-  profils.forEach(p => {
-
-    if(p.nom.toLowerCase().includes(val)){
-
-      const div = document.createElement("div");
-      div.className = "resultat";
-
-      div.innerHTML = `<span>${p.nom}</span>`;
-
-      div.onclick = () => {
-        window.location.href = p.lien;
-      };
-
-      box.appendChild(div);
-    }
-  });
-};
-
-</script>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup,
-  signOut,
+  getAuth,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getFirestore,
   doc,
   getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================= FIREBASE CONFIG ================= */
+/* CONFIG FIREBASE */
+
 const firebaseConfig = {
-  apiKey: "XXX",
-  authDomain: "XXX",
-  projectId: "XXX",
-  storageBucket: "XXX",
-  messagingSenderId: "XXX",
-  appId: "XXX"
+
+  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
+  authDomain: "huskymichel2.firebaseapp.com",
+  projectId: "huskymichel2",
+  storageBucket: "huskymichel2.firebasestorage.app",
+  messagingSenderId: "803041103978",
+  appId: "1:803041103978:web:0415d72f91e30735a47a13"
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
-/* ================= LOGIN ================= */
-window.loginGoogle = function(){
-  signInWithPopup(auth, provider);
+const profils = {
+
+  Gerrix: {
+    nom: "Gerrix",
+    photo: "Photo de profil/Photo de profil Gerrix.jpg",
+    lien: "Gerrix/gerrix.html"
+  },
+
+  XSU_LIFEZEN: {
+    nom: "XSU LIFEZEN",
+    photo: "Photo de profil/Photo de profil XSU LIFEZEN.jpg",
+    lien: "XSU-LIFEZEN/xsu-lifezen.html"
+  },
+
+  Veenzoxx_Officiel: {
+    nom: "Veenzoxx Officiel",
+    photo: "Photo de profil/Photo de profil Veenzoxx Officiel.jpg",
+    lien: "Veenzoxx-Officiel/veenzoxx-officiel.html"
+  },
+
+  HuskyMichel: {
+    nom: "HuskyMichel",
+    photo: "Photo de profil/Photo de profil HuskyMichel.jpg",
+    lien: "HuskyMichel/huskymichel.html"
+  }
+
 };
 
-/* ================= LOGOUT ================= */
-window.logout = function(){
-  signOut(auth);
-};
+/* ================= UTILISATEUR CONNECTÉ ================= */
 
-/* ================= PROFILS (pour favoris) ================= */
-const profils = [
-  { nom:"Gerrix", lien:"../Gerrix/gerrix.html", photo:"../Photo de profil/Gerrix.jpg" },
-  { nom:"Lifezen", lien:"../Lifezen/lifezen.html", photo:"../Photo de profil/Lifezen.jpg" },
-  { nom:"Veenzoxx", lien:"../Veenzoxx/veenzoxx.html", photo:"../Photo de profil/Veenzoxx.jpg" }
-];
-
-/* ================= AUTH STATE ================= */
 onAuthStateChanged(auth, async (user) => {
 
-  if(user){
+  if (!user) {
 
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("avatar").style.display = "block";
+    alert("Tu dois être connecté.");
+    window.location.href = "index.html";
 
-    document.getElementById("avatar").src = user.photoURL;
-    document.getElementById("photoProfil").src = user.photoURL;
-    document.getElementById("nom").innerText = user.displayName;
-    document.getElementById("email").innerText = user.email;
-
-    chargerFavoris(user.uid);
-
-  } else {
-
-    document.getElementById("loginBtn").style.display = "block";
-    document.getElementById("avatar").style.display = "none";
-
-    document.getElementById("nom").innerText = "Invité";
-    document.getElementById("email").innerText = "Non connecté";
+    return;
   }
+
+  /* PHOTO */
+
+  document.getElementById("profilPhoto").src =
+    localStorage.getItem("customAvatar")
+    || user.photoURL;
+
+  /* NOM */
+
+  document.getElementById("profilNom").innerText =
+    user.displayName;
+
+  /* EMAIL */
+
+  document.getElementById("profilEmail").innerText =
+    user.email;
+
+  /* CHARGEMENT DES LIKES */
+
+  chargerLikes(user.uid);
 
 });
 
-</script>
+async function chargerLikes(uid){
 
+  const container =
+    document.getElementById("likesContainer");
+
+  container.innerHTML = "";
+
+  const ref = doc(db, "userLikes", uid);
+
+  const snap = await getDoc(ref);
+
+  if(!snap.exists()){
+
+    container.innerHTML = `
+      <div class="placeholder">
+        Aucun profil liké pour le moment ❤️
+      </div>
+    `;
+
+    return;
+  }
+
+  const data = snap.data();
+
+  let nombreLikes = 0;
+
+  for(const profilId in data){
+
+    if(data[profilId] !== true) continue;
+
+    nombreLikes++;
+
+    const profil = profils[profilId];
+
+    if(!profil) continue;
+
+    const carte = document.createElement("div");
+
+    carte.className = "carte";
+
+    carte.innerHTML = `
+      <img src="${profil.photo}">
+      <h3>${profil.nom}</h3>
+
+      <a href="${profil.lien}"
+         class="bouton">
+         Voir le profil
+      </a>
+    `;
+
+    container.appendChild(carte);
+  }
+
+  if(nombreLikes === 0){
+
+    container.innerHTML = `
+      <div class="placeholder">
+        Aucun profil liké pour le moment ❤️
+      </div>
+    `;
+  }
+}
+
+</script>
 </body>
 </html>

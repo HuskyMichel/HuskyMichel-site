@@ -555,8 +555,9 @@ div.innerHTML = `
 `;
 
 div.onclick = () => {
-  window.location.href = profil.lien;
-};
+  window.voirFavoris = function(){
+  window.location.href = "profil/profil.html";
+}
 
 resultats.appendChild(div);
 			}
