@@ -16,24 +16,139 @@ font-family:Arial,sans-serif;
 background:linear-gradient(135deg,#f5f5f5,#ebebeb);
 }
 
-/* TOPBAR */
+/* ================= TOPBAR ================= */
 
 .topbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:15px 25px;
-background:white;
-box-shadow:0 4px 10px rgba(0,0,0,.1);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 25px;
+  background:white;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 }
 
 .home-img{
-width:140px;
-transition:0.3s;
+  width:140px;
+  transition:0.3s;
 }
 
 .home-img:hover{
-transform:scale(1.08);
+  transform:scale(1.08);
+}
+
+/* ================= RECHERCHE ================= */
+
+.recherche-container{
+  position:relative;
+  width:350px;
+}
+
+#recherche{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  outline:none;
+}
+
+#resultats{
+  position:absolute;
+  width:100%;
+  background:white;
+  border-radius:12px;
+  margin-top:5px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  z-index:1000;
+}
+
+.resultat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  cursor:pointer;
+}
+
+.resultat:hover{
+  background:#f0f0f0;
+}
+
+.resultat-photo{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+  transition:0.3s;
+}
+
+.resultat:hover .resultat-photo{
+  transform:scale(1.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+/* ================= AVATAR ================= */
+
+#avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+#avatar:hover{
+  transform:scale(1.08);
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+
+/* ================= MENU PROFIL ================= */
+
+#userBox{
+  position:relative;
+}
+
+#menuProfil{
+  display:none;
+  position:absolute;
+  right:0;
+  top:55px;
+  background:white;
+  border-radius:14px;
+  padding:8px 0;
+  width:200px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  overflow:hidden;
+  z-index:1000;
+}
+
+#menuProfil p{
+  margin:0;
+  padding:12px 15px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+#menuProfil p:hover{
+  background:#f2f2f2;
+}
+
+#menuProfil a{
+  color:black;
+  text-decoration:none;
+}
+
+#menuProfil::before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:15px;
+  width:12px;
+  height:12px;
+  background:white;
+  transform:rotate(45deg);
 }
 
 /* PROFIL */
@@ -130,14 +245,50 @@ box-shadow:0 6px 15px rgba(0,0,0,.08);
 <body>
 
 <!-- TOPBAR -->
-
 <div class="topbar">
 
-  <a href="index.html">
-    <img src="Photo de profil/Accueil.jpg" class="home-img">
-  </a>
+			<a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
 
+			<div class="recherche-container">
+
+				<input
+				type="text"
+				id="recherche"
+				placeholder="🔍 Rechercher un profil..."
+				onkeyup="chercherProfil()">
+
+				<div id="resultats"></div>
+
+			</div>
+
+<div id="userBox">
+  <button id="loginBtn" onclick="loginGoogle()" style="
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:black;
+  color:white;
+  cursor:pointer;
+  font-weight:500;
+">
+Se connecter
+</button>
+
+  <div id="profile" style="display:none;">
+    <img id="avatar" style="width:40px;height:40px;border-radius:50%;">
+  </div>
+
+  <div id="menuProfil">
+  <a href="https://huskymichel.github.io/HuskyMichel-site/Profil/profil.html"> <p onclick="voirFavoris()">👤 Mon profil</p></a>
+  <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
+  <p onclick="logout()">🚪 Déconnexion</p>
 </div>
+</div>
+
+		</div>
+
+			<input type="file" id="photoInput" accept="image/*" style="display:none;">
+
 
 <!-- PROFIL -->
 
@@ -184,6 +335,18 @@ box-shadow:0 6px 15px rgba(0,0,0,.08);
 </body>
 
 <script type="module">
+
+document.getElementById("profile").onclick = () => {
+
+  const menu = document.getElementById("menuProfil");
+
+  if(menu.style.display === "block"){
+    menu.style.display = "none";
+  }else{
+    menu.style.display = "block";
+  }
+
+};
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
