@@ -554,7 +554,7 @@ Se connecter
 			<div class="carte">
 				<img src="Photo de profil/Photo de profil Gerrix.jpg">
 				<h2>Gerrix</h2>
-				<p>YouTubeur gaming +10K, lives réguliers et communauté active.</p>
+				<p>YouTubeur gaming +10K, lives réguliers et communauté active !</p>
 
 <div class="like-zone">
   <button onclick="toggleLike('Gerrix')">❤️</button>
@@ -567,7 +567,7 @@ Se connecter
 			<div class="carte">
 				<img src="Photo de profil/Photo de profil XSU LIFEZEN.jpg">
 				<h2>XSU LIFEZEN</h2>
-				<p>Créateur de contenu YouTube et communautaire.</p>
+				<p>Créateur de contenu YouTube et communautaire !</p>
 
 <div class="like-zone">
   <button onclick="toggleLike('XSU_LIFEZEN')">❤️</button>
@@ -581,7 +581,7 @@ Se connecter
 			<div class="carte">
 				<img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg">
 				<h2>Veenzoxx Officiel</h2>
-				<p>Gaming Fortnite, YouTube et Twitch.</p>
+				<p>Gaming Fortnite, YouTube et Twitch !</p>
 
 <div class="like-zone">
   <button onclick="toggleLike('Veenzoxx_Officiel')">❤️</button>
@@ -599,7 +599,7 @@ Se connecter
 					<h2>⭐ HuskyMichel</h2>
 				<div class="badge-createur">Créateur
 				</div>
-				<p>Créateur du serveur et manager des différents projets.</p>
+				<p>Créateur du site et manager des différents projets !</p>
 
 <div class="like-zone">
   <button onclick="toggleLike('HuskyMichel')">❤️</button>
@@ -608,6 +608,21 @@ Se connecter
   <a href="https://huskymichel.github.io/HuskyMichel-site/HuskyMichel/huskymichel.html" class="bouton">Voir le profil</a>
 
 		</div>
+		
+		<div class="carte">
+				<img src="Photo de profil/Photo de profil Flyxoz.jpg">
+				<h2>Flyxoz</h2>
+				<br>
+				<br>
+				<br>
+				<p>Intéressant, Gentil, Drole !</p>
+
+<div class="like-zone">
+  <button onclick="toggleLike('Flyxoz')">❤️</button>
+  <span id="count-Flyxoz">0</span>
+</div>
+				<a href="https://huskymichel.github.io/HuskyMichel-site/Flyxoz/flyxoz.html" class="bouton">Voir le profil</a>
+			</div>
 		
 <input type="file" id="photoInput" accept="image/*" style="display:none;">
 
@@ -718,6 +733,13 @@ Se connecter
   nom: "XSU LIFEZEN",
   lien: "/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html",
   photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
+},
+
+{
+  nom:"Flyxoz",
+  lien:"/HuskyMichel-site/Flyxoz/flyxoz.html",
+  photo:"Barre de recherche/Photo de profil Flyxoz.jpg"
+  
 }
 ];
 
@@ -809,6 +831,7 @@ listenLikes("Gerrix");
 listenLikes("XSU_LIFEZEN");
 listenLikes("Veenzoxx_Officiel");
 listenLikes("HuskyMichel");
+listenLikes("Flyxoz");
 
 window.toggleLike = async (profil) => {
   const user = auth.currentUser;
@@ -846,6 +869,7 @@ listenLikes("Gerrix");
 listenLikes("XSU_LIFEZEN");
 listenLikes("Veenzoxx_Officiel");
 listenLikes("HuskyMichel");
+listenLikes("Flyxoz");
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
