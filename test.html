@@ -1029,9 +1029,40 @@ nouveauProfil
 
 afficherProfils()
 
-modal.style.display =
+zone.innerHTML += `
+<div class="profil" style="background:${p.couleur}">
+  <img src="${p.photo}">
+  <div class="nom">${p.nom}</div>
 
-"none"
+  <div class="tag">${p.categories.join(", ")}</div>
+
+  <button onclick="ouvrirProfil('${p.id}')">
+    Voir
+  </button>
+</div>
+`;
+
+window.ouvrirProfil = (id) => {
+  window.location.href = "profil.html?id=" + id;
+};
+
+const docRef = await addDoc(collection(db, "profils"), profil);
+
+profil.id = docRef.id;
+
+import { doc, getDoc } from "firebase/firestore";
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const snap = await getDoc(doc(db, "profils", id));
+
+if (snap.exists()) {
+  const data = snap.data();
+
+  document.getElementById("nom").innerText = data.nom;
+  document.getElementById("img").src = data.photo;
+}
 
 }
 
@@ -1376,6 +1407,14 @@ nom.includes(texte)
 
 /* ========================= */
 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where
+} from "firebase/firestore";
+
 document
 
 .querySelectorAll(
@@ -1475,6 +1514,42 @@ p.style.display=
 };
 
 });
+
+saveProfil.onclick = async () => {
+
+if (!user) return;
+
+const q = query(
+  collection(db, "profils"),
+  where("uid", "==", user.uid)
+);
+
+const snap = await getDocs(q);
+
+if (!snap.empty) {
+  alert("Tu as déjà créé un profil !");
+  return;
+}
+
+const profil = {
+  nom: pseudo.value,
+  photo: photo.value,
+  lien: profilLink.value,
+  description: description.value,
+  categories: categoriesChoisies,
+  couleur: couleurProfil,
+  uid: user.uid,
+  auteur: user.displayName
+};
+
+await addDoc(collection(db, "profils"), profil);
+
+profils.push(profil);
+afficherProfils();
+
+modal.style.display = "none";
+
+};
 
 </script>
 
