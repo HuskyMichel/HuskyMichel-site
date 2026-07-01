@@ -543,13 +543,14 @@ placeholder="🔍 Rechercher un profil..."
 
 <button
 
-class="btn"
 
-id="loginBtn">
+<button id="loginBtn">Connexion</button>
+<button id="profilBtn" style="display:none;">Déconnexion</button>
+<button id="createBtn" style="display:none;">+</button>
 
-Connexion
+<input id="photo" type="file">
 
-</button>
+
 
 <button
 
@@ -834,175 +835,128 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-/* ================= DOM ================= */
-const loginBtn = document.getElementById("loginBtn");
-const profilBtn = document.getElementById("profilBtn");
-const createBtn = document.getElementById("createBtn");
-const modal = document.getElementById("modal");
-const closeModal = document.getElementById("closeModal");
-const saveBtn = document.getElementById("saveProfil");
+/* ================= WAIT DOM ================= */
+window.addEventListener("DOMContentLoaded", () => {
 
-/* ================= AUTH ================= */
-loginBtn.onclick = () => signInWithPopup(auth, provider);
-profilBtn.onclick = () => signOut(auth);
+  const loginBtn = document.getElementById("loginBtn");
+  const profilBtn = document.getElementById("profilBtn");
+  const createBtn = document.getElementById("createBtn");
+  const modal = document.getElementById("modal");
+  const closeModal = document.getElementById("closeModal");
+  const saveBtn = document.getElementById("saveProfil");
 
-let currentUser = null;
+  let currentUser = null;
+  let imageBase64 = "";
 
-/* ================= IMAGE UPLOAD ================= */
-let imageBase64 = "";
-
-/* input file (AJOUTE dans HTML si pas encore) */
-const photoInput = document.createElement("input");
-photoInput.type = "file";
-photoInput.accept = "image/*";
-photoInput.style.display = "none";
-document.body.appendChild(photoInput);
-
-document.getElementById("photo").onclick = () => photoInput.click();
-
-photoInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    imageBase64 = reader.result;
-    document.getElementById("photo").value = "Image chargée ✔";
-  };
-  reader.readAsDataURL(file);
-});
-
-/* ================= LOGIN STATE ================= */
-onAuthStateChanged(auth, async (user) => {
-  currentUser = user;
-
-  if (user) {
-    loginBtn.style.display = "none";
-    profilBtn.style.display = "block";
-    createBtn.style.display = "block";
-  } else {
-    loginBtn.style.display = "block";
-    profilBtn.style.display = "none";
-    createBtn.style.display = "none";
-  }
-
-  await chargerProfils();
-});
-
-/* ================= MODAL ================= */
-createBtn.onclick = async () => {
-  if (!currentUser) return alert("Connecte-toi");
-  modal.style.display = "flex";
-};
-
-closeModal.onclick = () => modal.style.display = "none";
-
-/* ================= LIMIT DESCRIPTION ================= */
-document.getElementById("description").addEventListener("input", (e) => {
-  if (e.target.value.length > 50) {
-    e.target.value = e.target.value.slice(0, 50);
-  }
-});
-
-/* ================= CATEGORIES ================= */
-let categoriesChoisies = [];
-
-document.querySelectorAll(".catSelect").forEach(c => {
-  c.onclick = () => {
-    c.classList.toggle("selected");
-
-    const val = c.innerText;
-
-    if (categoriesChoisies.includes(val)) {
-      categoriesChoisies = categoriesChoisies.filter(x => x !== val);
-    } else {
-      categoriesChoisies.push(val);
+  /* ================= LOGIN ================= */
+  loginBtn.onclick = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      console.log(e);
+      alert("Erreur connexion");
     }
   };
-});
 
-/* ================= COULEUR ================= */
-let couleurProfil = "#5865F2";
-
-document.querySelectorAll(".color").forEach(c => {
-  c.onclick = () => {
-    document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
-    c.classList.add("active");
-
-    couleurProfil = window.getComputedStyle(c).backgroundColor;
-  };
-});
-
-/* ================= SAVE / CREATE OR UPDATE ================= */
-saveBtn.onclick = async () => {
-  if (!currentUser) return;
-
-  const pseudo = document.getElementById("pseudo").value.trim();
-  const desc = document.getElementById("description").value.trim();
-  const lien = document.getElementById("profilLink").value;
-
-  if (!pseudo) return alert("Pseudo requis");
-
-  /* CHECK SI PROFIL EXISTE */
-  const q = query(collection(db, "profils"), where("uid", "==", currentUser.uid));
-  const snap = await getDocs(q);
-
-  const data = {
-    nom: pseudo,
-    photo: imageBase64 || "",
-    lien,
-    description: desc.slice(0, 50),
-    categories: categoriesChoisies,
-    couleur: couleurProfil,
-    uid: currentUser.uid,
-    auteur: currentUser.displayName
+  profilBtn.onclick = () => {
+    signOut(auth);
   };
 
-  if (!snap.empty) {
-    /* UPDATE */
-    const id = snap.docs[0].id;
-    await updateDoc(doc(db, "profils", id), data);
-    alert("Profil modifié !");
-  } else {
-    /* CREATE */
-    await addDoc(collection(db, "profils"), data);
-    alert("Profil créé !");
-  }
+  /* ================= AUTH STATE ================= */
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
 
-  modal.style.display = "none";
-  await chargerProfils();
-};
-
-/* ================= LOAD PROFILES ================= */
-let profils = [];
-
-async function chargerProfils() {
-  const snap = await getDocs(collection(db, "profils"));
-
-  profils = snap.docs.map(d => ({
-    id: d.id,
-    ...d.data()
-  }));
-
-  afficherProfils();
-}
-
-function afficherProfils() {
-  const zone = document.getElementById("profils");
-  zone.innerHTML = "";
-
-  profils.forEach(p => {
-    zone.innerHTML += `
-      <div class="profil" style="background:${p.couleur}">
-        <img src="${p.photo || ''}">
-        <div class="nom">${p.nom}</div>
-        <div class="tag">${p.categories?.join(", ") || ""}</div>
-        <p style="font-size:12px;opacity:0.8">${p.description || ""}</p>
-
-        <a href="${p.lien}" class="voir">Voir</a>
-      </div>
-    `;
+    if (user) {
+      loginBtn.style.display = "none";
+      profilBtn.style.display = "inline-block";
+      createBtn.style.display = "inline-block";
+    } else {
+      loginBtn.style.display = "inline-block";
+      profilBtn.style.display = "none";
+      createBtn.style.display = "none";
+    }
   });
-}
+
+  /* ================= OPEN MODAL ================= */
+  createBtn.onclick = async () => {
+    if (!currentUser) {
+      alert("Connecte-toi d'abord");
+      return;
+    }
+    modal.style.display = "flex";
+  };
+
+  closeModal.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  /* ================= LIMIT DESCRIPTION 50 ================= */
+  const descInput = document.getElementById("description");
+
+  descInput.addEventListener("input", () => {
+    if (descInput.value.length > 50) {
+      descInput.value = descInput.value.slice(0, 50);
+    }
+  });
+
+  /* ================= IMAGE FILE ================= */
+  const photoInput = document.getElementById("photo");
+
+  photoInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      imageBase64 = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ================= SAVE PROFILE ================= */
+  saveBtn.onclick = async () => {
+    if (!currentUser) return;
+
+    const pseudo = document.getElementById("pseudo").value.trim();
+    const lien = document.getElementById("profilLink").value;
+
+    if (!pseudo) {
+      alert("Pseudo requis");
+      return;
+    }
+
+    /* CHECK 1 PROFIL MAX */
+    const q = query(collection(db, "profils"), where("uid", "==", currentUser.uid));
+    const snap = await getDocs(q);
+
+    const data = {
+      nom: pseudo,
+      photo: imageBase64 || "",
+      lien: lien,
+      description: descInput.value.slice(0, 50),
+      uid: currentUser.uid,
+      auteur: currentUser.displayName
+    };
+
+    try {
+
+      if (!snap.empty) {
+        const id = snap.docs[0].id;
+        await updateDoc(doc(db, "profils", id), data);
+        alert("Profil modifié !");
+      } else {
+        await addDoc(collection(db, "profils"), data);
+        alert("Profil créé !");
+      }
+
+      modal.style.display = "none";
+
+    } catch (e) {
+      console.log(e);
+      alert("Erreur Firestore");
+    }
+  };
+
+});
 </script>
 </html>
