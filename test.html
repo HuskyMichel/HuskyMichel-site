@@ -797,759 +797,224 @@ Publier mon profil
 
 </div>
 
-<script>
-
-const modal =
-document.getElementById("modal")
-
-const createBtn =
-document.getElementById("createBtn")
-
-const closeModal =
-document.getElementById("closeModal")
-
-createBtn.onclick = ()=>{
-
-modal.style.display = "flex"
-
-}
-
-closeModal.onclick = ()=>{
-
-modal.style.display = "none"
-
-}
-
-window.loginGoogle = async () => {
-
-  try{
-
-    await signInWithPopup(auth, provider);
-
-  }catch(error){
-
-    console.log(error);
-
-    alert(error.code);
-
-  }
-
-}
-
-</script>
-
-<script>
-
-const categoriesChoisies = []
-
-document.querySelectorAll(".catSelect")
-
-.forEach(cat=>{
-
-cat.onclick = ()=>{
-
-cat.classList.toggle("selected")
-
-const nom = cat.innerText
-
-if(categoriesChoisies.includes(nom)){
-
-const index =
-
-categoriesChoisies.indexOf(nom)
-
-categoriesChoisies.splice(index,1)
-
-}
-
-else{
-
-categoriesChoisies.push(nom)
-
-}
-
-}
-
-})
-
-</script>
-
-<script>
-
-let couleurProfil = "#5865F2"
-
-document.querySelectorAll(".color")
-
-.forEach(c=>{
-
-c.onclick = ()=>{
-
-document
-
-.querySelectorAll(".color")
-
-.forEach(x=>{
-
-x.classList.remove("active")
-
-})
-
-c.classList.add("active")
-
-couleurProfil =
-
-window.getComputedStyle(c)
-
-.backgroundColor
-
-}
-
-})
-
-</script>
-
-<script>
-
-let profils = []
-
-function afficherProfils(){
-
-const zone =
-
-document.getElementById("profils")
-
-zone.innerHTML = ""
-
-profils.forEach(p=>{
-
-zone.innerHTML += `
-
-<div
-class="profil">
-
-<img src="${p.photo}">
-
-<div class="nom">
-
-${p.nom}
-
-</div>
-
-<div class="tag">
-
-${p.categories.join(", ")}
-
-</div>
-
-<a
-
-href="${p.lien}"
-
-class="voir">
-
-Voir
-
-</a>
-
-</div>
-
-`
-
-})
-
-}
-
-</script>
-
-<script>
-
-document
-
-.getElementById("saveProfil")
-
-.onclick = ()=>{
-
-const nom =
-
-document.getElementById("pseudo")
-
-.value
-
-const photo =
-
-document.getElementById("photo")
-
-.value
-
-const lien =
-
-document.getElementById("profilLink")
-
-.value
-
-const description =
-
-document.getElementById("description")
-
-.value
-
-if(nom===""){
-
-alert("Pseudo requis")
-
-return
-
-}
-
-const nouveauProfil = {
-
-nom,
-
-photo,
-
-lien,
-
-description,
-
-categories:
-
-[...categoriesChoisies],
-
-couleur:
-
-couleurProfil
-
-}
-
-profils.push(
-
-nouveauProfil
-
-)
-
-afficherProfils()
-
-zone.innerHTML += `
-<div class="profil" style="background:${p.couleur}">
-  <img src="${p.photo}">
-  <div class="nom">${p.nom}</div>
-
-  <div class="tag">${p.categories.join(", ")}</div>
-
-  <button onclick="ouvrirProfil('${p.id}')">
-    Voir
-  </button>
-</div>
-`;
-
-window.ouvrirProfil = (id) => {
-  window.location.href = "profil.html?id=" + id;
-};
-
-const docRef = await addDoc(collection(db, "profils"), profil);
-
-profil.id = docRef.id;
-
-import { doc, getDoc } from "firebase/firestore";
-
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-const snap = await getDoc(doc(db, "profils", id));
-
-if (snap.exists()) {
-  const data = snap.data();
-
-  document.getElementById("nom").innerText = data.nom;
-  document.getElementById("img").src = data.photo;
-}
-
-}
-
-</script>
-
 <script type="module">
 
+/* ================= FIREBASE ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-
-getAuth,
-
-GoogleAuthProvider,
-
-signInWithPopup,
-
-onAuthStateChanged,
-
-signOut
-
-}
-
-from
-
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-
-getFirestore,
-
-collection,
-
-addDoc,
-
-getDocs
-
-}
-
-from
-
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
-
-authDomain: "huskymichel2.firebaseapp.com",
-
-projectId: "huskymichel2",
-
-storageBucket: "huskymichel2.firebasestorage.app",
-
-messagingSenderId: "803041103978",
-
-appId: "1:803041103978:web:0415d72f91e30735a47a13"
-
-};
-
-
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-const provider =
-
-new GoogleAuthProvider();
-
-let user = null;
-
-
-/* ========================= */
-
-loginBtn.onclick = ()=>{
-
-signInWithPopup(
-
-auth,
-
-provider
-
-)
-
-};
-
-/* ========================= */
-
-onAuthStateChanged(
-
-auth,
-
-(u)=>{
-
-user = u;
-
-if(u){
-
-loginBtn.style.display="none";
-
-profilBtn.style.display="block";
-
-createBtn.style.display="block";
-
-chargerCouleur();
-
-}
-
-else{
-
-loginBtn.style.display="block";
-
-profilBtn.style.display="none";
-
-createBtn.style.display="none";
-
-body.classList.remove(
-
-"custom"
-
-);
-
-}
-
-}
-
-);
-
-
-/* ========================= */
-
-profilBtn.onclick = ()=>{
-
-signOut(auth)
-
-};
-
-/* ========================= */
-
-createBtn.onclick = ()=>{
-
-if(!user){
-
-alert(
-
-"Connecte-toi d'abord"
-
-);
-
-return;
-
-}
-
-modal.style.display =
-
-"flex";
-
-};
-
-/* ========================= */
-
-saveProfil.onclick = async()=>{
-
-if(!user){
-
-return;
-
-}
-
-const profil = {
-
-nom:
-
-pseudo.value,
-
-photo:
-
-photo.value,
-
-lien:
-
-profilLink.value,
-
-description:
-
-description.value,
-
-categories:
-
-categoriesChoisies,
-
-couleur:
-
-couleurProfil,
-
-uid:
-
-user.uid,
-
-auteur:
-
-user.displayName
-
-};
-
-
-await addDoc(
-
-collection(
-
-db,
-
-"profils"
-
-),
-
-profil
-
-);
-
-
-profils.push(profil);
-
-afficherProfils();
-
-modal.style.display =
-
-"none";
-
-};
-
-/* ========================= */
-
-async function chargerProfils(){
-
-const snap =
-
-await getDocs(
-
-collection(
-
-db,
-
-"profils"
-
-)
-
-);
-
-
-profils = [];
-
-
-snap.forEach(doc=>{
-
-profils.push(
-
-doc.data()
-
-);
-
-});
-
-
-afficherProfils();
-
-}
-
-
-chargerProfils();
-
-</script>
-
-
-<script>
-
-/* ========================= */
-
-const recherche =
-
-document.getElementById(
-
-"search"
-
-);
-
-recherche.addEventListener(
-
-"input",
-
-()=>{
-
-const texte =
-
-recherche.value
-
-.toLowerCase();
-
-document
-
-.querySelectorAll(
-
-".profil"
-
-)
-
-.forEach(carte=>{
-
-const nom =
-
-carte.innerText
-
-.toLowerCase();
-
-carte.style.display =
-
-nom.includes(texte)
-
-?
-
-"block"
-
-:
-
-"none";
-
-});
-
-});
-
-</script>
-
-
-<script>
-
-/* ========================= */
-
-import {
+  getFirestore,
   collection,
   addDoc,
   getDocs,
   query,
   where
-} from "firebase/firestore";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-document
-
-.querySelectorAll(
-
-".categorie"
-
-)
-
-.forEach(cat=>{
-
-cat.onclick = ()=>{
-
-
-document
-
-.querySelectorAll(
-
-".categorie"
-
-)
-
-.forEach(c=>{
-
-c.classList.remove(
-
-"active"
-
-);
-
-});
-
-cat.classList.add(
-
-"active"
-
-);
-
-
-const choix =
-
-cat.innerText;
-
-
-document
-
-.querySelectorAll(
-
-".profil"
-
-)
-
-.forEach(p=>{
-
-
-if(
-
-choix==="Tout"
-
-){
-
-p.style.display =
-
-"block";
-
-return;
-
-}
-
-
-if(
-
-p.innerHTML.includes(
-
-choix
-
-)
-
-){
-
-p.style.display=
-
-"block";
-
-}
-
-else{
-
-p.style.display=
-
-"none";
-
-}
-
-});
-
-
+const firebaseConfig = {
+  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
+  authDomain: "huskymichel2.firebaseapp.com",
+  projectId: "huskymichel2",
+  storageBucket: "huskymichel2.firebasestorage.app",
+  messagingSenderId: "803041103978",
+  appId: "1:803041103978:web:0415d72f91e30735a47a13"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+/* ================= DOM ================= */
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const contenuSite = document.getElementById("contenuSite");
+
+const loginBtn = document.getElementById("loginBtn");
+const profilBtn = document.getElementById("profilBtn");
+const createBtn = document.getElementById("createBtn");
+
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("closeModal");
+const saveProfil = document.getElementById("saveProfil");
+
+/* ================= MENU ================= */
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  contenuSite.classList.toggle("decale");
 });
 
+/* ================= AUTH ================= */
+loginBtn.onclick = () => {
+  signInWithPopup(auth, provider);
+};
+
+profilBtn.onclick = () => {
+  signOut(auth);
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginBtn.style.display = "none";
+    profilBtn.style.display = "block";
+    createBtn.style.display = "block";
+  } else {
+    loginBtn.style.display = "block";
+    profilBtn.style.display = "none";
+    createBtn.style.display = "none";
+  }
+});
+
+/* ================= MODAL ================= */
+createBtn.onclick = () => {
+  if (!auth.currentUser) {
+    alert("Connecte-toi d'abord");
+    return;
+  }
+  modal.style.display = "flex";
+};
+
+closeModal.onclick = () => {
+  modal.style.display = "none";
+};
+
+/* ================= CATÉGORIES ================= */
+let categoriesChoisies = [];
+
+document.querySelectorAll(".catSelect").forEach(cat => {
+  cat.onclick = () => {
+    cat.classList.toggle("selected");
+
+    const name = cat.innerText;
+
+    if (categoriesChoisies.includes(name)) {
+      categoriesChoisies = categoriesChoisies.filter(c => c !== name);
+    } else {
+      categoriesChoisies.push(name);
+    }
+  };
+});
+
+/* ================= COULEUR ================= */
+let couleurProfil = "#5865F2";
+
+document.querySelectorAll(".color").forEach(c => {
+  c.onclick = () => {
+    document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
+    c.classList.add("active");
+
+    couleurProfil = window.getComputedStyle(c).backgroundColor;
+  };
+});
+
+/* ================= CREATION PROFIL ================= */
 saveProfil.onclick = async () => {
 
-if (!user) return;
+  const user = auth.currentUser;
+  if (!user) return;
 
-const q = query(
-  collection(db, "profils"),
-  where("uid", "==", user.uid)
-);
+  /* ❌ BLOQUE 1 PROFIL PAR USER */
+  const q = query(collection(db, "profils"), where("uid", "==", user.uid));
+  const snap = await getDocs(q);
 
-const snap = await getDocs(q);
+  if (!snap.empty) {
+    alert("Tu as déjà créé un profil !");
+    return;
+  }
 
-if (!snap.empty) {
-  alert("Tu as déjà créé un profil !");
-  return;
+  const profil = {
+    nom: document.getElementById("pseudo").value,
+    photo: document.getElementById("photo").value,
+    lien: document.getElementById("profilLink").value,
+    description: document.getElementById("description").value,
+    categories: categoriesChoisies,
+    couleur: couleurProfil,
+    uid: user.uid,
+    auteur: user.displayName
+  };
+
+  if (!profil.nom) {
+    alert("Pseudo requis");
+    return;
+  }
+
+  await addDoc(collection(db, "profils"), profil);
+
+  modal.style.display = "none";
+  alert("Profil créé !");
+};
+
+/* ================= CHARGER PROFILS ================= */
+let profils = [];
+
+async function chargerProfils() {
+  const snap = await getDocs(collection(db, "profils"));
+
+  profils = [];
+
+  snap.forEach(doc => {
+    profils.push(doc.data());
+  });
+
+  afficherProfils();
 }
 
-const profil = {
-  nom: pseudo.value,
-  photo: photo.value,
-  lien: profilLink.value,
-  description: description.value,
-  categories: categoriesChoisies,
-  couleur: couleurProfil,
-  uid: user.uid,
-  auteur: user.displayName
-};
+function afficherProfils() {
+  const zone = document.getElementById("profils");
+  zone.innerHTML = "";
 
-await addDoc(collection(db, "profils"), profil);
+  profils.forEach(p => {
+    zone.innerHTML += `
+      <div class="profil" style="background:${p.couleur}">
+        <img src="${p.photo}">
+        <div class="nom">${p.nom}</div>
+        <div class="tag">${p.categories?.join(", ") || ""}</div>
 
-profils.push(profil);
-afficherProfils();
+        <a href="${p.lien}" class="voir">Voir</a>
+      </div>
+    `;
+  });
+}
 
-modal.style.display = "none";
+chargerProfils();
 
-};
+/* ================= RECHERCHE ================= */
+document.getElementById("search").addEventListener("input", (e) => {
+  const texte = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".profil").forEach(p => {
+    const match = p.innerText.toLowerCase().includes(texte);
+    p.style.display = match ? "block" : "none";
+  });
+});
+
+/* ================= CATEGORIES FILTER ================= */
+document.querySelectorAll(".categorie").forEach(cat => {
+  cat.onclick = () => {
+
+    document.querySelectorAll(".categorie").forEach(c => c.classList.remove("active"));
+    cat.classList.add("active");
+
+    const choix = cat.innerText;
+
+    document.querySelectorAll(".profil").forEach(p => {
+
+      if (choix === "Tout") {
+        p.style.display = "block";
+        return;
+      }
+
+      p.style.display = p.innerText.includes(choix) ? "block" : "none";
+    });
+  };
+});
 
 </script>
 
