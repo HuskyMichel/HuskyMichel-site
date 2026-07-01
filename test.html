@@ -820,13 +820,19 @@ modal.style.display = "none"
 
 }
 
-window.onclick = (e)=>{
+window.loginGoogle = async () => {
 
-if(e.target===modal){
+  try{
 
-modal.style.display = "none"
+    await signInWithPopup(auth, provider);
 
-}
+  }catch(error){
+
+    console.log(error);
+
+    alert(error.code);
+
+  }
 
 }
 
