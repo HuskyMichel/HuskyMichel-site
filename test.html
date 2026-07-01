@@ -797,9 +797,8 @@ Publier mon profil
 
 </div>
 
-<script type="module">
+<script>
 
-/* ================= FIREBASE ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
@@ -815,9 +814,12 @@ import {
   addDoc,
   getDocs,
   query,
-  where
+  where,
+  updateDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
   authDomain: "huskymichel2.firebaseapp.com",
@@ -833,34 +835,47 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 /* ================= DOM ================= */
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-const contenuSite = document.getElementById("contenuSite");
-
 const loginBtn = document.getElementById("loginBtn");
 const profilBtn = document.getElementById("profilBtn");
 const createBtn = document.getElementById("createBtn");
-
 const modal = document.getElementById("modal");
 const closeModal = document.getElementById("closeModal");
-const saveProfil = document.getElementById("saveProfil");
-
-/* ================= MENU ================= */
-menuBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  contenuSite.classList.toggle("decale");
-});
+const saveBtn = document.getElementById("saveProfil");
 
 /* ================= AUTH ================= */
-loginBtn.onclick = () => {
-  signInWithPopup(auth, provider);
-};
+loginBtn.onclick = () => signInWithPopup(auth, provider);
+profilBtn.onclick = () => signOut(auth);
 
-profilBtn.onclick = () => {
-  signOut(auth);
-};
+let currentUser = null;
 
-onAuthStateChanged(auth, (user) => {
+/* ================= IMAGE UPLOAD ================= */
+let imageBase64 = "";
+
+/* input file (AJOUTE dans HTML si pas encore) */
+const photoInput = document.createElement("input");
+photoInput.type = "file";
+photoInput.accept = "image/*";
+photoInput.style.display = "none";
+document.body.appendChild(photoInput);
+
+document.getElementById("photo").onclick = () => photoInput.click();
+
+photoInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    imageBase64 = reader.result;
+    document.getElementById("photo").value = "Image chargée ✔";
+  };
+  reader.readAsDataURL(file);
+});
+
+/* ================= LOGIN STATE ================= */
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+
   if (user) {
     loginBtn.style.display = "none";
     profilBtn.style.display = "block";
@@ -870,34 +885,38 @@ onAuthStateChanged(auth, (user) => {
     profilBtn.style.display = "none";
     createBtn.style.display = "none";
   }
+
+  await chargerProfils();
 });
 
 /* ================= MODAL ================= */
-createBtn.onclick = () => {
-  if (!auth.currentUser) {
-    alert("Connecte-toi d'abord");
-    return;
-  }
+createBtn.onclick = async () => {
+  if (!currentUser) return alert("Connecte-toi");
   modal.style.display = "flex";
 };
 
-closeModal.onclick = () => {
-  modal.style.display = "none";
-};
+closeModal.onclick = () => modal.style.display = "none";
 
-/* ================= CATÉGORIES ================= */
+/* ================= LIMIT DESCRIPTION ================= */
+document.getElementById("description").addEventListener("input", (e) => {
+  if (e.target.value.length > 50) {
+    e.target.value = e.target.value.slice(0, 50);
+  }
+});
+
+/* ================= CATEGORIES ================= */
 let categoriesChoisies = [];
 
-document.querySelectorAll(".catSelect").forEach(cat => {
-  cat.onclick = () => {
-    cat.classList.toggle("selected");
+document.querySelectorAll(".catSelect").forEach(c => {
+  c.onclick = () => {
+    c.classList.toggle("selected");
 
-    const name = cat.innerText;
+    const val = c.innerText;
 
-    if (categoriesChoisies.includes(name)) {
-      categoriesChoisies = categoriesChoisies.filter(c => c !== name);
+    if (categoriesChoisies.includes(val)) {
+      categoriesChoisies = categoriesChoisies.filter(x => x !== val);
     } else {
-      categoriesChoisies.push(name);
+      categoriesChoisies.push(val);
     }
   };
 });
@@ -914,54 +933,56 @@ document.querySelectorAll(".color").forEach(c => {
   };
 });
 
-/* ================= CREATION PROFIL ================= */
-saveProfil.onclick = async () => {
+/* ================= SAVE / CREATE OR UPDATE ================= */
+saveBtn.onclick = async () => {
+  if (!currentUser) return;
 
-  const user = auth.currentUser;
-  if (!user) return;
+  const pseudo = document.getElementById("pseudo").value.trim();
+  const desc = document.getElementById("description").value.trim();
+  const lien = document.getElementById("profilLink").value;
 
-  /* ❌ BLOQUE 1 PROFIL PAR USER */
-  const q = query(collection(db, "profils"), where("uid", "==", user.uid));
+  if (!pseudo) return alert("Pseudo requis");
+
+  /* CHECK SI PROFIL EXISTE */
+  const q = query(collection(db, "profils"), where("uid", "==", currentUser.uid));
   const snap = await getDocs(q);
 
-  if (!snap.empty) {
-    alert("Tu as déjà créé un profil !");
-    return;
-  }
-
-  const profil = {
-    nom: document.getElementById("pseudo").value,
-    photo: document.getElementById("photo").value,
-    lien: document.getElementById("profilLink").value,
-    description: document.getElementById("description").value,
+  const data = {
+    nom: pseudo,
+    photo: imageBase64 || "",
+    lien,
+    description: desc.slice(0, 50),
     categories: categoriesChoisies,
     couleur: couleurProfil,
-    uid: user.uid,
-    auteur: user.displayName
+    uid: currentUser.uid,
+    auteur: currentUser.displayName
   };
 
-  if (!profil.nom) {
-    alert("Pseudo requis");
-    return;
+  if (!snap.empty) {
+    /* UPDATE */
+    const id = snap.docs[0].id;
+    await updateDoc(doc(db, "profils", id), data);
+    alert("Profil modifié !");
+  } else {
+    /* CREATE */
+    await addDoc(collection(db, "profils"), data);
+    alert("Profil créé !");
   }
 
-  await addDoc(collection(db, "profils"), profil);
-
   modal.style.display = "none";
-  alert("Profil créé !");
+  await chargerProfils();
 };
 
-/* ================= CHARGER PROFILS ================= */
+/* ================= LOAD PROFILES ================= */
 let profils = [];
 
 async function chargerProfils() {
   const snap = await getDocs(collection(db, "profils"));
 
-  profils = [];
-
-  snap.forEach(doc => {
-    profils.push(doc.data());
-  });
+  profils = snap.docs.map(d => ({
+    id: d.id,
+    ...d.data()
+  }));
 
   afficherProfils();
 }
@@ -973,49 +994,15 @@ function afficherProfils() {
   profils.forEach(p => {
     zone.innerHTML += `
       <div class="profil" style="background:${p.couleur}">
-        <img src="${p.photo}">
+        <img src="${p.photo || ''}">
         <div class="nom">${p.nom}</div>
         <div class="tag">${p.categories?.join(", ") || ""}</div>
+        <p style="font-size:12px;opacity:0.8">${p.description || ""}</p>
 
         <a href="${p.lien}" class="voir">Voir</a>
       </div>
     `;
   });
 }
-
-chargerProfils();
-
-/* ================= RECHERCHE ================= */
-document.getElementById("search").addEventListener("input", (e) => {
-  const texte = e.target.value.toLowerCase();
-
-  document.querySelectorAll(".profil").forEach(p => {
-    const match = p.innerText.toLowerCase().includes(texte);
-    p.style.display = match ? "block" : "none";
-  });
-});
-
-/* ================= CATEGORIES FILTER ================= */
-document.querySelectorAll(".categorie").forEach(cat => {
-  cat.onclick = () => {
-
-    document.querySelectorAll(".categorie").forEach(c => c.classList.remove("active"));
-    cat.classList.add("active");
-
-    const choix = cat.innerText;
-
-    document.querySelectorAll(".profil").forEach(p => {
-
-      if (choix === "Tout") {
-        p.style.display = "block";
-        return;
-      }
-
-      p.style.display = p.innerText.includes(choix) ? "block" : "none";
-    });
-  };
-});
-
 </script>
-
 </html>
