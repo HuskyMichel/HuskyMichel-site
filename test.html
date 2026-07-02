@@ -1,826 +1,211 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<title>Mon site</title>
 
-<title>HuskyMichel Community</title>
-
-<link rel="icon" href="img/logo.jpg">
+<link rel="stylesheet" href="style.css">
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
+    margin:0;
+    font-family:Arial, sans-serif;
 
-background:#202020;
+    /* 🔵 arrière-plan PLUS CLAIR */
+    background:#1f1f1f;
 
-color:white;
-
-transition:0.4s;
-
+    color:white;
 }
 
-/* ================= TOPBAR ================= */
+/* 🔴 barre du haut PLUS FONCÉE */
+header{
+    height:60px;
+    background:#0f0f0f;
 
-.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-position:fixed;
+    padding:0 20px;
 
-top:0;
-left:0;
+    position:sticky;
+    top:0;
 
-width:100%;
-
-height:75px;
-
-background:#111;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:0 25px;
-
-z-index:1000;
-
-box-shadow:0 5px 20px rgba(0,0,0,.35);
-
+    border-bottom:1px solid #2a2a2a;
 }
 
-.logo{
-
-height:50px;
-
-cursor:pointer;
-
+/* logo */
+.logo img{
+    height:40px;
+    cursor:pointer;
 }
 
-.recherche{
-
-width:400px;
-
-padding:12px;
-
-border:none;
-
-outline:none;
-
-border-radius:12px;
-
-background:#2f3136;
-
-color:white;
-
-font-size:15px;
-
+/* barre de recherche */
+.search{
+    flex:1;
+    display:flex;
+    justify-content:center;
 }
 
-.recherche::placeholder{
+.search input{
+    width:500px;
+    padding:10px 16px;
 
-color:#aaa;
+    border-radius:25px;
 
+    border:1px solid #333;
+
+    background:#141414;
+
+    color:white;
+
+    font-size:16px;
+
+    outline:none;
 }
 
-/* ================= BOUTONS ================= */
-
-.actions{
-
-display:flex;
-
-gap:15px;
-
-align-items:center;
-
+.search input:focus{
+    border-color:#3ea6ff;
 }
 
-.btn{
+/* bouton connexion */
+.auth button{
+    padding:10px 18px;
 
-padding:10px 18px;
+    background:#3ea6ff;
+    color:white;
 
-border:none;
+    border:none;
+    border-radius:20px;
 
-border-radius:10px;
+    font-weight:bold;
 
-background:#5865F2;
+    cursor:pointer;
 
-color:white;
-
-cursor:pointer;
-
-font-size:14px;
-
-transition:.25s;
-
+    transition:0.2s;
 }
 
-.btn:hover{
-
-transform:translateY(-2px);
-
-background:#4752c4;
-
+.auth button:hover{
+    background:#65b8ff;
 }
 
-/* ================= CATEGORIES ================= */
-
-.categories{
-
-margin-top:110px;
-
-display:flex;
-
-gap:12px;
-
-padding:20px;
-
-overflow-x:auto;
-
+/* zone contenu */
+main{
+    padding:20px;
 }
-
-.categories::-webkit-scrollbar{
-
-display:none;
-
-}
-
-.categorie{
-
-padding:10px 18px;
-
-background:#2f3136;
-
-border-radius:12px;
-
-cursor:pointer;
-
-transition:.3s;
-
-white-space:nowrap;
-
-}
-
-.categorie:hover{
-
-background:#5865F2;
-
-}
-
-.categorie.active{
-
-background:#5865F2;
-
-}
-
-/* ================= PROFILS ================= */
-
-.container{
-
-padding:30px;
-
-display:grid;
-
-grid-template-columns:
-
-repeat(auto-fill,minmax(220px,1fr));
-
-gap:20px;
-
-}
-
-.profil{
-
-background:#2f3136;
-
-border-radius:18px;
-
-padding:15px;
-
-text-align:center;
-
-transition:.3s;
-
-}
-
-.profil:hover{
-
-transform:translateY(-6px);
-
-}
-
-.profil img{
-
-width:90px;
-
-height:90px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-margin-bottom:10px;
-
-}
-
-.nom{
-
-font-size:18px;
-
-font-weight:bold;
-
-margin-bottom:8px;
-
-}
-
-.tag{
-
-display:inline-block;
-
-padding:5px 12px;
-
-border-radius:999px;
-
-background:#40444b;
-
-font-size:12px;
-
-margin-top:6px;
-
-}
-
-.voir{
-
-margin-top:12px;
-
-display:inline-block;
-
-padding:10px 16px;
-
-background:#5865F2;
-
-border-radius:10px;
-
-text-decoration:none;
-
-color:white;
-
-font-size:14px;
-
-}
-
-.voir:hover{
-
-background:#4752c4;
-
-}
-
-/* ================= CREER PROFIL ================= */
-
-.createBtn{
-
-position:fixed;
-
-right:25px;
-
-bottom:25px;
-
-width:65px;
-
-height:65px;
-
-border:none;
-
-border-radius:50%;
-
-font-size:30px;
-
-background:#5865F2;
-
-color:white;
-
-cursor:pointer;
-
-box-shadow:0 8px 25px rgba(0,0,0,.4);
-
-}
-
-.createBtn:hover{
-
-transform:scale(1.05);
-
-}
-
-/* ================= MODAL ================= */
-
-.modal{
-
-display:none;
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.7);
-
-justify-content:center;
-
-align-items:center;
-
-z-index:3000;
-
-}
-
-.modal-content{
-
-width:500px;
-
-background:#2f3136;
-
-padding:25px;
-
-border-radius:20px;
-
-}
-
-/* ================= MODAL ================= */
-
-.modal-content h2{
-
-margin-bottom:20px;
-
-text-align:center;
-
-}
-
-.input{
-
-width:100%;
-
-padding:12px;
-
-border:none;
-
-border-radius:12px;
-
-margin-bottom:15px;
-
-background:#40444b;
-
-color:white;
-
-font-size:15px;
-
-outline:none;
-
-}
-
-.input::placeholder{
-
-color:#aaa;
-
-}
-
-textarea.input{
-
-resize:none;
-
-height:90px;
-
-}
-
-.categoriesSelect{
-
-display:flex;
-
-flex-wrap:wrap;
-
-gap:10px;
-
-margin-bottom:20px;
-
-}
-
-.catSelect{
-
-padding:10px 14px;
-
-background:#40444b;
-
-border-radius:10px;
-
-cursor:pointer;
-
-transition:.25s;
-
-}
-
-.catSelect:hover{
-
-background:#5865F2;
-
-}
-
-.catSelect.selected{
-
-background:#5865F2;
-
-}
-
-.colorBox{
-
-display:flex;
-
-gap:12px;
-
-margin-top:15px;
-
-margin-bottom:20px;
-
-}
-
-.color{
-
-width:35px;
-
-height:35px;
-
-border-radius:50%;
-
-cursor:pointer;
-
-border:3px solid transparent;
-
-}
-
-.color.active{
-
-border-color:white;
-
-}
-
-.save{
-
-width:100%;
-
-padding:14px;
-
-border:none;
-
-border-radius:12px;
-
-background:#5865F2;
-
-color:white;
-
-font-size:16px;
-
-cursor:pointer;
-
-}
-
-.save:hover{
-
-background:#4752c4;
-
-}
-
-.close{
-
-position:absolute;
-
-right:20px;
-
-top:15px;
-
-font-size:24px;
-
-cursor:pointer;
-
-}
-
-.hidden{
-
-display:none;
-
-}
-
 </style>
 
 </head>
 
 <body>
 
-<div class="topbar">
+<header>
 
-<img
-src="img/logo.png"
-class="logo">
+<div class="logo">
+<img src="logo.png" alt="logo">
+</div>
+
+<div class="search">
 
 <input
-
 type="text"
-
-id="search"
-
-class="recherche"
-
-placeholder="🔍 Rechercher un profil..."
-
+placeholder="Rechercher..."
 >
 
-<div class="actions">
+</div>
 
-<button
+<div class="auth">
 
+<button id="loginBtn">
 
-<button id="loginBtn">Connexion</button>
-<button id="profilBtn" style="display:none;">Déconnexion</button>
-<button id="createBtn" style="display:none;">+</button>
-
-<input id="photo" type="file">
-
-
-
-<button
-
-class="btn"
-
-id="profilBtn"
-
-style="display:none;">
-
-Profil
+Connexion Google
 
 </button>
 
 </div>
 
-</div>
+</header>
 
-<div class="categories">
+<main>
 
-<div class="categorie active">
+<h1>Bienvenue</h1>
 
-Tout
-
-</div>
-
-<div class="categorie">
-
-Fortnite
-
-</div>
-
-<div class="categorie">
-
-GTA
-
-</div>
-
-<div class="categorie">
-
-Minecraft
-
-</div>
-
-<div class="categorie">
-
-Discord
-
-</div>
-
-<div class="categorie">
-
-Streamer
-
-</div>
-
-<div class="categorie">
-
-Créateur
-
-</div>
-
-</div>
-
-<div
-
-class="container"
-
-id="profils">
-
-</div>
-
-<button
-
-id="createBtn"
-
-class="createBtn">
-
-+
-
-</button>
-
-<div
-
-id="modal"
-
-class="modal">
-
-<div class="modal-content">
-
-<span
-
-id="closeModal"
-
-class="close">
-
-×
-
-</span>
-
-<h2>
-
-Créer un profil
-
-</h2>
-
-<input
-
-id="pseudo"
-
-class="input"
-
-placeholder="Pseudo">
-
-<input
-
-id="photo"
-
-class="input"
-
-placeholder="Lien image">
-
-<input
-
-id="profilLink"
-
-class="input"
-
-placeholder="Lien profil">
-
-<textarea
-
-id="description"
-
-class="input"
-
-placeholder="Description">
-
-</textarea>
-
-<h3>
-
-Catégories
-
-</h3>
-
-<div class="categoriesSelect">
-
-<div class="catSelect">
-
-Fortnite
-
-</div>
-
-<div class="catSelect">
-
-GTA
-
-</div>
-
-<div class="catSelect">
-
-Minecraft
-
-</div>
-
-<div class="catSelect">
-
-Discord
-
-</div>
-
-<div class="catSelect">
-
-Streamer
-
-</div>
-
-<div class="catSelect">
-
-Créateur
-
-</div>
-
-</div>
-
-<h3>
-
-Couleur du profil
-
-</h3>
-
-<div class="colorBox">
-
-<div
-
-class="color"
-
-style="background:#5865F2">
-
-</div>
-
-<div
-class="color"
-style="background:#57F287">
-</div>
-
-<div
-class="color"
-style="background:#ED4245">
-</div>
-
-<div
-class="color"
-style="background:#FAA61A">
-</div>
-
-<div
-class="color"
-style="background:#EB459E">
-</div>
-
-<div
-class="color"
-style="background:#00C3FF">
-</div>
-
-<div
-class="color"
-style="background:#7289DA">
-</div>
-
-</div>
-
-<button
-
-id="saveProfil"
-
-class="save">
-
-Publier mon profil
-
-</button>
-
-</div>
-
-</div>
+</main>
 
 <script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "firebase/app";
 
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  updateDoc,
-  doc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
+getAuth,
+
+GoogleAuthProvider,
+
+signInWithPopup
+
+}
+
+from "firebase/auth";
+
+const firebaseConfig = {
+
+apiKey: "",
+
+authDomain: "",
+
+projectId: "",
+
+storageBucket: "",
+
+messagingSenderId: "",
+
+appId: ""
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
+
+document.getElementById("loginBtn")
+
+.addEventListener("click", async () => {
+
+const result = await signInWithPopup(
+
+auth,
+
+provider
+
+);
+
+console.log(result.user);
+
+});
+
+loginBtn.addEventListener("click", async () => {
+  try {
+
+    const result = await signInWithPopup(auth, provider);
+
+    console.log("Connecté :", result.user);
+
+  } catch (error) {
+
+    console.log(error.code);
+    console.log(error.message);
+
+  }
+});
+
+document.getElementById("loginBtn").addEventListener("click", () => {
+  console.log("bouton cliqué");
+});
+
 const firebaseConfig = {
   apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
   authDomain: "huskymichel2.firebaseapp.com",
@@ -829,134 +214,40 @@ const firebaseConfig = {
   messagingSenderId: "803041103978",
   appId: "1:803041103978:web:0415d72f91e30735a47a13"
 };
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+// 🔥 CONFIG FIREBASE (à remplir)
+const firebaseConfig = {
+  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
+  authDomain: "firebaseapp",
+  projectId: "huskymichel2",
+  appId: "0415d72f91e30735a47a13"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-/* ================= WAIT DOM ================= */
-window.addEventListener("DOMContentLoaded", () => {
+// 🎯 bouton
+const loginBtn = document.getElementById("loginBtn");
 
-  const loginBtn = document.getElementById("loginBtn");
-  const profilBtn = document.getElementById("profilBtn");
-  const createBtn = document.getElementById("createBtn");
-  const modal = document.getElementById("modal");
-  const closeModal = document.getElementById("closeModal");
-  const saveBtn = document.getElementById("saveProfil");
-
-  let currentUser = null;
-  let imageBase64 = "";
-
-  /* ================= LOGIN ================= */
-  loginBtn.onclick = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (e) {
-      console.log(e);
-      alert("Erreur connexion");
-    }
-  };
-
-  profilBtn.onclick = () => {
-    signOut(auth);
-  };
-
-  /* ================= AUTH STATE ================= */
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-
-    if (user) {
-      loginBtn.style.display = "none";
-      profilBtn.style.display = "inline-block";
-      createBtn.style.display = "inline-block";
-    } else {
-      loginBtn.style.display = "inline-block";
-      profilBtn.style.display = "none";
-      createBtn.style.display = "none";
-    }
-  });
-
-  /* ================= OPEN MODAL ================= */
-  createBtn.onclick = async () => {
-    if (!currentUser) {
-      alert("Connecte-toi d'abord");
-      return;
-    }
-    modal.style.display = "flex";
-  };
-
-  closeModal.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  /* ================= LIMIT DESCRIPTION 50 ================= */
-  const descInput = document.getElementById("description");
-
-  descInput.addEventListener("input", () => {
-    if (descInput.value.length > 50) {
-      descInput.value = descInput.value.slice(0, 50);
-    }
-  });
-
-  /* ================= IMAGE FILE ================= */
-  const photoInput = document.getElementById("photo");
-
-  photoInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      imageBase64 = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  /* ================= SAVE PROFILE ================= */
-  saveBtn.onclick = async () => {
-    if (!currentUser) return;
-
-    const pseudo = document.getElementById("pseudo").value.trim();
-    const lien = document.getElementById("profilLink").value;
-
-    if (!pseudo) {
-      alert("Pseudo requis");
-      return;
-    }
-
-    /* CHECK 1 PROFIL MAX */
-    const q = query(collection(db, "profils"), where("uid", "==", currentUser.uid));
-    const snap = await getDocs(q);
-
-    const data = {
-      nom: pseudo,
-      photo: imageBase64 || "",
-      lien: lien,
-      description: descInput.value.slice(0, 50),
-      uid: currentUser.uid,
-      auteur: currentUser.displayName
-    };
-
-    try {
-
-      if (!snap.empty) {
-        const id = snap.docs[0].id;
-        await updateDoc(doc(db, "profils", id), data);
-        alert("Profil modifié !");
-      } else {
-        await addDoc(collection(db, "profils"), data);
-        alert("Profil créé !");
-      }
-
-      modal.style.display = "none";
-
-    } catch (e) {
-      console.log(e);
-      alert("Erreur Firestore");
-    }
-  };
-
+loginBtn.addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    console.log("Utilisateur connecté :", result.user);
+  } catch (e) {
+    console.error("Erreur auth :", e.code, e.message);
+  }
 });
 </script>
+
+</body>
 </html>
