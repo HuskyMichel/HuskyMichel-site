@@ -133,35 +133,31 @@ Connexion Google
 
 </main>
 
-<script>
+<script type="module">
 
-import { initializeApp } from "firebase/app";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-
-getAuth,
-
-GoogleAuthProvider,
-
-signInWithPopup
-
+ getAuth,
+ GoogleAuthProvider,
+ signInWithPopup
 }
-
-from "firebase/auth";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
 
-apiKey: "",
+ apiKey: "AIza...",
 
-authDomain: "",
+ authDomain: "huskymichel2.firebaseapp.com",
 
-projectId: "",
+ projectId: "huskymichel2",
 
-storageBucket: "",
+ storageBucket: "huskymichel2.firebasestorage.app",
 
-messagingSenderId: "",
+ messagingSenderId: "803041103978",
 
-appId: ""
+ appId: "1:803041103978:web:0415d72f91e30735a47a13"
 
 };
 
@@ -172,81 +168,25 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 document.getElementById("loginBtn")
-
 .addEventListener("click", async () => {
 
-const result = await signInWithPopup(
+ try {
 
-auth,
+   const result =
+   await signInWithPopup(auth, provider);
 
-provider
+   console.log(result.user);
 
-);
+ } catch (e) {
 
-console.log(result.user);
+   console.log(e.code);
+
+   console.log(e.message);
+
+ }
 
 });
 
-loginBtn.addEventListener("click", async () => {
-  try {
-
-    const result = await signInWithPopup(auth, provider);
-
-    console.log("Connecté :", result.user);
-
-  } catch (error) {
-
-    console.log(error.code);
-    console.log(error.message);
-
-  }
-});
-
-document.getElementById("loginBtn").addEventListener("click", () => {
-  console.log("bouton cliqué");
-});
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
-  authDomain: "huskymichel2.firebaseapp.com",
-  projectId: "huskymichel2",
-  storageBucket: "huskymichel2.firebasestorage.app",
-  messagingSenderId: "803041103978",
-  appId: "1:803041103978:web:0415d72f91e30735a47a13"
-};
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-// 🔥 CONFIG FIREBASE (à remplir)
-const firebaseConfig = {
-  apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
-  authDomain: "firebaseapp",
-  projectId: "huskymichel2",
-  appId: "0415d72f91e30735a47a13"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-// 🎯 bouton
-const loginBtn = document.getElementById("loginBtn");
-
-loginBtn.addEventListener("click", async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    console.log("Utilisateur connecté :", result.user);
-  } catch (e) {
-    console.error("Erreur auth :", e.code, e.message);
-  }
-});
 </script>
 
 </body>
