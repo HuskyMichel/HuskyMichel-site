@@ -4,21 +4,18 @@
 <meta charset="UTF-8">
 <title>Mon site</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="Photo de profil/titre.jpg"><title>Accueil</title>
 
 <style>
 
 body{
     margin:0;
     font-family:Arial, sans-serif;
-
-    /* 🔵 arrière-plan PLUS CLAIR */
     background:#1f1f1f;
-
     color:white;
 }
 
-/* 🔴 barre du haut PLUS FONCÉE */
+/* barre du haut */
 header{
     height:60px;
     background:#0f0f0f;
@@ -50,6 +47,7 @@ header{
 
 .search input{
     width:500px;
+
     padding:10px 16px;
 
     border-radius:25px;
@@ -69,113 +67,73 @@ header{
     border-color:#3ea6ff;
 }
 
-/* bouton connexion */
-.auth button{
-    padding:10px 18px;
-
-    background:#3ea6ff;
-    color:white;
-
-    border:none;
-    border-radius:20px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.auth button:hover{
-    background:#65b8ff;
-}
-
-/* zone contenu */
+/* contenu principal */
 main{
     padding:20px;
 }
 
-.auth{
+.account{
+    display:flex;
+    align-items:center;
+}
 
-position:relative;
+#loginBtn{
+
+    background:#3ea6ff;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:20px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:0.2s;
 
 }
 
-#userMenu{
-
-display:none;
-
-position:relative;
-
-cursor:pointer;
-
+#loginBtn:hover{
+    background:#5bb5ff;
 }
 
-#avatar{
-
-width:40px;
-
-height:40px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-border:2px solid #3ea6ff;
-
-}
-
-#menu{
-
-display:none;
-
-position:absolute;
-
-right:0;
-
-top:55px;
-
-background:#181818;
-
-border:1px solid #333;
-
-border-radius:10px;
-
-overflow:hidden;
-
-min-width:220px;
-
-z-index:1000;
-
-}
-
-#menu div{
-
-padding:14px;
-
-cursor:pointer;
-
-}
-
-#menu div:hover{
-
-background:#2a2a2a;
-
+.profile{
+    position:relative;
 }
 
 #avatar{
+    width:42px;
+    height:42px;
 
-cursor:pointer;
+    border-radius:50%;
 
-transition:0.2s;
+    cursor:pointer;
+}
+
+.menu{
+
+    position:absolute;
+
+    top:55px;
+
+    right:0;
+
+    width:220px;
+
+    background:#242424;
+
+    border-radius:10px;
+
+    padding:10px;
+
+    display:none;
 
 }
 
-#avatar:hover{
-
-transform:scale(1.05);
-
-}
 </style>
 
 </head>
@@ -185,7 +143,7 @@ transform:scale(1.05);
 <header>
 
 <div class="logo">
-<img src="logo.png" alt="logo">
+    <a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
 </div>
 
 <div class="search">
@@ -197,82 +155,45 @@ placeholder="🔍 Rechercher un profil..."
 
 </div>
 
-<div class="auth">
+<div class="account">
 
 <button id="loginBtn">
-
-Connexion Google
-
+Se connecter
 </button>
 
-<div id="userMenu" style="display:none;">
+<div class="profile" style="display:none;">
 
 <img id="avatar">
 
-<div id="menu">
+<div class="menu">
 
-<div>👤 Mon profil</div>
+<a href="/profil">
+Mon profil
+</a>
 
-<div>🖼️ Changer photo de profil</div>
+<button id="changePhoto">
+Changer la photo
+</button>
 
-<div id="logoutBtn">
+<button id="logout">
+Déconnexion
+</button>
 
-🚪 Déconnexion
+</div>
 
 </div>
 
 </div>
-
-</div>
-
-</div>
-
-</header>
-
-<main>
-
-<h1>Bienvenue</h1>
-
-</main>
 
 <script type="module">
 
-console.log(window.location.hostname);
-
-console.log("Firebase chargé");
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-
-getAuth,
-GoogleAuthProvider,
-
-signInWithRedirect,
-
-getRedirectResult,
-
-onAuthStateChanged,
-
-signOut
-
-}
-
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithRedirect,
-getRedirectResult,
-onAuthStateChanged,
-signOut
-}
-const auth = getAuth(app);
-await getRedirectResult(auth);
-
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
    apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -284,69 +205,36 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const provider = new GoogleAuthProvider();
+
 const loginBtn = document.getElementById("loginBtn");
 
-const avatar =
-document.getElementById("avatar");
+loginBtn.addEventListener("click", async () => {
 
-const menu =
-document.getElementById("menu");
+    try {
 
-const userMenu =
-document.getElementById("userMenu");
+        const result = await signInWithPopup(auth, provider);
 
-const logoutBtn =
-document.getElementById("logoutBtn");
+        const user = result.user;
 
-onAuthStateChanged(auth,(user)=>{
+        console.log(user.displayName);
 
-console.log("USER =", user);
+        console.log(user.photoURL);
 
-if(user){
+    }
 
-loginBtn.style.display="none";
+    catch(error){
 
-userMenu.style.display="block";
+        console.error(error);
 
-avatar.src=user.photoURL;
-
-}
-
-else{
-
-loginBtn.style.display="block";
-
-userMenu.style.display="none";
-
-}
+    }
 
 });
 
-avatar.addEventListener("click",()=>{
-
-menu.style.display=
-
-menu.style.display==="block"
-
-?
-
-"none"
-
-:
-
-"block";
-
-});
-
-logoutBtn.addEventListener("click",()=>{
-
-signOut(auth);
-
-menu.style.display="none";
-
-});
 </script>
+
 </body>
 </html>
