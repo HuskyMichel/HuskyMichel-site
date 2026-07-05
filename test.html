@@ -162,6 +162,20 @@ cursor:pointer;
 background:#2a2a2a;
 
 }
+
+#avatar{
+
+cursor:pointer;
+
+transition:0.2s;
+
+}
+
+#avatar:hover{
+
+transform:scale(1.05);
+
+}
 </style>
 
 </head>
@@ -261,6 +275,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const loginBtn = document.getElementById("loginBtn");
 
 const avatar =
 document.getElementById("avatar");
@@ -315,39 +330,6 @@ logoutBtn.addEventListener("click",()=>{
 signOut(auth);
 
 menu.style.display="none";
-
-});
-
-const loginBtn = document.getElementById("loginBtn");
-
-loginBtn.addEventListener("click", () => {
-
-    signInWithRedirect(auth, provider);
-
-});
-
-onAuthStateChanged(auth)
-.then((result) => {
-
-    if (result) {
-
-        console.log("Utilisateur connecté");
-
-        console.log(result.user);
-
-    }
-
-})
-.catch((error) => {
-
-    console.log(error.code);
-    console.log(error.message);
-
-});
-
-loginBtn.addEventListener("click",()=>{
-
-signInWithRedirect(auth,provider);
 
 });
 </script>
