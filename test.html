@@ -189,6 +189,25 @@ Déconnexion
 
 <script type="module">
 
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+onAuthStateChanged(auth,(user)=>{
+
+    if(user){
+
+        console.log(user.displayName);
+
+        avatar.src = user.photoURL;
+
+        loginBtn.style.display = "none";
+
+        profile.style.display = "block";
+
+    }
+
+});
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
