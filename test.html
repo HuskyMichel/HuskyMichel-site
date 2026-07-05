@@ -262,6 +262,17 @@ signOut
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithRedirect,
+getRedirectResult,
+onAuthStateChanged,
+signOut
+}
+const auth = getAuth(app);
+await getRedirectResult(auth);
+
 
 const firebaseConfig = {
    apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -291,6 +302,8 @@ document.getElementById("logoutBtn");
 
 onAuthStateChanged(auth,(user)=>{
 
+console.log("USER =", user);
+
 if(user){
 
 loginBtn.style.display="none";
@@ -299,7 +312,9 @@ userMenu.style.display="block";
 
 avatar.src=user.photoURL;
 
-}else{
+}
+
+else{
 
 loginBtn.style.display="block";
 
