@@ -94,6 +94,74 @@ header{
 main{
     padding:20px;
 }
+
+.auth{
+
+position:relative;
+
+}
+
+#userMenu{
+
+display:none;
+
+position:relative;
+
+cursor:pointer;
+
+}
+
+#avatar{
+
+width:40px;
+
+height:40px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid #3ea6ff;
+
+}
+
+#menu{
+
+display:none;
+
+position:absolute;
+
+right:0;
+
+top:55px;
+
+background:#181818;
+
+border:1px solid #333;
+
+border-radius:10px;
+
+overflow:hidden;
+
+min-width:220px;
+
+z-index:1000;
+
+}
+
+#menu div{
+
+padding:14px;
+
+cursor:pointer;
+
+}
+
+#menu div:hover{
+
+background:#2a2a2a;
+
+}
 </style>
 
 </head>
@@ -123,6 +191,26 @@ Connexion Google
 
 </button>
 
+<div id="userMenu" style="display:none;">
+
+<img id="avatar">
+
+<div id="menu">
+
+<div>👤 Mon profil</div>
+
+<div>🖼️ Changer photo de profil</div>
+
+<div id="logoutBtn">
+
+🚪 Déconnexion
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </header>
@@ -143,12 +231,23 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithRedirect,
-    getRedirectResult
+
+getAuth,
+GoogleAuthProvider,
+
+signInWithRedirect,
+
+getRedirectResult,
+
+onAuthStateChanged,
+
+signOut
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 const firebaseConfig = {
    apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -163,6 +262,62 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+const avatar =
+document.getElementById("avatar");
+
+const menu =
+document.getElementById("menu");
+
+const userMenu =
+document.getElementById("userMenu");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+loginBtn.style.display="none";
+
+userMenu.style.display="block";
+
+avatar.src=user.photoURL;
+
+}else{
+
+loginBtn.style.display="block";
+
+userMenu.style.display="none";
+
+}
+
+});
+
+avatar.addEventListener("click",()=>{
+
+menu.style.display=
+
+menu.style.display==="block"
+
+?
+
+"none"
+
+:
+
+"block";
+
+});
+
+logoutBtn.addEventListener("click",()=>{
+
+signOut(auth);
+
+menu.style.display="none";
+
+});
+
 const loginBtn = document.getElementById("loginBtn");
 
 loginBtn.addEventListener("click", () => {
@@ -171,7 +326,7 @@ loginBtn.addEventListener("click", () => {
 
 });
 
-getRedirectResult(auth)
+onAuthStateChanged(auth)
 .then((result) => {
 
     if (result) {
@@ -190,23 +345,9 @@ getRedirectResult(auth)
 
 });
 
-loginBtn.addEventListener("click", async () => {
+loginBtn.addEventListener("click",()=>{
 
-    console.log("clic");
-
-    try {
-
-        await signInWithRedirect(auth, provider);
-
-        console.log("redirection lancée");
-
-    } catch (e) {
-
-        console.error(e);
-
-        alert(e.code);
-
-    }
+signInWithRedirect(auth,provider);
 
 });
 </script>
