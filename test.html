@@ -216,6 +216,8 @@ const loginBtn = document.getElementById("loginBtn");
 
 loginBtn.addEventListener("click", async () => {
 
+    loginBtn.disabled = true;
+
     try {
 
         const result = await signInWithPopup(auth, provider);
@@ -223,20 +225,21 @@ loginBtn.addEventListener("click", async () => {
         const user = result.user;
 
         console.log(user.displayName);
-
         console.log(user.photoURL);
 
     }
 
     catch(error){
 
-    console.log(error);
+        console.error(error);
 
-    alert(error.code);
+    }
 
-    alert(error.message);
+    finally{
 
-}
+        loginBtn.disabled = false;
+
+    }
 
 });
 
