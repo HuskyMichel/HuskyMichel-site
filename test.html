@@ -444,10 +444,28 @@ logout.addEventListener("click", async ()=>{
 
 onAuthStateChanged(auth, async (user)=>{
 
+
     if(user){
 
-        console.log("Connecté :", user.displayName);
+        console.log("Utilisateur connecté :", user.email);
 
+
+        // Afficher la photo
+
+        avatar.src = user.photoURL;
+
+
+        // Cacher le bouton
+
+        loginBtn.style.display="none";
+
+
+        // Afficher le profil
+
+        profile.style.display="block";
+
+
+        // Vérifier Firestore
 
         const profilRef = doc(db,"users",user.uid);
 
@@ -462,28 +480,30 @@ onAuthStateChanged(auth, async (user)=>{
 
         else{
 
-            console.log("Aucun profil trouvé");
+            console.log("Création du profil nécessaire");
 
             window.location.href="creation-profil.html";
 
         }
 
 
-        loginBtn.style.display="none";
-
-        profile.style.display="block";
-
-        avatar.src=user.photoURL;
-
     }
+
 
     else{
 
+
+        console.log("Pas connecté");
+
+
         loginBtn.style.display="block";
+
 
         profile.style.display="none";
 
+
     }
+
 
 });
 
