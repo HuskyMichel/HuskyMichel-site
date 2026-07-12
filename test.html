@@ -270,6 +270,58 @@ menu.style.display = "block";
 
 });
 
+loginBtn.addEventListener("click", async () => {
+
+    loginBtn.disabled = true;
+
+    try {
+
+        const result = await signInWithPopup(auth, provider);
+
+        const user = result.user;
+
+        console.log(user.displayName);
+        console.log(user.photoURL);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+    finally{
+
+        loginBtn.disabled = false;
+
+    }
+
+});
+
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+onAuthStateChanged(auth,(user)=>{
+
+    if(user){
+
+        console.log(user.displayName);
+
+        avatar.src = user.photoURL;
+
+        loginBtn.style.display = "none";
+
+        profile.style.display = "block";
+		
+		menu.style.display = "block";
+
+    }
+
+});
+
+
+
 </script>
 
 </body>
