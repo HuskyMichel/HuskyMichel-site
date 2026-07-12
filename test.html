@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Mon site</title>
 
-<link rel="icon" href="Photo de profil/titre.jpg"><title>Accueil</title>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Accueil</title>
+
+<link rel="icon" href="Photo de profil/titre.jpg">
 
 <style>
 
-body{
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
     font-family:Arial, sans-serif;
     background:#1f1f1f;
     color:white;
 }
 
-/* barre du haut */
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
 header{
+
+    position:sticky;
+    top:0;
+
     height:60px;
+
     background:#0f0f0f;
 
     display:flex;
@@ -26,56 +43,88 @@ header{
 
     padding:0 20px;
 
-    position:sticky;
-    top:0;
+    border-bottom:1px solid #2b2b2b;
 
-    border-bottom:1px solid #2a2a2a;
+    z-index:1000;
+
 }
 
-/* logo */
-.logo img{
-    height:40px;
-    cursor:pointer;
-}
+/* ========================= */
+/* LOGO */
+/* ========================= */
 
-/* barre de recherche */
-.search{
-    flex:1;
+.logo{
+
     display:flex;
+    align-items:center;
+
+}
+
+.logo img{
+
+    height:42px;
+
+    cursor:pointer;
+
+}
+
+/* ========================= */
+/* RECHERCHE */
+/* ========================= */
+
+.search{
+
+    flex:1;
+
+    display:flex;
+
     justify-content:center;
+
 }
 
 .search input{
-    width:500px;
 
-    padding:10px 16px;
+    width:520px;
 
-    border-radius:25px;
+    max-width:90%;
 
-    border:1px solid #333;
-
-    background:#141414;
+    background:#151515;
 
     color:white;
 
-    font-size:16px;
+    border:1px solid #333;
+
+    border-radius:30px;
+
+    padding:11px 18px;
+
+    font-size:15px;
 
     outline:none;
+
 }
 
 .search input:focus{
+
     border-color:#3ea6ff;
+
 }
 
-/* contenu principal */
-main{
-    padding:20px;
-}
+/* ========================= */
+/* COMPTE */
+/* ========================= */
 
 .account{
+
     display:flex;
+
     align-items:center;
+
+    gap:12px;
+
 }
+
+/* bouton connexion */
 
 #loginBtn{
 
@@ -85,9 +134,9 @@ main{
 
     border:none;
 
-    padding:10px 18px;
+    border-radius:25px;
 
-    border-radius:20px;
+    padding:10px 18px;
 
     font-size:15px;
 
@@ -98,23 +147,46 @@ main{
 }
 
 #loginBtn:hover{
-    background:#5bb5ff;
+
+    background:#61b8ff;
+
 }
 
+/* ========================= */
+/* PHOTO */
+/* ========================= */
+
 .profile{
+
+    display:none;
+
     position:relative;
+
 }
 
 #avatar{
+
     width:42px;
+
     height:42px;
 
     border-radius:50%;
 
+    object-fit:cover;
+
     cursor:pointer;
+
+    border:2px solid #3ea6ff;
+
 }
 
+/* ========================= */
+/* MENU */
+/* ========================= */
+
 .menu{
+
+    display:none;
 
     position:absolute;
 
@@ -122,15 +194,59 @@ main{
 
     right:0;
 
-    width:220px;
+    width:230px;
 
     background:#242424;
 
-    border-radius:10px;
+    border-radius:12px;
 
-    padding:10px;
+    overflow:hidden;
 
-    display:none;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+
+}
+
+.menu a,
+.menu button{
+
+    width:100%;
+
+    display:block;
+
+    padding:14px;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+}
+
+.menu a{
+
+    text-decoration:none;
+
+}
+
+.menu a:hover,
+.menu button:hover{
+
+    background:#333;
+
+}
+
+/* ========================= */
+
+main{
+
+    padding:25px;
 
 }
 
@@ -143,7 +259,13 @@ main{
 <header>
 
 <div class="logo">
-    <a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
+
+<a href="https://huskymichel.github.io/HuskyMichel-site/">
+
+<img src="Photo de profil/Accueil.jpg" alt="Accueil">
+
+</a>
+
 </div>
 
 <div class="search">
@@ -158,25 +280,29 @@ placeholder="🔍 Rechercher un profil..."
 <div class="account">
 
 <button id="loginBtn">
+
 Se connecter
+
 </button>
 
-<div class="profile" style="display:none;">
+<div class="profile" id="profile">
 
 <img id="avatar">
 
-<div class="menu">
+<div class="menu" id="menu">
 
-<a href="/profil">
-Mon profil
-</a>
+<a href="#">👤 Mon profil</a>
 
 <button id="changePhoto">
-Changer la photo
+
+🖼️ Changer la photo
+
 </button>
 
 <button id="logout">
-Déconnexion
+
+🚪 Déconnexion
+
 </button>
 
 </div>
@@ -187,34 +313,29 @@ Déconnexion
 
 </header>
 
+<main>
+
+<h1>Bienvenue !</h1>
+
+<p>Le contenu du site arrivera ici.</p>
+
+</main>
+
 <script type="module">
-
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-onAuthStateChanged(auth,(user)=>{
-
-    if(user){
-
-        console.log(user.displayName);
-
-        avatar.src = user.photoURL;
-
-        loginBtn.style.display = "none";
-
-        profile.style.display = "block";
-
-    }
-
-});
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+/* ========================= */
+/* CONFIG FIREBASE */
+/* ========================= */
 
 const firebaseConfig = {
    apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -231,20 +352,59 @@ const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
+/* ========================= */
+/* ELEMENTS HTML */
+/* ========================= */
+
 const loginBtn = document.getElementById("loginBtn");
 
-loginBtn.addEventListener("click", async () => {
+const profile = document.getElementById("profile");
 
-    loginBtn.disabled = true;
+const avatar = document.getElementById("avatar");
 
-    try {
+const menu = document.getElementById("menu");
 
-        const result = await signInWithPopup(auth, provider);
+const logout = document.getElementById("logout");
 
-        const user = result.user;
+/* ========================= */
+/* MENU */
+/* ========================= */
 
-        console.log(user.displayName);
-        console.log(user.photoURL);
+avatar.addEventListener("click", () => {
+
+    if(menu.style.display==="block"){
+
+        menu.style.display="none";
+
+    }
+
+    else{
+
+        menu.style.display="block";
+
+    }
+
+});
+
+document.addEventListener("click",(event)=>{
+
+    if(!profile.contains(event.target)){
+
+        menu.style.display="none";
+
+    }
+
+});
+
+/* ========================= */
+/* CONNEXION */
+/* ========================= */
+
+loginBtn.addEventListener("click", async ()=>{
+
+    try{
+
+        await signInWithPopup(auth,provider);
 
     }
 
@@ -254,34 +414,17 @@ loginBtn.addEventListener("click", async () => {
 
     }
 
-    finally{
-
-        loginBtn.disabled = false;
-
-    }
-
-avatar.src = user.photoURL;
-
-profile.style.display = "block";
-
-loginBtn.style.display = "none";
-
-menu.style.display = "block";
-
 });
 
-loginBtn.addEventListener("click", async () => {
+/* ========================= */
+/* DECONNEXION */
+/* ========================= */
 
-    loginBtn.disabled = true;
+logout.addEventListener("click", async ()=>{
 
-    try {
+    try{
 
-        const result = await signInWithPopup(auth, provider);
-
-        const user = result.user;
-
-        console.log(user.displayName);
-        console.log(user.photoURL);
+        await signOut(auth);
 
     }
 
@@ -291,36 +434,51 @@ loginBtn.addEventListener("click", async () => {
 
     }
 
-    finally{
-
-        loginBtn.disabled = false;
-
-    }
-
 });
 
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+/* ========================= */
+/* ETAT DE LA CONNEXION */
+/* ========================= */
 
 onAuthStateChanged(auth,(user)=>{
 
     if(user){
 
-        console.log(user.displayName);
+        console.log("Connecté :", user.displayName);
 
-        avatar.src = user.photoURL;
+        loginBtn.style.display="none";
 
-        loginBtn.style.display = "none";
+        profile.style.display="block";
 
-        profile.style.display = "block";
-		
-		menu.style.display = "block";
+        avatar.src=user.photoURL;
+
+    }
+
+    else{
+
+        loginBtn.style.display="block";
+
+        profile.style.display="none";
+
+        menu.style.display="none";
 
     }
 
 });
 
+/* ========================= */
+/* CHANGER LA PHOTO */
+/* ========================= */
 
+document.getElementById("changePhoto").addEventListener("click",()=>{
+
+    alert("Cette fonctionnalité sera ajoutée plus tard.");
+
+});
+
+/* ========================= */
+/* FIN */
+/* ========================= */
 
 </script>
 
