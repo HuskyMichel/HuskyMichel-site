@@ -350,6 +350,8 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
+const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 
 /* ========================= */
@@ -440,11 +442,32 @@ logout.addEventListener("click", async ()=>{
 /* ETAT DE LA CONNEXION */
 /* ========================= */
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, async (user)=>{
 
     if(user){
 
         console.log("Connecté :", user.displayName);
+
+
+        const profilRef = doc(db,"users",user.uid);
+
+        const profilSnap = await getDoc(profilRef);
+
+
+        if(profilSnap.exists()){
+
+            console.log("Profil trouvé");
+
+        }
+
+        else{
+
+            console.log("Aucun profil trouvé");
+
+            window.location.href="creation-profil.html";
+
+        }
+
 
         loginBtn.style.display="none";
 
@@ -460,8 +483,6 @@ onAuthStateChanged(auth,(user)=>{
 
         profile.style.display="none";
 
-        menu.style.display="none";
-
     }
 
 });
@@ -475,6 +496,12 @@ document.getElementById("changePhoto").addEventListener("click",()=>{
     alert("Cette fonctionnalité sera ajoutée plus tard.");
 
 });
+
+import {
+    getFirestore,
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 /* ========================= */
 /* FIN */
