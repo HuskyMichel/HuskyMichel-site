@@ -8,39 +8,303 @@
 
 <title>Créer mon profil</title>
 
+<style>
+
+body{
+
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#1f1f1f;
+    color:white;
+
+}
+
+
+.container{
+
+    max-width:600px;
+
+    margin:50px auto;
+
+    background:#242424;
+
+    padding:30px;
+
+    border-radius:15px;
+
+}
+
+
+h1{
+
+    text-align:center;
+
+}
+
+
+label{
+
+    display:block;
+
+    margin-top:20px;
+
+    margin-bottom:5px;
+
+    font-weight:bold;
+
+}
+
+
+input, textarea, select{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:none;
+
+    background:#141414;
+
+    color:white;
+
+    box-sizing:border-box;
+
+}
+
+
+textarea{
+
+    resize:none;
+
+    height:80px;
+
+}
+
+
+button{
+
+    margin-top:25px;
+
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:#3ea6ff;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+
+button:hover{
+
+    background:#5bb5ff;
+
+}
+
+
+</style>
+
 </head>
+
 
 <body>
 
-<h1>Créer votre profil</h1>
 
-<p>Vous devez créer votre profil avant d'accéder au site.</p>
+<div class="container">
 
 
-<button id="logout">
-    Se déconnecter
+<h1>Créer mon profil</h1>
+
+
+<label>
+Pseudo *
+</label>
+
+<input 
+type="text"
+id="pseudo"
+placeholder="Choisissez votre pseudo"
+maxlength="20"
+>
+
+
+
+<label>
+Réseaux sociaux *
+</label>
+
+<input
+type="text"
+id="reseaux"
+placeholder="Exemple : YouTube, Discord..."
+>
+
+
+<label>
+<div id="categoriesContainer">
+
+<h2>Catégories</h2>
+
+<p>Chargement des catégories...</p>
+
+</div>
+</label>
+
+<select id="categories">
+
+<option>
+Choisir une catégorie
+</option>
+
+<option>
+Fortnite
+</option>
+
+<option>
+Minecraft
+</option>
+
+<option>
+GTA
+</option>
+
+<option>
+Roblox
+</option>
+
+<option>
+IRL
+</option>
+
+<option>
+Autre
+</option>
+
+
+</select>
+
+
+
+<label>
+Description (50 caractères maximum)
+</label>
+
+
+<textarea
+id="description"
+maxlength="50"
+placeholder="Présentez-vous rapidement..."
+></textarea>
+
+
+
+<label>
+Vidéo de présentation (facultatif)
+</label>
+
+
+<input
+type="text"
+id="video"
+placeholder="Lien YouTube pour le moment"
+>
+
+
+<button id="createProfile">
+
+Créer mon profil
+
 </button>
 
 
+</div>
+
 <script type="module">
 
+import { db } from "./firebase.js";
+
+
 import {
-    getAuth,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-const auth = getAuth();
+
+const container = document.getElementById("categoriesContainer");
 
 
-const logout = document.getElementById("logout");
+
+const categoriesRef = collection(db,"categories");
 
 
-logout.addEventListener("click", async ()=>{
+const snapshot = await getDocs(categoriesRef);
 
-    await signOut(auth);
 
-    window.location.href="index.html";
+
+container.innerHTML = "<h2>Catégories</h2>";
+
+
+
+snapshot.forEach((doc)=>{
+
+
+    const data = doc.data();
+
+
+    const titre = doc.id;
+
+
+    const bloc = document.createElement("div");
+
+
+    bloc.innerHTML = `
+
+    <h3>${titre}</h3>
+
+    `;
+
+
+    data.liste.forEach((categorie)=>{
+
+
+        bloc.innerHTML += `
+
+        <label>
+
+        <input 
+        type="checkbox"
+        name="categories"
+        value="${categorie}"
+        >
+
+        ${categorie}
+
+        </label>
+
+        <br>
+
+        `;
+
+
+    });
+
+
+
+    container.appendChild(bloc);
+
+
 
 });
 
