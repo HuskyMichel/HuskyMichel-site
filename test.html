@@ -1,341 +1,807 @@
 <!DOCTYPE html>
 <html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" href="Photo de profil/titre.jpg"><title>Accueil</title>
+		
+		<style>
+			body{
+			margin:0;
+			font-family:Arial,sans-serif;
+			background:linear-gradient(135deg,#f5f5f5,#ebebeb);
+			}
 
-<head>
+			/* TOPBAR */
+			.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  padding:15px 25px;
+  background:white;
 
-<title>Accueil</title>
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
 
-<link rel="icon" href="Photo de profil/titre.jpg">
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
 
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+  z-index:3000;
+  box-sizing:border-box;
 }
 
-body{
-    font-family:Arial, sans-serif;
-    background:#1f1f1f;
-    color:white;
+			.recherche-container{
+  			margin:auto;
+  			width:400px;
+			}
+
+
+			.home-img{
+  			width:140px;
+  			transition:0.3s;
+			}
+
+			.home-img:hover{
+  			transform:scale(1.08);
+			}
+
+			.recherche-container{
+  			position:relative;
+ 			width:350px;
+ 			}
+
+ 			#recherche{
+   			width:100%;
+   			padding:12px;
+   			border:none;
+   			border-radius:12px;
+   			font-size:16px;
+   			box-shadow:0 5px 15px rgba(0,0,0,.15);
+ 			}
+
+ 			#resultats{
+   			position:absolute;
+   			width:100%;
+   			background:white;
+   			border-radius:12px;
+   			margin-top:5px;
+   			overflow:hidden;
+   			box-shadow:0 5px 15px rgba(0,0,0,.15);
+   			z-index:1000;
+ 			}
+
+ 			.resultat{
+   			padding:12px;
+   			 cursor:pointer;
+ 			}
+
+ 			.resultat:hover{
+   			background:#f0f0f0;
+ 			}
+			
+			.resultat{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  cursor:pointer;
 }
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
+.resultat-photo{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
 
-header{
-
-    position:sticky;
-    top:0;
-
-    height:60px;
-
-    background:#0f0f0f;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 20px;
-
-    border-bottom:1px solid #2b2b2b;
-
-    z-index:1000;
-
+  transition:0.3s;
 }
 
-/* ========================= */
-/* LOGO */
-/* ========================= */
-
-.logo{
-
-    display:flex;
-    align-items:center;
-
+.resultat:hover .resultat-photo{
+  transform:scale(1.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
 }
 
-.logo img{
+.resultat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  cursor:pointer;
+}
+			
+			.titre{
+			text-align:center;
+			margin-top:30px;
+			font-size:32px;
+			}
 
-    height:42px;
+			.intro{
+			text-align:center;
+			color:#666;
+			margin-bottom:30px;
+			}
 
-    cursor:pointer;
+			/* PREMIERE LIGNE */
+			.galerie-top{
+			display:flex;
+			justify-content:center;
+			gap:30px;
+			flex-wrap:wrap;
+			padding:20px;
+			}
 
+			/* DEUXIEME LIGNE */
+			.galerie-bottom{
+			display:flex;
+			justify-content:center;
+			padding-bottom:40px;
+			}
+
+			.carte{
+			width:260px;
+			background:white;
+			padding:20px;
+			border-radius:20px;
+			text-align:center;
+			box-shadow:0 8px 20px rgba(0,0,0,.12);
+			transition:.3s;
+			}
+
+			.carte:hover{
+			transform:translateY(-10px);
+			}
+
+			/* IMAGE AVEC CONTOUR BLANC + OMBRE */
+			.carte img{
+			width:100%;
+			border-radius:18px;
+			padding:8px;
+			background:white;
+			box-shadow:0 8px 20px rgba(0,0,0,.12);
+			box-sizing:border-box;
+			}
+
+			.footer{
+			background:white;
+			text-align:center;
+			padding:30px;
+			margin-top:30px;
+
+			border-top-left-radius:20px;
+			border-top-right-radius:20px;
+
+			box-shadow:0 -4px 15px rgba(0,0,0,0.10);
+			}
+
+			.carte h2{
+			margin-top:15px;
+			}
+
+			.bouton{
+			display:inline-block;
+			margin-top:15px;
+			padding:12px 22px;
+			background:black;
+			color:white;
+			text-decoration:none;
+			border-radius:10px;
+			}
+
+			/* HUSKYMICHEL */
+			.carte-createur{
+			border:2px solid #111;
+			}
+
+			.badge-createur{
+			display:inline-block;
+			margin-top:5px;
+			margin-bottom:12px;
+			padding:6px 14px;
+			background:linear-gradient(135deg,#111,#444);
+			color:white;
+			border-radius:999px;
+			font-size:13px;
+			font-weight:bold;
+			box-shadow:0 5px 15px rgba(0,0,0,.15);
+			}
+
+			.footer{
+			background:white;
+			text-align:center;
+			padding:30px;
+			margin-top:30px;
+			}
+
+			.don-widget{
+  			position:fixed;
+  			right:20px;
+  			bottom:20px;
+  			z-index:999;
+			}
+
+			.don-content{
+  			background:white;
+  			padding:20px;
+  			border-radius:20px;
+  			box-shadow:0 8px 25px rgba(0,0,0,.18);
+  			text-align:center;
+			}
+
+			.don-toggle{
+ 			width:55px;
+  			height:55px;
+  			border:none;
+  			border-radius:50%;
+  			background:black;
+  			color:white;
+  			font-size:24px;
+  			cursor:pointer;
+  			margin-bottom:10px;
+			}
+
+			.dons{
+  			display:flex;
+  			gap:15px;
+  			justify-content:center;
+			}
+
+			.merci{
+  			font-size:13px;
+  			color:#666;
+  			margin-top:10px;
+			}
+			
+			.heart-float {
+  position: absolute;
+  font-size: 20px;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
 }
 
-/* ========================= */
-/* RECHERCHE */
-/* ========================= */
-
-.search{
-
-    flex:1;
-
-    display:flex;
-
-    justify-content:center;
-
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.8);
+    opacity: 0;
+  }
 }
-
-.search input{
-
-    width:520px;
-
-    max-width:90%;
-
-    background:#151515;
-
-    color:white;
-
-    border:1px solid #333;
-
-    border-radius:30px;
-
-    padding:11px 18px;
-
-    font-size:15px;
-
-    outline:none;
-
-}
-
-.search input:focus{
-
-    border-color:#3ea6ff;
-
-}
-
-/* ========================= */
-/* COMPTE */
-/* ========================= */
-
-.account{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-}
-
-/* bouton connexion */
-
-#loginBtn{
-
-    background:#3ea6ff;
-
-    color:white;
-
-    border:none;
-
-    border-radius:25px;
-
-    padding:10px 18px;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-    transition:0.2s;
-
-}
-
-#loginBtn:hover{
-
-    background:#61b8ff;
-
-}
-
-/* ========================= */
-/* PHOTO */
-/* ========================= */
-
-.profile{
-
-    display:none;
-
-    position:relative;
-
-}
+			
+			/* ================= AVATAR ================= */
 
 #avatar{
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    cursor:pointer;
-
-    border:2px solid #3ea6ff;
-
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-/* ========================= */
-/* MENU */
-/* ========================= */
+#avatar:hover{
+  transform:scale(1.08);
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+			
+			/* ================= MENU PROFIL ================= */
 
-.menu{
+#menuProfil{
+  display:none;
+  position:absolute;
+  right:0;
+  top:55px;
 
-    display:none;
+  background:white;
+  border-radius:14px;
+  padding:8px 0;
+  width:180px;
 
-    position:absolute;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  overflow:hidden;
 
-    top:55px;
-
-    right:0;
-
-    width:230px;
-
-    background:#242424;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    box-shadow:0 0 20px rgba(0,0,0,.5);
-
+  animation:menuPop 0.15s ease-out;
 }
 
-.menu a,
-.menu button{
-
-    width:100%;
-
-    display:block;
-
-    padding:14px;
-
-    background:none;
-
-    border:none;
-
-    color:white;
-
-    text-align:left;
-
-    font-size:15px;
-
-    cursor:pointer;
-
+@keyframes menuPop{
+  from{
+    transform:translateY(-10px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
 }
 
-.menu a{
-
-    text-decoration:none;
-
+#menuProfil p{
+  margin:0;
+  padding:12px 15px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:0.2s;
 }
 
-.menu a:hover,
-.menu button:hover{
-
-    background:#333;
-
+#menuProfil p:hover{
+  background:#f2f2f2;
 }
 
-/* ========================= */
-
-main{
-
-    padding:25px;
-
+#menuProfil p:hover{
+  cursor:pointer;
 }
 
-</style>
+/* ================= MENU FLÈCHE ================= */
 
-</head>
+#userBox{
+  position:relative;
+}
 
-<body>
+#menuProfil::before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:15px;
 
-<header>
+  width:12px;
+  height:12px;
+  background:white;
+  transform:rotate(45deg);
 
-<div class="logo">
+  box-shadow:-2px -2px 5px rgba(0,0,0,0.05);
+}
 
-<a href="https://huskymichel.github.io/HuskyMichel-site/">
+.like-zone{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:10px;
+}
 
-<img src="Photo de profil/Accueil.jpg" alt="Accueil">
+.like-zone button{
+  border:none;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+  transition:0.2s;
+}
 
-</a>
+.like-zone button:hover{
+  transform:scale(1.2);
+}
 
-</div>
+#menuBtn{
+  position:fixed;
 
-<div class="search">
+  top:90px; /* juste sous la barre blanche */
+  left:20px;
 
-<input
-type="text"
-placeholder="🔍 Rechercher un profil..."
->
+  width:55px;
+  height:55px;
 
-</div>
+  border:none;
+  border-radius:15px;
 
-<div class="account">
+  background:black;
+  color:white;
 
-<button id="loginBtn">
+  font-size:24px;
+  cursor:pointer;
 
+  z-index:2500;
+}
+
+#sidebar{
+  position:fixed;
+  top:75px; /* hauteur de la barre du haut */
+  left:-320px;
+
+  width:250px;
+  height:calc(100vh - 75px);
+
+  background:white;
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  box-shadow:5px 0 20px rgba(0,0,0,.15);
+  transition:.3s;
+  z-index:1500;
+}
+
+#sidebar.open{
+  left:0;
+}
+
+.menu-item{
+  padding:15px 20px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.menu-item:hover{
+  background:#f5f5f5;
+}
+
+#favorisContent{
+  display:none;
+  padding-left:30px;
+}
+
+#favorisContent a{
+  display:block;
+  padding:8px 0;
+  color:black;
+  text-decoration:none;
+}
+
+.classement{
+  padding:10px 20px;
+}
+
+hr{
+  border:none;
+  border-top:1px solid #ddd;
+  margin:15px;
+}
+
+.sidebar-header{
+  text-align:center;
+  padding:20px;
+}
+
+.sidebar-avatar{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  object-fit:cover;
+
+  border:4px solid white;
+
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.sidebar-menu-btn{
+  margin-top:15px;
+
+  width:60px;
+  height:60px;
+
+  border:none;
+  border-radius:15px;
+
+  background:black;
+  color:white;
+
+  font-size:26px;
+}
+
+#DonationsContent{
+  display:none;
+  padding-left:20px;
+}
+
+#DonationsContent a{
+  display:block;
+  padding:6px 0;
+}
+
+#contenuSite{
+  transition:0.3s;
+}
+
+#contenuSite.decale{
+  margin-left:300px;
+}
+
+		</style>
+	</head>
+
+	<body>
+
+		<div class="topbar">
+
+			<a href="https://huskymichel.github.io/HuskyMichel-site/"><img src="Photo de profil/Accueil.jpg" class="home-img" alt="Accueil"></a>
+
+			<div class="recherche-container">
+
+				<input
+				type="text"
+				id="recherche"
+				placeholder="🔍 Rechercher un profil..."
+				onkeyup="chercherProfil()">
+
+				<div id="resultats"></div>
+
+			</div>
+
+<div id="userBox">
+  <button id="loginBtn" onclick="loginGoogle()" style="
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:black;
+  color:white;
+  cursor:pointer;
+  font-weight:500;
+">
 Se connecter
-
 </button>
 
-<div class="profile" id="profile">
+  <div id="profile" style="display:none;">
+    <img id="avatar" style="width:40px;height:40px;border-radius:50%;">
+  </div>
 
-<img id="avatar">
+  <div id="menuProfil">
+  <p onclick="voirFavoris()">👤 Mon profil</p>
+  <p onclick="changerPhoto()">🖼️ Changer photo de profil</p>
+  <p onclick="logout()">🚪 Déconnexion</p>
+</div>
+</div>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+<div id="contenuSite">
+			<h1 class="titre">Voici différents réseaux que vous pourriez adorer !</h1>
+			<p class="intro">Découvre de multiples projets !</p>
 
-<div class="menu" id="menu">
+		<div class="galerie-top">
 
-<a href="#">👤 Mon profil</a>
+			<div class="carte">
+				<img src="Photo de profil/Photo de profil Gerrix.jpg">
+				<h2>Gerrix</h2>
+				<p>YouTubeur gaming +10K, lives réguliers et communauté active !</p>
 
-<button id="changePhoto">
+<div class="like-zone">
+  <button onclick="toggleLike('Gerrix')">❤️</button>
+  <span id="count-Gerrix">0</span>
+</div>
 
-🖼️ Changer la photo
+<a href="https://huskymichel.github.io/HuskyMichel-site/Gerrix/gerrix.html" class="bouton">Voir le profil</a>
+			</div>
 
-</button>
+			<div class="carte">
+				<img src="Photo de profil/Photo de profil XSU LIFEZEN.jpg">
+				<h2>XSU LIFEZEN</h2>
+				<p>Créateur de contenu YouTube et communautaire !</p>
 
-<button id="logout">
+<div class="like-zone">
+  <button onclick="toggleLike('XSU_LIFEZEN')">❤️</button>
+  <span id="count-XSU_LIFEZEN">0</span>
+</div>
 
-🚪 Déconnexion
+<a href="https://huskymichel.github.io/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html" class="bouton">Voir le profil</a>
+				
+			</div>
 
-</button>
+			<div class="carte">
+				<img src="Photo de profil/Photo de profil Veenzoxx Officiel.jpg">
+				<h2>Veenzoxx Officiel</h2>
+				<p>Gaming Fortnite, YouTube et Twitch !</p>
+
+<div class="like-zone">
+  <button onclick="toggleLike('Veenzoxx_Officiel')">❤️</button>
+  <span id="count-Veenzoxx_Officiel">0</span>
+</div>
+				<a href="https://huskymichel.github.io/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html" class="bouton">Voir le profil</a>
+			</div>
+
+		</div>
+
+		<div class="galerie-bottom">
+
+			<div class="carte carte-createur">
+					<img src="Photo de profil/Photo de profil HuskyMichel.jpg">
+					<h2>⭐ HuskyMichel</h2>
+				<div class="badge-createur">Créateur
+				</div>
+				<p>Créateur du site et manager des différents projets !</p>
+
+<div class="like-zone">
+  <button onclick="toggleLike('HuskyMichel')">❤️</button>
+  <span id="count-HuskyMichel">0</span>
+  </div>
+  <a href="https://huskymichel.github.io/HuskyMichel-site/HuskyMichel/huskymichel.html" class="bouton">Voir le profil</a>
+
+		</div>
+		
+		<div class="carte">
+				<img src="Photo de profil/Photo de profil Flyxoz.jpg">
+				<h2>Flyxoz</h2>
+				<br>
+				<br>
+				<br>
+				<p>Intéressant, Gentil, Drole !</p>
+
+<div class="like-zone">
+  <button onclick="toggleLike('Flyxoz')">❤️</button>
+  <span id="count-Flyxoz">0</span>
+</div>
+				<a href="https://huskymichel.github.io/HuskyMichel-site/Flyxoz/flyxoz.html" class="bouton">Voir le profil</a>
+			</div>
+		
+<input type="file" id="photoInput" accept="image/*" style="display:none;">
+
+</div>
+<button id="menuBtn">☰</button>
+
+<div id="sidebar">
+<br>
+<br>
+<br>
+  <div class="menu-item">
+    <p onclick="voirFavoris()">👤 Mon Profil ></p>
+  </div>
+
+  <div class="menu-item dropdown" onclick="toggleFavoris()">
+    ⭐ Favoris <span id="flecheFavoris">▼</span>
+  </div>
+
+  <div id="favorisContent">
+    En cours...
+  </div>
+
+  <hr>
+<div class="menu-item">
+<a href="https://huskymichel.github.io/HuskyMichel-site/Discord/Discord.html"><img src="Menu/Discord.jpg" width="100" class="menu-item" alt="Discord"></a>
+
+  <div class="menu-item">
+    <a href="https://huskymichel.github.io/HuskyMichel-site/Fortnite/Fortnite.html"><img src="Menu/Fortnite2.jpg" width="100" class="menu-item" alt="Fortnite"></a>
+  </div>
+
+  <div class="menu-item">
+    <a href="https://huskymichel.github.io/HuskyMichel-site/GTA/GTA.html"><img src="Menu/GTA.jpg" width="100" class="menu-item" alt="GTA"></a>
+  </div>
+
+  <div class="menu-item">
+    <a href="https://huskymichel.github.io/HuskyMichel-site/Minecraft/Minecraft.html"><img src="Menu/Minecraft.jpg" width="100" class="menu-item" alt="Minecraft"></a>
+  </div>
+</div>
+  <hr>
+
+<div class="menu-item dropdown" onclick="toggleDonations()">
+    💰 Donations <span id="flecheDonations">▼</span>
+  </div>
+  <div id="DonationsContent">
+   <a href="https://huskymichel.github.io/HuskyMichel-site/Dons/ClassementDonateurs.html"><img src="Menu/Classement donateurs.jpg" width="175" class="menu-item" alt="Classemnet donateurs"></a>
+    <a href="https://huskymichel.github.io/HuskyMichel-site/Dons/Plushautdons.html"><img src="Menu/Plus gros dons.jpg" width="140" class="menu-item" alt="Plus gros dons"></a>
+    <a href="https://huskymichel.github.io/HuskyMichel-site/Dons/Historiquedesdons.html"><img src="Menu/Historique des dons.jpg" width="175" class="menu-item" alt="Historique des dons"></a>
+  </div>
+
+  <hr>
+
+  <h3>❤️ Classement Likes : En cours...</h3>
+  
+  <h3>⭐ Classement Favoris : En cours...</h3>
 
 </div>
 
-</div>
+		<!-- DON FLOTTANT -->
+		<div class="don-widget" id="donWidget">
 
-</div>
+			<button class="don-toggle" onclick="toggleDon()">💰</button>
 
-</header>
+			<div class="don-content" id="donContent">
 
-<main>
+				<h3>💰 Dons</h3>En cours...
 
-<h1>Bienvenue !</h1>
+				<p class="merci">Merci pour le soutien ❤️</p>
 
-<p>Le contenu du site arrivera ici.</p>
+			</div>
+		</div>
 
-</main>
+		<script>
+ 			function toggleDon(){
+   			const box = document.getElementById("donContent");
+
+   			if(box.style.display === "none"){
+     		box.style.display = "block";
+   			} else {
+			box.style.display = "none";
+			}
+			}
+		</script>
+
+		<script>
+		
+		window.voirFavoris = function(){
+  window.location.href =
+  "https://huskymichel.github.io/HuskyMichel-site/Profil/profil.html";
+};
+
+			const profils = [
+  {
+    nom: "HuskyMichel",
+    lien: "/HuskyMichel-site/HuskyMichel/huskymichel.html",
+    photo: "Barre de recherche/Photo de profil HuskyMichel.jpg"
+  },
+  {
+    nom: "Veenzoxx Officiel",
+    lien: "/HuskyMichel-site/Veenzoxx-Officiel/veenzoxx-officiel.html",
+    photo: "Barre de recherche/Photo de profil Veenzoxx Officiel.jpg"
+  },
+  {
+    nom: "Gerrix",
+    lien: "/HuskyMichel-site/Gerrix/gerrix.html",
+    photo: "Barre de recherche/Photo de profil Gerrix.jpg"
+  },
+  {
+  nom: "XSU LIFEZEN",
+  lien: "/HuskyMichel-site/XSU-LIFEZEN/xsu-lifezen.html",
+  photo: "Barre de recherche/Photo de profil XSU LIFEZEN.jpg"
+},
+
+{
+  nom:"Flyxoz",
+  lien:"/HuskyMichel-site/Flyxoz/flyxoz.html",
+  photo:"Barre de recherche/Photo de profil Flyxoz.jpg"
+  
+}
+];
+
+			function chercherProfil(){
+
+  const recherche =
+    document.getElementById("recherche").value.toLowerCase();
+
+  const resultats =
+    document.getElementById("resultats");
+
+  resultats.innerHTML = "";
+
+  if(recherche.length === 0){
+    return;
+  }
+
+  profils.forEach(profil => {
+
+    if(profil.nom.toLowerCase().includes(recherche)){
+
+      const div = document.createElement("div");
+
+      div.className = "resultat";
+
+      div.innerHTML = `
+        <span>${profil.nom}</span>
+        <img src="${profil.photo}" class="resultat-photo">
+      `;
+
+      div.onclick = () => {
+        window.location.href = profil.lien;
+      };
+
+      resultats.appendChild(div);
+    }
+
+  });
+
+}
+
+		</script>
 
 <script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
 import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  getFirestore,
+  doc,
+  onSnapshot,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ========================= */
-/* CONFIG FIREBASE */
-/* ========================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
    apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
@@ -347,187 +813,207 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
 const db = getFirestore(app);
 
+function listenLikes(profil){
+  const ref = doc(db, "likes", profil);
+
+  onSnapshot(ref, (snap) => {
+    const data = snap.data();
+    const count = data?.count || 0;
+
+    const el = document.getElementById(`count-${profil}`);
+    if (el) el.innerText = count;
+  });
+}
+
+listenLikes("Gerrix");
+listenLikes("XSU_LIFEZEN");
+listenLikes("Veenzoxx_Officiel");
+listenLikes("HuskyMichel");
+listenLikes("Flyxoz");
+
+window.toggleLike = async (profil) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Connecte-toi !");
+
+  const likeRef = doc(db, "likes", profil);
+  const userRef = doc(db, "userLikes", user.uid);
+
+  const snap = await getDoc(userRef);
+  let data = snap.exists() ? snap.data() : {};
+
+  const alreadyLiked = data[profil];
+
+  if (alreadyLiked) {
+    await updateDoc(likeRef, {
+      count: increment(-1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: false
+    }, { merge: true });
+
+  } else {
+    await updateDoc(likeRef, {
+      count: increment(1)
+    });
+
+    await setDoc(userRef, {
+      [profil]: true
+    }, { merge: true });
+  }
+};
+
+listenLikes("Gerrix");
+listenLikes("XSU_LIFEZEN");
+listenLikes("Veenzoxx_Officiel");
+listenLikes("HuskyMichel");
+listenLikes("Flyxoz");
+
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-/* ========================= */
-/* ELEMENTS HTML */
-/* ========================= */
+window.loginGoogle = () => signInWithPopup(auth, provider);
+window.logout = () => signOut(auth);
 
-const loginBtn = document.getElementById("loginBtn");
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("profile").style.display = "block";
 
-const profile = document.getElementById("profile");
+    const custom = localStorage.getItem("customAvatar");
 
-const avatar = document.getElementById("avatar");
+    document.getElementById("avatar").src =
+      custom || user.photoURL || "https://ui-avatars.com/api/?name=" + user.displayName;
 
-const menu = document.getElementById("menu");
-
-const logout = document.getElementById("logout");
-
-/* ========================= */
-/* MENU */
-/* ========================= */
-
-avatar.addEventListener("click", () => {
-
-    if(menu.style.display==="block"){
-
-        menu.style.display="none";
-
-    }
-
-    else{
-
-        menu.style.display="block";
-
-    }
-
+  } else {
+    document.getElementById("loginBtn").style.display = "block";
+    document.getElementById("profile").style.display = "none";
+  }
 });
 
-document.addEventListener("click",(event)=>{
+document.getElementById("profile").onclick = () => {
+  const menu = document.getElementById("menuProfil");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+};
+</script>
 
-    if(!profile.contains(event.target)){
+<script>
 
-        menu.style.display="none";
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
 
-    }
+const contenuSite =
+document.getElementById("contenuSite");
 
-});
+menuBtn.onclick = () => {
 
-/* ========================= */
-/* CONNEXION */
-/* ========================= */
+  sidebar.classList.toggle("open");
 
-loginBtn.addEventListener("click", async ()=>{
+  contenuSite.classList.toggle("decale");
 
-    try{
+};
 
-        await signInWithPopup(auth,provider);
+function toggleFavoris(){
 
-    }
+  const bloc =
+  document.getElementById("favorisContent");
 
-    catch(error){
+  const fleche =
+  document.getElementById("flecheFavoris");
 
-        console.error(error);
+  if(bloc.style.display === "block"){
 
-    }
+    bloc.style.display = "none";
+    fleche.innerHTML = "▼";
 
-});
+  }else{
 
-/* ========================= */
-/* DECONNEXION */
-/* ========================= */
+    bloc.style.display = "block";
+    fleche.innerHTML = "▲";
+  }
+}
+function toggleDonations(){
 
-logout.addEventListener("click", async ()=>{
+  const bloc =
+  document.getElementById("DonationsContent");
 
-    try{
+  const fleche =
+  document.getElementById("flecheDonations");
 
-        await signOut(auth);
+  if(bloc.style.display === "block"){
 
-    }
+    bloc.style.display = "none";
+    fleche.innerHTML = "▼";
 
-    catch(error){
+  }else{
 
-        console.error(error);
+    bloc.style.display = "block";
+    fleche.innerHTML = "▲";
+  }
+}
+</script>
 
-    }
+<script>
+menuBtn.onclick = () => {
+  sidebar.classList.toggle("open");
+};
 
-});
+function toggleFavoris(){
+  const bloc = document.getElementById("favorisContent");
+  const fleche = document.getElementById("flecheFavoris");
 
-/* ========================= */
-/* ETAT DE LA CONNEXION */
-/* ========================= */
+  if(bloc.style.display === "block"){
+    bloc.style.display = "none";
+    fleche.innerHTML = "▼";
+  }else{
+    bloc.style.display = "block";
+    fleche.innerHTML = "▲";
+  }
+}
 
-onAuthStateChanged(auth, async (user)=>{
+function toggleDonations(){
+  const bloc = document.getElementById("DonationsContent");
+  const fleche = document.getElementById("flecheDonations");
 
-
-    if(user){
-
-        console.log("Utilisateur connecté :", user.email);
-
-
-        // Afficher la photo
-
-        avatar.src = user.photoURL;
-
-
-        // Cacher le bouton
-
-        loginBtn.style.display="none";
-
-
-        // Afficher le profil
-
-        profile.style.display="block";
-
-
-        // Vérifier Firestore
-
-        const profilRef = doc(db,"users",user.uid);
-
-        const profilSnap = await getDoc(profilRef);
-
-
-        if(profilSnap.exists()){
-
-            console.log("Profil trouvé");
-
-        }
-
-        else{
-
-            console.log("Création du profil nécessaire");
-
-            window.location.href="creation-profil.html";
-
-        }
-
-
-    }
-
-
-    else{
-
-
-        console.log("Pas connecté");
-
-
-        loginBtn.style.display="block";
-
-
-        profile.style.display="none";
-
-
-    }
-
-
-});
-
-/* ========================= */
-/* CHANGER LA PHOTO */
-/* ========================= */
-
-document.getElementById("changePhoto").addEventListener("click",()=>{
-
-    alert("Cette fonctionnalité sera ajoutée plus tard.");
-
-});
-
-import {
-    getFirestore,
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-/* ========================= */
-/* FIN */
-/* ========================= */
+  if(bloc.style.display === "block"){
+    bloc.style.display = "none";
+    fleche.innerHTML = "▼";
+  }else{
+    bloc.style.display = "block";
+    fleche.innerHTML = "▲";
+  }
+}
 
 </script>
 
-</body>
+<script>
+window.changerPhoto = function(){
+  document.getElementById("photoInput").click();
+};
+
+document.getElementById("photoInput").addEventListener("change", function(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const image = e.target.result;
+
+    localStorage.setItem("customAvatar", image);
+
+    document.getElementById("avatar").src = image;
+  };
+
+  reader.readAsDataURL(file);
+});
+
+
+</script>
+
+	</body>
 </html>
