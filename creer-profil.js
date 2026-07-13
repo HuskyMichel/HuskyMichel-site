@@ -60,6 +60,9 @@ async function chargerCategories(){
         details.appendChild(recherche);
 
         const liste=document.createElement("div");
+		
+		liste.style.display = "flex";
+liste.style.flexDirection = "column";
 
         liste.style.marginTop="10px";
 
@@ -69,12 +72,20 @@ async function chargerCategories(){
 
             label.style.display="block";
 
-            label.innerHTML=`
-            <input
-            type="checkbox"
-            value="${categorie}">
-            ${categorie}
-            `;
+            label.style.display = "flex";
+label.style.alignItems = "center";
+label.style.gap = "10px";
+label.style.margin = "8px 0";
+
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.value = categorie;
+
+const texte = document.createElement("span");
+texte.textContent = categorie;
+
+label.appendChild(checkbox);
+label.appendChild(texte);
 
             liste.appendChild(label);
 
