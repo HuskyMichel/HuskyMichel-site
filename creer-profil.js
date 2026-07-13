@@ -11,6 +11,8 @@ import {
 
 const photo = document.getElementById("photo");
 const categoriesContainer = document.getElementById("categoriesContainer");
+const categoriesSelectionnees = document.getElementById("categoriesSelectionnees");
+const categoriesChoisies = [];
 const ajouterReseau = document.getElementById("ajouterReseau");
 const reseaux = document.getElementById("reseaux");
 
@@ -59,35 +61,63 @@ async function chargerCategories(){
 
         details.appendChild(recherche);
 
-        const liste=document.createElement("div");
-		
-		liste.style.display = "flex";
-liste.style.flexDirection = "column";
+        const liste = document.createElement("div");
 
-        liste.style.marginTop="10px";
+liste.style.display = "flex";
+liste.style.flexWrap = "wrap";
+liste.style.gap = "10px";
+liste.style.marginTop = "15px";
 
         data.liste.forEach((categorie)=>{
 
-            const label=document.createElement("label");
+            const bouton = document.createElement("button");
 
-            label.style.display="block";
+bouton.type = "button";
+bouton.textContent = categorie;
 
-            label.style.display = "flex";
-label.style.alignItems = "center";
-label.style.gap = "10px";
-label.style.margin = "8px 0";
+bouton.style.background = "#2f2f2f";
+bouton.style.color = "white";
+bouton.style.border = "1px solid #555";
+bouton.style.borderRadius = "20px";
+bouton.style.padding = "8px 14px";
+bouton.style.cursor = "pointer";
+bouton.style.transition = "0.2s";
 
-const checkbox = document.createElement("input");
-checkbox.type = "checkbox";
-checkbox.value = categorie;
+bouton.dataset.selected = "false";
 
-const texte = document.createElement("span");
-texte.textContent = categorie;
+bouton.onclick = () => {
 
-label.appendChild(checkbox);
-label.appendChild(texte);
+    if(bouton.dataset.selected === "false"){
 
-            liste.appendChild(label);
+        bouton.dataset.selected = "true";
+
+        bouton.style.background = "#3ea6ff";
+        bouton.style.borderColor = "#3ea6ff";
+
+        categoriesChoisies.push(categorie);
+
+    }else{
+
+        bouton.dataset.selected = "false";
+
+        bouton.style.background = "#2f2f2f";
+        bouton.style.borderColor = "#555";
+
+        const index = categoriesChoisies.indexOf(categorie);
+
+        if(index > -1){
+
+            categoriesChoisies.splice(index,1);
+
+        }
+
+    }
+
+    afficherCategoriesChoisies();
+
+};
+
+liste.appendChild(bouton);
 
         });
 
@@ -95,11 +125,12 @@ label.appendChild(texte);
 
             const texte=recherche.value.toLowerCase();
 
-            liste.querySelectorAll("label").forEach((label)=>{
+            liste.querySelectorAll("button").forEach((button)=>{
 
-                label.style.display=
-                label.textContent.toLowerCase().includes(texte)
-                ?"block":"none";
+                button.style.display =
+button.textContent.toLowerCase().includes(texte)
+? "inline-block"
+: "none";
 
             });
 
@@ -154,3 +185,49 @@ ajouterReseau.addEventListener("click",()=>{
     reseaux.appendChild(div);
 
 });
+
+function afficherCategoriesChoisies(){
+
+    categoriesSelectionnees.innerHTML = "";
+
+    categoriesChoisies.forEach((categorie)=>{
+
+        const tag = document.createElement("div");
+
+        tag.textContent = "🏷️ " + categorie + " ✕";
+
+        tag.style.display = "inline-block";
+        tag.style.margin = "5px";
+        tag.style.padding = "8px 12px";
+        tag.style.background = "#3ea6ff";
+        tag.style.borderRadius = "20px";
+        tag.style.cursor = "pointer";
+
+        tag.onclick = ()=>{
+
+            categoriesChoisies.splice(
+                categoriesChoisies.indexOf(categorie),
+                1
+            );
+
+            document.querySelectorAll("#categoriesContainer button").forEach((b)=>{
+
+                if(b.textContent === categorie){
+
+                    b.dataset.selected="false";
+                    b.style.background="#2f2f2f";
+                    b.style.borderColor="#555";
+
+                }
+
+            });
+
+            afficherCategoriesChoisies();
+
+        };
+
+        categoriesSelectionnees.appendChild(tag);
+
+    });
+
+}
