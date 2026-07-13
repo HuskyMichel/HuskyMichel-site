@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
 
 <meta charset="UTF-8">
@@ -8,103 +7,91 @@
 
 <title>Créer mon profil</title>
 
+<link rel="stylesheet" href="style.css">
+
 <style>
 
 body{
-
     margin:0;
     font-family:Arial, sans-serif;
     background:#1f1f1f;
     color:white;
-
 }
 
+main{
+    max-width:900px;
+    margin:auto;
+    padding:40px;
+}
 
-.container{
+h1{
+    text-align:center;
+    margin-bottom:40px;
+}
 
-    max-width:600px;
+.section{
 
-    margin:50px auto;
+    background:#2a2a2a;
 
-    background:#242424;
-
-    padding:30px;
+    padding:25px;
 
     border-radius:15px;
 
-}
-
-
-h1{
-
-    text-align:center;
+    margin-bottom:25px;
 
 }
 
+.section h2{
 
-label{
-
-    display:block;
-
-    margin-top:20px;
-
-    margin-bottom:5px;
-
-    font-weight:bold;
+    margin-top:0;
 
 }
 
-
-input, textarea, select{
+input,textarea{
 
     width:100%;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    border:none;
-
-    background:#141414;
-
-    color:white;
 
     box-sizing:border-box;
 
-}
+    margin-top:10px;
 
-
-textarea{
-
-    resize:none;
-
-    height:80px;
-
-}
-
-
-button{
-
-    margin-top:25px;
-
-    width:100%;
+    margin-bottom:15px;
 
     padding:12px;
 
+    border-radius:10px;
+
     border:none;
 
-    border-radius:20px;
+    background:#181818;
+
+    color:white;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+}
+
+button{
 
     background:#3ea6ff;
 
     color:white;
 
-    font-size:16px;
+    border:none;
+
+    padding:12px 25px;
+
+    border-radius:10px;
 
     cursor:pointer;
 
-}
+    font-size:16px;
 
+}
 
 button:hover{
 
@@ -112,179 +99,141 @@ button:hover{
 
 }
 
+#photo{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    display:block;
+
+    margin:auto;
+
+    object-fit:cover;
+
+    border:4px solid white;
+
+}
+
+#categoriesContainer{
+
+    margin-top:20px;
+
+}
 
 </style>
 
 </head>
 
-
 <body>
 
-
-<div class="container">
-
+<main>
 
 <h1>Créer mon profil</h1>
 
+<div class="section">
 
-<label>
-Pseudo *
-</label>
+<h2>Photo de profil</h2>
 
-<input 
-type="text"
-id="pseudo"
-placeholder="Choisissez votre pseudo"
-maxlength="20"
->
+<img id="photo">
 
+</div>
 
+<div class="section">
 
-<label>
-Réseaux sociaux *
-</label>
+<h2>Pseudo</h2>
 
 <input
+id="pseudo"
 type="text"
-id="reseaux"
-placeholder="Exemple : YouTube, Discord..."
->
+placeholder="Votre pseudo">
 
-<option>
-<label>
-<div id="categoriesContainer">
+<p id="pseudoEtat"></p>
+
+</div>
+
+<div class="section">
+
+<h2>Description courte</h2>
+
+<input
+id="descriptionCourte"
+maxlength="50"
+placeholder="50 caractères maximum">
+
+<h2>Description complète</h2>
+
+<textarea
+id="descriptionLongue"
+maxlength="1000"
+rows="8"
+placeholder="Présente-toi..."></textarea>
+
+</div>
+
+<div class="section">
+
+<h2>Réseaux sociaux</h2>
+
+<div id="reseaux"></div>
+
+<button
+type="button"
+id="ajouterReseau">
+
++ Ajouter un réseau
+
+</button>
+
+</div>
+
+<div class="section">
+
+<h2>Vidéo</h2>
+
+<input
+type="file"
+accept="video/*">
+
+<br><br>
+
+OU
+
+<br><br>
+
+<input
+type="url"
+placeholder="Lien YouTube">
+
+</div>
+
+<div class="section">
 
 <h2>Catégories</h2>
 
-<p>Chargement des catégories...</p>
+<div id="categoriesContainer">
+
+Chargement...
 
 </div>
-</label>
 
-<select id="categories">
+</div>
 
-</option>
+<center>
 
-
-</select>
-
-
-
-<label>
-Description (50 caractères maximum)
-</label>
-
-
-<textarea
-id="description"
-maxlength="50"
-placeholder="Présentez-vous rapidement..."
-></textarea>
-
-
-
-<label>
-Vidéo de présentation (facultatif)
-</label>
-
-
-<input
-type="text"
-id="video"
-placeholder="Lien YouTube pour le moment"
->
-
-
-<button id="createProfile">
+<button id="saveProfile">
 
 Créer mon profil
 
 </button>
 
+</center>
 
-</div>
+</main>
 
-<script type="module">
-
-import { db } from "./firebase.js";
-
-
-import {
-    collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-
-
-const container = document.getElementById("categoriesContainer");
-
-
-
-const categoriesRef = collection(db,"categories");
-
-
-const snapshot = await getDocs(categoriesRef);
-
-
-
-container.innerHTML = "<h2>Catégories</h2>";
-
-
-
-snapshot.forEach((doc)=>{
-
-
-    const data = doc.data();
-
-
-    const titre = doc.id;
-
-
-    const bloc = document.createElement("div");
-
-
-    bloc.innerHTML = `
-
-    <h3>${titre}</h3>
-
-    `;
-
-
-    data.liste.forEach((categorie)=>{
-
-
-        bloc.innerHTML += `
-
-        <label>
-
-        <input 
-        type="checkbox"
-        name="categories"
-        value="${categorie}"
-        >
-
-        ${categorie}
-
-        </label>
-
-        <br>
-
-        `;
-
-
-    });
-
-
-
-    container.appendChild(bloc);
-
-
-
-});
-
-
-</script>
+<script type="module" src="creer-profil.js"></script>
 
 </body>
-
 </html>
