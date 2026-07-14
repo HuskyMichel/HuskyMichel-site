@@ -6,7 +6,12 @@ import {
 
 import {
     collection,
-    getDocs
+    getDocs,
+    query,
+    where,
+    doc,
+    getDoc,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const photo = document.getElementById("photo");
@@ -15,6 +20,11 @@ const categoriesSelectionnees = document.getElementById("categoriesSelectionnees
 const categoriesChoisies = [];
 const ajouterReseau = document.getElementById("ajouterReseau");
 const reseaux = document.getElementById("reseaux");
+const pseudo = document.getElementById("pseudo");
+const pseudoEtat = document.getElementById("pseudoEtat");
+const saveProfile = document.getElementById("saveProfile");
+const descriptionCourte = document.getElementById("descriptionCourte");
+const descriptionLongue = document.getElementById("descriptionLongue");
 
 onAuthStateChanged(auth, async (user)=>{
 
@@ -231,3 +241,97 @@ function afficherCategoriesChoisies(){
     });
 
 }
+
+async function verifierPseudo(){
+
+    const valeur = pseudo.value.trim();
+
+    if(valeur.length < 3){
+
+        pseudoEtat.textContent = "Le pseudo doit contenir au moins 3 caractères.";
+        pseudoEtat.style.color = "orange";
+        return;
+
+    }
+
+    const q = query(
+        collection(db,"users"),
+        where("pseudo","==",valeur)
+    );
+
+    const resultat = await getDocs(q);
+
+    if(resultat.empty){
+
+        pseudoEtat.textContent = "✅ Pseudo disponible";
+        pseudoEtat.style.color = "#3ea6ff";
+
+    }else{
+
+        pseudoEtat.textContent = "❌ Ce pseudo est déjà utilisé";
+        pseudoEtat.style.color = "red";
+
+    }
+
+}
+pseudo.addEventListener("input", verifierPseudo);
+
+saveProfile.addEventListener("click", async () => {
+
+    const user = auth.currentUser;
+
+    if(!user){
+        return;
+    }
+
+    if(pseudo.value.trim() === ""){
+
+        alert("Tu dois choisir un pseudo.");
+        return;
+
+    }
+
+    const categories = [];
+
+    document.querySelectorAll("#categoriesContainer button").forEach((button)=>{
+
+        if(button.dataset.selected === "true"){
+
+            categories.push(button.textContent);
+
+        }
+
+    });
+
+    if(categories.length === 0){
+
+        alert("Choisis au moins une catégorie.");
+        return;
+
+    }
+
+    await setDoc(doc(db,"users",user.uid),{
+
+        uid:user.uid,
+
+        pseudo:pseudo.value.trim(),
+
+        email:user.email,
+
+        photo:user.photoURL,
+
+        descriptionCourte:descriptionCourte.value,
+
+        descriptionLongue:descriptionLongue.value,
+
+        categories:categories,
+
+        dateCreation:new Date()
+
+    });
+
+    alert("Profil enregistré !");
+
+    window.location.href="index.html";
+
+});
