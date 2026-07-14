@@ -1,3 +1,4 @@
+let reseauxAjoutes = [];
 import { auth, db } from "./firebase.js";
 
 import {
@@ -10,8 +11,10 @@ import {
     query,
     where,
     doc,
+    getDoc,
     setDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const photo = document.getElementById("photo");
 const categoriesContainer = document.getElementById("categoriesContainer");
@@ -36,7 +39,9 @@ onAuthStateChanged(auth, async (user)=>{
 
     photo.src = user.photoURL;
 
-    chargerCategories();
+await chargerCategories();
+
+await chargerProfil(user);
 
 });
 
@@ -153,47 +158,50 @@ button.textContent.toLowerCase().includes(texte)
 
 }
 
-ajouterReseau.addEventListener("click",()=>{
+ajouterReseau.addEventListener("click", ajouterUnReseau);
 
-    const div=document.createElement("div");
+function ajouterUnReseau(type="", lien=""){
 
-    div.style.marginBottom="15px";
+    const div = document.createElement("div");
 
-    div.innerHTML=`
+    div.style.display = "flex";
+    div.style.gap = "10px";
+    div.style.marginBottom = "10px";
 
-    <select>
+    div.innerHTML = `
+        <select class="typeReseau">
 
-        <option>YouTube</option>
+            <option ${type==="YouTube"?"selected":""}>YouTube</option>
+            <option ${type==="Twitch"?"selected":""}>Twitch</option>
+            <option ${type==="Discord"?"selected":""}>Discord</option>
+            <option ${type==="TikTok"?"selected":""}>TikTok</option>
+            <option ${type==="Instagram"?"selected":""}>Instagram</option>
+            <option ${type==="Snapchat"?"selected":""}>Snapchat</option>
+            <option ${type==="Kick"?"selected":""}>Kick</option>
+            <option ${type==="Facebook"?"selected":""}>Facebook</option>
+            <option ${type==="Paypal"?"selected":""}>Paypal</option>
+            <option ${type==="Site Web"?"selected":""}>Site Web</option>
 
-        <option>Twitch</option>
+        </select>
 
-        <option>Discord</option>
+        <input
+        class="lienReseau"
+        type="text"
+        value="${lien}"
+        placeholder="Lien ou identifiant">
 
-        <option>TikTok</option>
-
-        <option>Instagram</option>
-
-        <option>Snapchat</option>
-
-        <option>Kick</option>
-
-        <option>Facebook</option>
-
-        <option>Paypal</option>
-
-        <option>Site Web</option>
-
-    </select>
-
-    <input
-    type="text"
-    placeholder="Lien">
-
+        <button type="button">❌</button>
     `;
+
+    div.querySelector("button").onclick = ()=>{
+
+        div.remove();
+
+    };
 
     reseaux.appendChild(div);
 
-});
+}
 
 function afficherCategoriesChoisies(){
 
@@ -240,7 +248,23 @@ function afficherCategoriesChoisies(){
     });
 
 }
+async function chargerProfil(user){
 
+    const profil = await getDoc(doc(db,"users",user.uid));
+
+    if(!profil.exists()){
+        return;
+    }
+
+    const data = profil.data();
+
+    pseudo.value = data.pseudo || "";
+    descriptionCourte.value = data.descriptionCourte || "";
+    descriptionLongue.value = data.descriptionLongue || "";
+
+    saveProfile.textContent = "Mettre à jour mon profil";
+
+}
 async function verifierPseudo(){
 
     const valeur = pseudo.value.trim();
@@ -308,8 +332,26 @@ saveProfile.addEventListener("click", async () => {
         return;
 
     }
+const listeReseaux = [];
 
+document.querySelectorAll("#reseaux > div").forEach((div)=>{
+
+    const type = div.querySelector(".typeReseau").value;
+
+    const lien = div.querySelector(".lienReseau").value.trim();
+
+    if(lien !== ""){
+
+        listeReseaux.push({
+            type,
+            lien
+        });
+
+    }
+
+});
     await setDoc(doc(db,"users",user.uid),{
+		
 
         uid:user.uid,
 
@@ -323,13 +365,15 @@ saveProfile.addEventListener("click", async () => {
 
         descriptionLongue:descriptionLongue.value,
 
+		reseaux: listeReseaux,
+
         categories:categories,
 
         dateCreation:new Date()
 
     });
 
-    alert("Profil enregistré !");
+    alert("Profil enregistré avec succès !");
 
     window.location.href="index.html";
 
