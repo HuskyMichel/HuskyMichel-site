@@ -20,6 +20,21 @@ const photo = document.getElementById("photo");
 const categoriesContainer = document.getElementById("categoriesContainer");
 const categoriesSelectionnees = document.getElementById("categoriesSelectionnees");
 const categoriesChoisies = [];
+function selectionnerCategorie(categorie, bouton){
+
+    if(categoriesChoisies.includes(categorie)){
+        return;
+    }
+
+    categoriesChoisies.push(categorie);
+
+    bouton.dataset.selected = "true";
+    bouton.style.background = "#3ea6ff";
+    bouton.style.borderColor = "#3ea6ff";
+
+    afficherCategoriesChoisies();
+
+}
 const ajouterReseau = document.getElementById("ajouterReseau");
 const reseaux = document.getElementById("reseaux");
 const pseudo = document.getElementById("pseudo");
@@ -27,6 +42,24 @@ const pseudoEtat = document.getElementById("pseudoEtat");
 const saveProfile = document.getElementById("saveProfile");
 const descriptionCourte = document.getElementById("descriptionCourte");
 const descriptionLongue = document.getElementById("descriptionLongue");
+
+if(data.categories){
+
+    data.categories.forEach((categorie)=>{
+
+        document.querySelectorAll("#categoriesContainer button").forEach((button)=>{
+
+            if(button.textContent === categorie){
+
+                selectionnerCategorie(categorie, button);
+
+            }
+
+        });
+
+    });
+
+}
 
 onAuthStateChanged(auth, async (user)=>{
 
@@ -103,12 +136,7 @@ bouton.onclick = () => {
 
     if(bouton.dataset.selected === "false"){
 
-        bouton.dataset.selected = "true";
-
-        bouton.style.background = "#3ea6ff";
-        bouton.style.borderColor = "#3ea6ff";
-
-        categoriesChoisies.push(categorie);
+        selectionnerCategorie(categorie, bouton);
 
     }else{
 
@@ -125,9 +153,9 @@ bouton.onclick = () => {
 
         }
 
-    }
+        afficherCategoriesChoisies();
 
-    afficherCategoriesChoisies();
+    }
 
 };
 
@@ -261,6 +289,19 @@ async function chargerProfil(user){
     pseudo.value = data.pseudo || "";
     descriptionCourte.value = data.descriptionCourte || "";
     descriptionLongue.value = data.descriptionLongue || "";
+	
+	// Recharger les réseaux
+reseaux.innerHTML = "";
+
+if(data.reseaux){
+
+    data.reseaux.forEach((reseau)=>{
+
+        ajouterUnReseau(reseau.type, reseau.lien);
+
+    });
+
+}
 
     saveProfile.textContent = "Mettre à jour mon profil";
 

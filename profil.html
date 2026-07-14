@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Profil</title>
+
+<style>
+
+body{
+
+    margin:0;
+
+    font-family:Arial,sans-serif;
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
+
+.banner{
+
+    height:250px;
+
+    background:#333;
+
+}
+
+.photo{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    border:6px solid #1f1f1f;
+
+    margin-top:-85px;
+
+    margin-left:40px;
+
+    object-fit:cover;
+
+}
+
+main{
+
+    max-width:1100px;
+
+    margin:auto;
+
+}
+
+.infos{
+
+    padding:20px 40px;
+
+}
+
+#pseudo{
+
+    font-size:35px;
+
+    font-weight:bold;
+
+}
+
+#descriptionCourte{
+
+    color:#bbbbbb;
+
+    margin-top:10px;
+
+}
+
+#categories{
+
+    margin-top:20px;
+
+}
+
+.tag{
+
+    display:inline-block;
+
+    padding:8px 15px;
+
+    margin:5px;
+
+    background:#3ea6ff;
+
+    border-radius:20px;
+
+}
+
+#reseaux{
+
+    margin-top:30px;
+
+}
+
+.reseau{
+
+    margin-bottom:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="banner"></div>
+
+<main>
+
+<img
+id="photo"
+class="photo">
+
+<div class="infos">
+
+<div id="pseudo"></div>
+
+<div id="descriptionCourte"></div>
+
+<h2>À propos</h2>
+
+<p id="descriptionLongue"></p>
+
+<h2>Catégories</h2>
+
+<div id="categories"></div>
+
+<h2>Réseaux</h2>
+
+<div id="reseaux"></div>
+
+</div>
+
+</main>
+
+<script type="module" src="profil.js"></script>
+
+</body>
+
+</html>
