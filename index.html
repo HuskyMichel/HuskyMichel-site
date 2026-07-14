@@ -250,6 +250,78 @@ main{
 
 }
 
+#listeProfils{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+
+    gap:25px;
+
+    margin-top:30px;
+
+}
+
+.carteProfil{
+
+    background:#2a2a2a;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+}
+
+.carteProfil:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.cartePhoto{
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+}
+
+.carteContenu{
+
+    padding:18px;
+
+}
+
+.cartePseudo{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+.carteDescription{
+
+    color:#bdbdbd;
+
+    margin:12px 0;
+
+}
+
+.carteLikes{
+
+    color:#3ea6ff;
+
+    font-weight:bold;
+
+}
+
 </style>
 
 </head>
@@ -317,217 +389,15 @@ Se connecter
 
 <h1>Bienvenue !</h1>
 
-<p>Le contenu du site arrivera ici.</p>
+
+<h2>Créateurs</h2>
+
+<div id="listeProfils"></div>
+
 
 </main>
 
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-/* ========================= */
-/* CONFIG FIREBASE */
-/* ========================= */
-
-const firebaseConfig = {
-   apiKey: "AIzaSyA_4v5IjbJBT3R6dyKAtGmsqy-EA_3a73U",
-   authDomain: "huskymichel2.firebaseapp.com",
-   projectId: "huskymichel2",
-   storageBucket: "huskymichel2.firebasestorage.app",
-   messagingSenderId: "803041103978",
-   appId: "1:803041103978:web:0415d72f91e30735a47a13"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-const provider = new GoogleAuthProvider();
-
-/* ========================= */
-/* ELEMENTS HTML */
-/* ========================= */
-
-const loginBtn = document.getElementById("loginBtn");
-
-const profile = document.getElementById("profile");
-
-const avatar = document.getElementById("avatar");
-
-const menu = document.getElementById("menu");
-
-const logout = document.getElementById("logout");
-
-/* ========================= */
-/* MENU */
-/* ========================= */
-
-avatar.addEventListener("click", () => {
-
-    if(menu.style.display==="block"){
-
-        menu.style.display="none";
-
-    }
-
-    else{
-
-        menu.style.display="block";
-
-    }
-
-});
-
-document.addEventListener("click",(event)=>{
-
-    if(!profile.contains(event.target)){
-
-        menu.style.display="none";
-
-    }
-
-});
-
-/* ========================= */
-/* CONNEXION */
-/* ========================= */
-
-loginBtn.addEventListener("click", async ()=>{
-
-    try{
-
-        await signInWithPopup(auth,provider);
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-    }
-
-});
-
-/* ========================= */
-/* DECONNEXION */
-/* ========================= */
-
-logout.addEventListener("click", async ()=>{
-
-    try{
-
-        await signOut(auth);
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-    }
-
-});
-
-/* ========================= */
-/* ETAT DE LA CONNEXION */
-/* ========================= */
-
-onAuthStateChanged(auth, async (user)=>{
-
-
-    if(user){
-
-        console.log("Utilisateur connecté :", user.email);
-
-
-        // Afficher la photo
-
-        avatar.src = user.photoURL;
-
-
-        // Cacher le bouton
-
-        loginBtn.style.display="none";
-
-
-        // Afficher le profil
-
-        profile.style.display="block";
-
-
-        // Vérifier Firestore
-
-        const profilRef = doc(db,"users",user.uid);
-
-        const profilSnap = await getDoc(profilRef);
-
-
-        if(profilSnap.exists()){
-
-            console.log("Profil trouvé");
-
-        }
-
-        else{
-
-            console.log("Création du profil nécessaire");
-
-            window.location.href="creation-profil.html";
-
-        }
-
-
-    }
-
-
-    else{
-
-
-        console.log("Pas connecté");
-
-
-        loginBtn.style.display="block";
-
-
-        profile.style.display="none";
-
-
-    }
-
-
-});
-
-/* ========================= */
-/* CHANGER LA PHOTO */
-/* ========================= */
-
-document.getElementById("changePhoto").addEventListener("click",()=>{
-
-    alert("Cette fonctionnalité sera ajoutée plus tard.");
-
-});
-
-import {
-    getFirestore,
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-/* ========================= */
-/* FIN */
-/* ========================= */
-
-</script>
+<script type="module" src="index.js"></script>
 
 </body>
 </html>

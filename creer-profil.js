@@ -1,3 +1,4 @@
+const videoYoutube = document.getElementById("videoYoutube");
 let reseauxAjoutes = [];
 import { auth, db } from "./firebase.js";
 
@@ -277,6 +278,8 @@ function afficherCategoriesChoisies(){
 
 }
 async function chargerProfil(user){
+	
+	videoYoutube.value = data.videoYoutube || "";
 
     const profil = await getDoc(doc(db,"users",user.uid));
 
@@ -392,6 +395,8 @@ document.querySelectorAll("#reseaux > div").forEach((div)=>{
 
 });
     await setDoc(doc(db,"users",user.uid),{
+		
+		videoYoutube: videoYoutube.value.trim(),
 		
 
         uid:user.uid,

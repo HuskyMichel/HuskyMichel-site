@@ -1,3 +1,22 @@
+const videoContainer = document.getElementById("videoContainer");
+if(data.videoYoutube){
+
+    let url = data.videoYoutube;
+
+    url = url.replace("watch?v=", "embed/");
+    url = url.replace("youtu.be/", "www.youtube.com/embed/");
+
+    videoContainer.innerHTML = `
+        <iframe
+            width="100%"
+            height="500"
+            src="${url}"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+    `;
+
+}
 import { db } from "./firebase.js";
 
 import {
@@ -41,7 +60,7 @@ if(resultat.empty){
 
     const data = resultat.docs[0].data();
 
-    photo.src = data.photo;
+    photo.src = data.photo.replace("=s96-c", "=s512-c");
 
     pseudo.textContent = data.pseudo;
 

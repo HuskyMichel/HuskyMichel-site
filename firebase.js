@@ -13,7 +13,8 @@ getFirestore
 } from 
 "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-
+import { getStorage } from
+"https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
 
 const firebaseConfig = {
 
@@ -31,12 +32,9 @@ appId: "1:803041103978:web:0415d72f91e30735a47a13"
 
 };
 
-
+const storage = getStorage(app);
 
 const app = initializeApp(firebaseConfig);
 
 
-export const auth = getAuth(app);
-
-
-export const db = getFirestore(app);
+export { auth, db, storage };
