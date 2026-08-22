@@ -28,6 +28,10 @@ const recherche = document.querySelector(".search input");
 
 const provider = new GoogleAuthProvider();
 
+provider.setCustomParameters({
+    prompt: "select_account"
+});
+
 /* ===========================
    MENU
 =========================== */
