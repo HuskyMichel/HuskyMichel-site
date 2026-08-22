@@ -457,21 +457,29 @@ const deconnexion =
     document.getElementById("deconnexion");
 
 
-deconnexion.addEventListener("click", async ()=>{
+if(deconnexion){
 
-    try{
+    deconnexion.addEventListener("click", async ()=>{
 
-        await signOut(auth);
+        console.log("Bouton déconnexion cliqué");
 
-        window.location.href = "index.html";
+        try{
 
-    }catch(error){
+            await signOut(auth);
 
-        console.error(
-            "Erreur lors de la déconnexion :",
-            error
-        );
+            console.log("Déconnexion réussie");
 
-    }
+            window.location.href = "index.html";
 
-});
+        }catch(error){
+
+            console.error(
+                "Erreur lors de la déconnexion :",
+                error
+            );
+
+        }
+
+    });
+
+}
