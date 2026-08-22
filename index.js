@@ -178,13 +178,26 @@ async function chargerProfils(){
 
     ${
         data.categories
-        ? data.categories.map(categorie => `
-            
-            <span class="categorieCarte">
-                🏷️ ${categorie}
-            </span>
+        ? data.categories
+            .slice(0, 3)
+            .map(categorie => `
+                
+                <span class="categorieCarte">
+                    🏷️ ${categorie}
+                </span>
 
-        `).join("")
+            `)
+            .join("")
+        : ""
+    }
+
+    ${
+        data.categories && data.categories.length > 3
+        ? `
+            <span class="categorieCarte categoriePlus">
+                +${data.categories.length - 3}
+            </span>
+        `
         : ""
     }
 
