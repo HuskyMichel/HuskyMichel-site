@@ -171,12 +171,28 @@ async function chargerProfils(){
                     </div>
 
                     <div class="carteDescription">
-                        ${data.descriptionCourte || "Aucune description"}
-                    </div>
+    ${data.descriptionCourte || "Aucune description"}
+</div>
 
-                    <div class="carteLikes">
-                        ❤️ 0 likes
-                    </div>
+<div class="carteCategories">
+
+    ${
+        data.categories
+        ? data.categories.map(categorie => `
+            
+            <span class="categorieCarte">
+                🏷️ ${categorie}
+            </span>
+
+        `).join("")
+        : ""
+    }
+
+</div>
+
+<div class="carteLikes">
+    ❤️ 0 likes
+</div>
 
                 </div>
 
