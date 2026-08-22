@@ -40,23 +40,28 @@ provider.setCustomParameters({
 
 
 /* ===========================
-   MENU
+   MENU DU COMPTE
 =========================== */
 
-avatar.addEventListener("click", (e)=>{
+if(avatar){
 
-    e.stopPropagation();
+    avatar.addEventListener("click", (e)=>{
 
-    menu.style.display =
-        menu.style.display === "block"
-        ? "none"
-        : "block";
+        e.stopPropagation();
 
-});
+        menu.style.display =
+            menu.style.display === "block"
+            ? "none"
+            : "block";
+
+    });
+
+}
+
 
 document.addEventListener("click",(e)=>{
 
-    if(!profile.contains(e.target)){
+    if(profile && !profile.contains(e.target)){
 
         menu.style.display = "none";
 
@@ -69,38 +74,56 @@ document.addEventListener("click",(e)=>{
    CONNEXION
 =========================== */
 
-loginBtn.addEventListener("click", async ()=>{
+if(loginBtn){
 
-    try{
+    loginBtn.addEventListener("click", async ()=>{
 
-        await signInWithPopup(auth, provider);
+        try{
 
-    }catch(error){
+            await signInWithPopup(auth, provider);
 
-        console.error(error);
+        }
 
-    }
+        catch(error){
 
-});
+            console.error(
+                "Erreur lors de la connexion :",
+                error
+            );
+
+        }
+
+    });
+
+}
 
 
 /* ===========================
    DECONNEXION
 =========================== */
 
-logout.addEventListener("click", async ()=>{
+if(logout){
 
-    try{
+    logout.addEventListener("click", async ()=>{
 
-        await signOut(auth);
+        try{
 
-    }catch(error){
+            await signOut(auth);
 
-        console.error(error);
+        }
 
-    }
+        catch(error){
 
-});
+            console.error(
+                "Erreur lors de la déconnexion :",
+                error
+            );
+
+        }
+
+    });
+
+}
 
 
 /* ===========================
@@ -109,41 +132,91 @@ logout.addEventListener("click", async ()=>{
 
 onAuthStateChanged(auth, async(user)=>{
 
+    /* ===========================
+       UTILISATEUR CONNECTE
+    =========================== */
+
     if(user){
 
-        avatar.src =
-            user.photoURL.replace("=s96-c","=s512-c");
+        /* PHOTO GOOGLE */
+
+        if(user.photoURL){
+
+            avatar.src =
+                user.photoURL.replace(
+                    "=s96-c",
+                    "=s512-c"
+                );
+
+        }
+
+
+        /* AFFICHER LE COMPTE */
 
         loginBtn.style.display = "none";
 
         profile.style.display = "block";
 
 
-        const profilRef =
-            doc(db,"users",user.uid);
+        /* ===========================
+           VERIFIER LE PROFIL FIRESTORE
+        =========================== */
 
-        const profilSnap =
-            await getDoc(profilRef);
+        try{
+
+            const profilRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+            const profilSnap =
+                await getDoc(profilRef);
 
 
-        if(!profilSnap.exists()){
+            /* PROFIL INEXISTANT */
 
-            window.location.href =
-                "creation-profil.html";
+            if(!profilSnap.exists()){
 
-            return;
+                window.location.href =
+                    "creation-profil.html";
+
+                return;
+
+            }
 
         }
+
+        catch(error){
+
+            console.error(
+                "Erreur lors de la vérification du profil :",
+                error
+            );
+
+        }
+
+
+        /* CHARGER LES PROFILS */
 
         chargerProfils();
 
     }
+
+
+    /* ===========================
+       UTILISATEUR NON CONNECTE
+    =========================== */
 
     else{
 
         loginBtn.style.display = "block";
 
         profile.style.display = "none";
+
+
+        /* LES PROFILS RESTENT VISIBLES */
 
         chargerProfils();
 
@@ -158,15 +231,26 @@ onAuthStateChanged(auth, async(user)=>{
 
 async function chargerProfils(){
 
+    /* VIDER LA LISTE */
+
     listeProfils.innerHTML = "";
 
+
     try{
+
+        /* ===========================
+           RECUPERER LES UTILISATEURS
+        =========================== */
 
         const snapshot =
             await getDocs(
                 collection(db,"users")
             );
 
+
+        /* ===========================
+           PARCOURIR LES PROFILS
+        =========================== */
 
         snapshot.forEach((profilDoc)=>{
 
@@ -175,7 +259,7 @@ async function chargerProfils(){
 
 
             /* ===========================
-               CREATION DE LA CARTE
+               CREER LA CARTE
             =========================== */
 
             const carte =
@@ -190,10 +274,18 @@ async function chargerProfils(){
             =========================== */
 
             const categories =
-                data.categories || [];
+                Array.isArray(data.categories)
+                ? data.categories
+                : [];
+
+
+            /* Les 3 premières */
 
             const troisCategories =
                 categories.slice(0,3);
+
+
+            /* Les suivantes */
 
             const autresCategories =
                 categories.slice(3);
@@ -201,6 +293,10 @@ async function chargerProfils(){
 
             let categoriesHTML = "";
 
+
+            /* ===========================
+               AFFICHER LES 3 PREMIERES
+            =========================== */
 
             troisCategories.forEach((categorie)=>{
 
@@ -215,13 +311,20 @@ async function chargerProfils(){
             });
 
 
+            /* ===========================
+               AFFICHER +X
+            =========================== */
+
             if(autresCategories.length > 0){
 
                 categoriesHTML += `
 
-                    <span class="categorieCarte categoriePlus">
+                    <span
+                        class="categorieCarte categoriePlus"
+                    >
                         +${autresCategories.length}
                     </span>
+
 
                     <div class="categoriesCachees">
 
@@ -256,15 +359,24 @@ async function chargerProfils(){
                     alt="Photo de ${data.pseudo || "profil"}"
                 >
 
+
                 <div class="carteContenu">
 
+
                     <div class="cartePseudo">
+
                         ${data.pseudo || "Sans pseudo"}
+
                     </div>
 
 
                     <div class="carteDescription">
-                        ${data.descriptionCourte || "Aucune description"}
+
+                        ${
+                            data.descriptionCourte
+                            || "Aucune description"
+                        }
+
                     </div>
 
 
@@ -276,8 +388,11 @@ async function chargerProfils(){
 
 
                     <div class="carteLikes">
+
                         ❤️ 0 likes
+
                     </div>
+
 
                 </div>
 
@@ -285,11 +400,13 @@ async function chargerProfils(){
 
 
             /* ===========================
-               BOUTON + CATEGORIES
+               BOUTON +X
             =========================== */
 
             const boutonPlus =
-                carte.querySelector(".categoriePlus");
+                carte.querySelector(
+                    ".categoriePlus"
+                );
 
 
             if(boutonPlus){
@@ -297,6 +414,12 @@ async function chargerProfils(){
                 boutonPlus.addEventListener(
                     "click",
                     (event)=>{
+
+                        /*
+                           Empêche le clic de
+                           déclencher l'ouverture
+                           du profil
+                        */
 
                         event.stopPropagation();
 
@@ -306,6 +429,17 @@ async function chargerProfils(){
                                 ".categoriesCachees"
                             );
 
+
+                        if(!categoriesCachees){
+
+                            return;
+
+                        }
+
+
+                        /* ===========================
+                           FERMER
+                        =========================== */
 
                         if(
                             categoriesCachees.style.display
@@ -326,10 +460,16 @@ async function chargerProfils(){
 
                         }
 
+
+                        /* ===========================
+                           OUVRIR
+                        =========================== */
+
                         else{
 
                             categoriesCachees.style.display =
                                 "flex";
+
 
                             boutonPlus.textContent =
                                 "−";
@@ -343,22 +483,56 @@ async function chargerProfils(){
 
 
             /* ===========================
-               AJOUT DE LA CARTE
+               AJOUTER LA CARTE
             =========================== */
 
             listeProfils.appendChild(carte);
 
-carte.addEventListener("click", () => {
 
-    window.location.href =
-        "profil.html?pseudo=" +
-        encodeURIComponent(data.pseudo);
+            /* ===========================
+               OUVRIR LE PROFIL
+            =========================== */
 
-});
+            carte.addEventListener(
+                "click",
+                (event)=>{
+
+                    /*
+                       Si on clique sur +X,
+                       le profil ne s'ouvre pas.
+                    */
+
+                    if(
+                        event.target.classList.contains(
+                            "categoriePlus"
+                        )
+                    ){
+
+                        return;
+
+                    }
 
 
+                    /*
+                       Ouverture du profil
+                       avec le pseudo
+                    */
 
-    }catch(error){
+                    window.location.href =
+                        "profil.html?pseudo=" +
+                        encodeURIComponent(
+                            data.pseudo
+                        );
+
+                }
+            );
+
+        });
+
+
+    }
+
+    catch(error){
 
         console.error(
             "Erreur lors du chargement des profils :",
@@ -366,8 +540,13 @@ carte.addEventListener("click", () => {
         );
 
 
-        listeProfils.innerHTML =
-            "<p>Impossible de charger les profils.</p>";
+        listeProfils.innerHTML = `
+
+            <p>
+                Impossible de charger les profils.
+            </p>
+
+        `;
 
     }
 
