@@ -133,3 +133,69 @@ onAuthStateChanged(auth, async(user)=>{
     }
 
 });
+
+/* ===========================
+   CHARGER LES PROFILS
+=========================== */
+
+async function chargerProfils(){
+
+    listeProfils.innerHTML = "";
+
+    try{
+
+        const snapshot =
+            await getDocs(collection(db,"users"));
+
+        snapshot.forEach((profilDoc)=>{
+
+            const data = profilDoc.data();
+
+            const carte =
+                document.createElement("div");
+
+            carte.className = "carteProfil";
+
+            carte.innerHTML = `
+
+                <img
+                    class="cartePhoto"
+                    src="${data.photo || ""}"
+                    alt="Photo de ${data.pseudo || "profil"}"
+                >
+
+                <div class="carteContenu">
+
+                    <div class="cartePseudo">
+                        👤 ${data.pseudo || "Sans pseudo"}
+                    </div>
+
+                    <div class="carteDescription">
+                        ${data.descriptionCourte || "Aucune description"}
+                    </div>
+
+                    <div class="carteLikes">
+                        ❤️ 0 likes
+                    </div>
+
+                </div>
+
+            `;
+
+            listeProfils.appendChild(carte);
+
+        });
+
+    }catch(error){
+
+        console.error(
+            "Erreur lors du chargement des profils :",
+            error
+        );
+
+        listeProfils.innerHTML =
+            "<p>Impossible de charger les profils.</p>";
+
+    }
+
+}
