@@ -167,7 +167,7 @@ async function chargerProfils(){
                 <div class="carteContenu">
 
                     <div class="cartePseudo">
-                        👤 ${data.pseudo || "Sans pseudo"}
+                         ${data.pseudo || "Sans pseudo"}
                     </div>
 
                     <div class="carteDescription">
