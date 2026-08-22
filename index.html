@@ -24,6 +24,7 @@ body{
     color:white;
 }
 
+
 /* ========================= */
 /* HEADER */
 /* ========================= */
@@ -49,6 +50,7 @@ header{
 
 }
 
+
 /* ========================= */
 /* LOGO */
 /* ========================= */
@@ -67,6 +69,7 @@ header{
     cursor:pointer;
 
 }
+
 
 /* ========================= */
 /* RECHERCHE */
@@ -110,6 +113,7 @@ header{
 
 }
 
+
 /* ========================= */
 /* COMPTE */
 /* ========================= */
@@ -124,7 +128,10 @@ header{
 
 }
 
-/* bouton connexion */
+
+/* ========================= */
+/* BOUTON CONNEXION */
+/* ========================= */
 
 #loginBtn{
 
@@ -152,8 +159,9 @@ header{
 
 }
 
+
 /* ========================= */
-/* PHOTO */
+/* PHOTO DE COMPTE */
 /* ========================= */
 
 .profile{
@@ -180,8 +188,9 @@ header{
 
 }
 
+
 /* ========================= */
-/* MENU */
+/* MENU COMPTE */
 /* ========================= */
 
 .menu{
@@ -242,6 +251,9 @@ header{
 
 }
 
+
+/* ========================= */
+/* CONTENU PRINCIPAL */
 /* ========================= */
 
 main{
@@ -250,17 +262,31 @@ main{
 
 }
 
+
+/* ========================= */
+/* LISTE DES PROFILS */
+/* ========================= */
+
 #listeProfils{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(280px,1fr)
+        );
 
     gap:25px;
 
     margin-top:30px;
 
 }
+
+
+/* ========================= */
+/* CARTE PROFIL */
+/* ========================= */
 
 .carteProfil{
 
@@ -282,9 +308,15 @@ main{
 
 }
 
+
+/* ========================= */
+/* PHOTO DU PROFIL */
+/* ========================= */
+
 .cartePhoto{
 
     width:110px;
+
     height:110px;
 
     object-fit:cover;
@@ -303,46 +335,66 @@ main{
 
 }
 
-.categoriesCachees{
 
-    display:none;
+/* ========================= */
+/* CONTENU DE LA CARTE */
+/* ========================= */
 
-    flex-wrap:wrap;
+.carteContenu{
 
-    gap:7px;
-
-    width:100%;
-
-    margin-top:5px;
+    padding:18px;
 
 }
 
-.categoriePlus{
 
-    background:#444;
+/* ========================= */
+/* PSEUDO */
+/* ========================= */
 
-    color:#ddd;
+.cartePseudo{
 
-    cursor:pointer;
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+
+/* ========================= */
+/* DESCRIPTION */
+/* ========================= */
+
+.carteDescription{
+
+    color:#bdbdbd;
+
+    margin:12px 0;
 
 }
 
-.categoriePlus:hover{
 
-    background:#555;
+/* ========================= */
+/* CATEGORIES */
+/* ========================= */
 
-}
 .carteCategories{
 
     display:flex;
 
     flex-wrap:wrap;
 
+    align-items:center;
+
     gap:7px;
 
     margin-top:12px;
 
 }
+
+
+/* ========================= */
+/* PASTILLE CATEGORIE */
+/* ========================= */
 
 .categorieCarte{
 
@@ -365,41 +417,101 @@ main{
 
 }
 
+
+/* ========================= */
+/* BOUTON +3 / +4 */
+/* ========================= */
+
 .categoriePlus{
 
     background:#444;
 
     color:#ddd;
 
-}
+    cursor:pointer;
 
-.carteContenu{
-
-    padding:18px;
+    transition:0.2s;
 
 }
 
-.cartePseudo{
+.categoriePlus:hover{
 
-    font-size:22px;
+    background:#555;
 
-    font-weight:bold;
+    transform:scale(1.05);
+
+}
+
+
+/* ========================= */
+/* CATEGORIES CACHEES */
+/* ========================= */
+
+.categoriesCachees{
+
+    display:none;
+
+    flex-wrap:wrap;
+
+    gap:7px;
+
+    width:100%;
+
+    margin-top:2px;
 
 }
 
-.carteDescription{
 
-    color:#bdbdbd;
-
-    margin:12px 0;
-
-}
+/* ========================= */
+/* LIKES */
+/* ========================= */
 
 .carteLikes{
 
     color:#3ea6ff;
 
     font-weight:bold;
+
+    margin-top:15px;
+
+}
+
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media(max-width:700px){
+
+    header{
+
+        padding:0 10px;
+
+    }
+
+    .search input{
+
+        width:300px;
+
+    }
+
+    main{
+
+        padding:15px;
+
+    }
+
+    #listeProfils{
+
+        grid-template-columns:
+            repeat(
+                auto-fill,
+                minmax(240px,1fr)
+            );
+
+        gap:15px;
+
+    }
 
 }
 

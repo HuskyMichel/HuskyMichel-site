@@ -14,6 +14,7 @@ import {
     getDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
+
 /* ===========================
    ELEMENTS HTML
 =========================== */
@@ -26,11 +27,17 @@ const logout = document.getElementById("logout");
 const listeProfils = document.getElementById("listeProfils");
 const recherche = document.querySelector(".search input");
 
+
+/* ===========================
+   GOOGLE
+=========================== */
+
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
     prompt: "select_account"
 });
+
 
 /* ===========================
    MENU
@@ -41,7 +48,7 @@ avatar.addEventListener("click", (e)=>{
     e.stopPropagation();
 
     menu.style.display =
-        menu.style.display==="block"
+        menu.style.display === "block"
         ? "none"
         : "block";
 
@@ -51,11 +58,12 @@ document.addEventListener("click",(e)=>{
 
     if(!profile.contains(e.target)){
 
-        menu.style.display="none";
+        menu.style.display = "none";
 
     }
 
 });
+
 
 /* ===========================
    CONNEXION
@@ -75,6 +83,7 @@ loginBtn.addEventListener("click", async ()=>{
 
 });
 
+
 /* ===========================
    DECONNEXION
 =========================== */
@@ -93,6 +102,7 @@ logout.addEventListener("click", async ()=>{
 
 });
 
+
 /* ===========================
    ETAT DE LA CONNEXION
 =========================== */
@@ -101,19 +111,26 @@ onAuthStateChanged(auth, async(user)=>{
 
     if(user){
 
-        avatar.src = user.photoURL.replace("=s96-c","=s512-c");
+        avatar.src =
+            user.photoURL.replace("=s96-c","=s512-c");
 
         loginBtn.style.display = "none";
 
         profile.style.display = "block";
 
-        const profilRef = doc(db,"users",user.uid);
 
-        const profilSnap = await getDoc(profilRef);
+        const profilRef =
+            doc(db,"users",user.uid);
+
+        const profilSnap =
+            await getDoc(profilRef);
+
 
         if(!profilSnap.exists()){
 
-            window.location.href = "creation-profil.html";
+            window.location.href =
+                "creation-profil.html";
+
             return;
 
         }
@@ -134,6 +151,7 @@ onAuthStateChanged(auth, async(user)=>{
 
 });
 
+
 /* ===========================
    CHARGER LES PROFILS
 =========================== */
@@ -141,54 +159,94 @@ onAuthStateChanged(auth, async(user)=>{
 async function chargerProfils(){
 
     listeProfils.innerHTML = "";
-	
-	const boutonPlus =
-    carte.querySelector(".categoriePlus");
-
-if(boutonPlus){
-
-    boutonPlus.addEventListener("click", (event)=>{
-
-        event.stopPropagation();
-
-        const categoriesCachees =
-            carte.querySelector(".categoriesCachees");
-
-        if(categoriesCachees.style.display === "flex"){
-
-            categoriesCachees.style.display = "none";
-
-            boutonPlus.textContent =
-                "+" +
-                categoriesCachees
-                .querySelectorAll(".categorieCarte")
-                .length;
-
-        }else{
-
-            categoriesCachees.style.display = "flex";
-
-            boutonPlus.textContent = "−";
-
-        }
-
-    });
-
-}
 
     try{
 
         const snapshot =
-            await getDocs(collection(db,"users"));
+            await getDocs(
+                collection(db,"users")
+            );
+
 
         snapshot.forEach((profilDoc)=>{
 
-            const data = profilDoc.data();
+            const data =
+                profilDoc.data();
+
+
+            /* ===========================
+               CREATION DE LA CARTE
+            =========================== */
 
             const carte =
                 document.createElement("div");
 
-            carte.className = "carteProfil";
+            carte.className =
+                "carteProfil";
+
+
+            /* ===========================
+               CATEGORIES
+            =========================== */
+
+            const categories =
+                data.categories || [];
+
+            const troisCategories =
+                categories.slice(0,3);
+
+            const autresCategories =
+                categories.slice(3);
+
+
+            let categoriesHTML = "";
+
+
+            troisCategories.forEach((categorie)=>{
+
+                categoriesHTML += `
+
+                    <span class="categorieCarte">
+                        🏷️ ${categorie}
+                    </span>
+
+                `;
+
+            });
+
+
+            if(autresCategories.length > 0){
+
+                categoriesHTML += `
+
+                    <span class="categorieCarte categoriePlus">
+                        +${autresCategories.length}
+                    </span>
+
+                    <div class="categoriesCachees">
+
+                        ${
+                            autresCategories
+                            .map((categorie)=>`
+
+                                <span class="categorieCarte">
+                                    🏷️ ${categorie}
+                                </span>
+
+                            `)
+                            .join("")
+                        }
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* ===========================
+               CONTENU DE LA CARTE
+            =========================== */
 
             carte.innerHTML = `
 
@@ -201,70 +259,97 @@ if(boutonPlus){
                 <div class="carteContenu">
 
                     <div class="cartePseudo">
-                         ${data.pseudo || "Sans pseudo"}
+                        ${data.pseudo || "Sans pseudo"}
                     </div>
 
+
                     <div class="carteDescription">
-    ${data.descriptionCourte || "Aucune description"}
-</div>
+                        ${data.descriptionCourte || "Aucune description"}
+                    </div>
 
-<div class="carteCategories">
 
-    ${
-        data.categories
-        ? data.categories
-            .slice(0, 3)
-            .map(categorie => `
-                
-                <span class="categorieCarte">
-                    🏷️ ${categorie}
-                </span>
+                    <div class="carteCategories">
 
-            `)
-            .join("")
-        : ""
-    }
+                        ${categoriesHTML}
 
-    ${
-        data.categories && data.categories.length > 3
-        ? `
-            <span class="categorieCarte categoriePlus">
-                +${data.categories.length - 3}
-            </span>
+                    </div>
 
-            <div class="categoriesCachees">
 
-                ${
-                    data.categories
-                    .slice(3)
-                    .map(categorie => `
-                        
-                        <span class="categorieCarte">
-                            🏷️ ${categorie}
-                        </span>
-
-                    `)
-                    .join("")
-                }
-
-            </div>
-        `
-        : ""
-    }
-
-</div>
-
-<div class="carteLikes">
-    ❤️ 0 likes
-</div>
+                    <div class="carteLikes">
+                        ❤️ 0 likes
+                    </div>
 
                 </div>
 
             `;
 
+
+            /* ===========================
+               BOUTON + CATEGORIES
+            =========================== */
+
+            const boutonPlus =
+                carte.querySelector(".categoriePlus");
+
+
+            if(boutonPlus){
+
+                boutonPlus.addEventListener(
+                    "click",
+                    (event)=>{
+
+                        event.stopPropagation();
+
+
+                        const categoriesCachees =
+                            carte.querySelector(
+                                ".categoriesCachees"
+                            );
+
+
+                        if(
+                            categoriesCachees.style.display
+                            === "flex"
+                        ){
+
+                            categoriesCachees.style.display =
+                                "none";
+
+
+                            boutonPlus.textContent =
+                                "+" +
+                                categoriesCachees
+                                .querySelectorAll(
+                                    ".categorieCarte"
+                                )
+                                .length;
+
+                        }
+
+                        else{
+
+                            categoriesCachees.style.display =
+                                "flex";
+
+                            boutonPlus.textContent =
+                                "−";
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            /* ===========================
+               AJOUT DE LA CARTE
+            =========================== */
+
             listeProfils.appendChild(carte);
 
         });
+
 
     }catch(error){
 
@@ -272,6 +357,7 @@ if(boutonPlus){
             "Erreur lors du chargement des profils :",
             error
         );
+
 
         listeProfils.innerHTML =
             "<p>Impossible de charger les profils.</p>";
