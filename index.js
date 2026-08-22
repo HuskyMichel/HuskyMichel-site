@@ -141,6 +141,40 @@ onAuthStateChanged(auth, async(user)=>{
 async function chargerProfils(){
 
     listeProfils.innerHTML = "";
+	
+	const boutonPlus =
+    carte.querySelector(".categoriePlus");
+
+if(boutonPlus){
+
+    boutonPlus.addEventListener("click", (event)=>{
+
+        event.stopPropagation();
+
+        const categoriesCachees =
+            carte.querySelector(".categoriesCachees");
+
+        if(categoriesCachees.style.display === "flex"){
+
+            categoriesCachees.style.display = "none";
+
+            boutonPlus.textContent =
+                "+" +
+                categoriesCachees
+                .querySelectorAll(".categorieCarte")
+                .length;
+
+        }else{
+
+            categoriesCachees.style.display = "flex";
+
+            boutonPlus.textContent = "−";
+
+        }
+
+    });
+
+}
 
     try{
 
@@ -194,10 +228,7 @@ async function chargerProfils(){
     ${
         data.categories && data.categories.length > 3
         ? `
-            <span
-                class="categorieCarte categoriePlus"
-                onclick="afficherCategories(this)"
-            >
+            <span class="categorieCarte categoriePlus">
                 +${data.categories.length - 3}
             </span>
 
@@ -244,34 +275,6 @@ async function chargerProfils(){
 
         listeProfils.innerHTML =
             "<p>Impossible de charger les profils.</p>";
-
-    }
-
-}
-
-function afficherCategories(element){
-
-    const carteCategories =
-        element.parentElement;
-
-    const categoriesCachees =
-        carteCategories.querySelector(".categoriesCachees");
-
-    if(categoriesCachees.style.display === "flex"){
-
-        categoriesCachees.style.display = "none";
-
-        element.textContent =
-            "+" +
-            categoriesCachees
-            .querySelectorAll(".categorieCarte")
-            .length;
-
-    }else{
-
-        categoriesCachees.style.display = "flex";
-
-        element.textContent = "−";
 
     }
 
