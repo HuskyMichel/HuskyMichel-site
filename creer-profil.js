@@ -450,13 +450,6 @@ document.querySelectorAll("#reseaux > div").forEach((div)=>{
    DECONNEXION
 =========================== */
 
-const compteConnecte =
-    document.getElementById("compteConnecte");
-
-const deconnexion =
-    document.getElementById("deconnexion");
-
-
 if(deconnexion){
 
     deconnexion.addEventListener("click", async ()=>{
