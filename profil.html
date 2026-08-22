@@ -4,21 +4,20 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Profil</title>
 
-<link rel="icon" href="Photo de profil/titre.jpg">
-
 <style>
 
 *{
-    margin:0;
-    padding:0;
     box-sizing:border-box;
 }
 
 body{
+
+    margin:0;
 
     font-family:Arial,sans-serif;
 
@@ -29,15 +28,11 @@ body{
 }
 
 
-/* ========================= */
-/* HEADER */
-/* ========================= */
+/* =========================
+   BARRE DU HAUT
+========================= */
 
 header{
-
-    position:sticky;
-
-    top:0;
 
     height:60px;
 
@@ -53,14 +48,18 @@ header{
 
     border-bottom:1px solid #2b2b2b;
 
+    position:sticky;
+
+    top:0;
+
     z-index:1000;
 
 }
 
 
-/* ========================= */
-/* LOGO */
-/* ========================= */
+/* =========================
+   LOGO
+========================= */
 
 .logo{
 
@@ -79,9 +78,9 @@ header{
 }
 
 
-/* ========================= */
-/* RECHERCHE */
-/* ========================= */
+/* =========================
+   RECHERCHE
+========================= */
 
 .search{
 
@@ -99,19 +98,19 @@ header{
 
     max-width:90%;
 
+    padding:11px 18px;
+
+    border-radius:30px;
+
+    border:1px solid #333;
+
     background:#151515;
 
     color:white;
 
-    border:1px solid #333;
-
-    border-radius:30px;
-
-    padding:11px 18px;
+    outline:none;
 
     font-size:15px;
-
-    outline:none;
 
 }
 
@@ -122,9 +121,9 @@ header{
 }
 
 
-/* ========================= */
-/* COMPTE */
-/* ========================= */
+/* =========================
+   COMPTE
+========================= */
 
 .account{
 
@@ -137,9 +136,7 @@ header{
 }
 
 
-/* ========================= */
 /* CONNEXION */
-/* ========================= */
 
 #loginBtn{
 
@@ -153,24 +150,14 @@ header{
 
     padding:10px 18px;
 
-    font-size:15px;
-
     cursor:pointer;
 
-    transition:.2s;
-
-}
-
-#loginBtn:hover{
-
-    background:#61b8ff;
+    font-size:15px;
 
 }
 
 
-/* ========================= */
-/* PHOTO COMPTE */
-/* ========================= */
+/* PROFIL */
 
 .profile{
 
@@ -192,14 +179,18 @@ header{
 
     cursor:pointer;
 
-    border:2px solid #3ea6ff;
+    border:2px solid white;
+
+    box-shadow:
+
+        0 0 7px white,
+
+        0 0 15px rgba(255,255,255,.7);
 
 }
 
 
-/* ========================= */
-/* MENU COMPTE */
-/* ========================= */
+/* MENU */
 
 .menu{
 
@@ -219,36 +210,32 @@ header{
 
     overflow:hidden;
 
-    box-shadow:0 0 20px rgba(0,0,0,.5);
+    box-shadow:0 0 20px rgba(0,0,0,.6);
 
 }
 
 .menu a,
 .menu button{
 
-    width:100%;
-
     display:block;
+
+    width:100%;
 
     padding:14px;
 
-    background:none;
-
     border:none;
+
+    background:none;
 
     color:white;
 
     text-align:left;
 
-    font-size:15px;
+    text-decoration:none;
 
     cursor:pointer;
 
-}
-
-.menu a{
-
-    text-decoration:none;
+    font-size:15px;
 
 }
 
@@ -260,9 +247,32 @@ header{
 }
 
 
-/* ========================= */
-/* PROFIL */
-/* ========================= */
+/* =========================
+   BANNIERE
+========================= */
+
+.banner{
+
+    height:280px;
+
+    background:
+
+        linear-gradient(
+
+            to bottom,
+
+            #3a3a3a,
+
+            #292929
+
+        );
+
+}
+
+
+/* =========================
+   CONTENU
+========================= */
 
 main{
 
@@ -275,46 +285,24 @@ main{
 }
 
 
-/* ========================= */
-/* BANNIERE */
-/* ========================= */
+/* =========================
+   ENTETE PROFIL
+========================= */
 
-.banner{
+.profilHeader{
 
-    width:100%;
+    position:relative;
 
-    height:250px;
-
-    background:#333;
-
-    border-radius:0 0 20px 20px;
+    padding:0 40px;
 
 }
 
 
-/* ========================= */
-/* PHOTO PROFIL */
-/* ========================= */
-
-.photoContainer{
-
-    position:relative;
-
-    margin-left:40px;
-
-    margin-top:-90px;
+.photo{
 
     width:180px;
 
     height:180px;
-
-}
-
-#photo{
-
-    width:170px;
-
-    height:170px;
 
     border-radius:50%;
 
@@ -322,20 +310,24 @@ main{
 
     display:block;
 
+    margin-top:-90px;
+
     border:6px solid #1f1f1f;
 
     box-shadow:
 
         0 0 10px white,
 
-        0 0 25px rgba(255,255,255,.8);
+        0 0 25px rgba(255,255,255,.8),
+
+        0 0 45px rgba(255,255,255,.35);
 
 }
 
 
-/* ========================= */
-/* INFORMATIONS */
-/* ========================= */
+/* =========================
+   INFOS
+========================= */
 
 .infos{
 
@@ -344,71 +336,78 @@ main{
 }
 
 
-/* ========================= */
 /* PSEUDO */
-/* ========================= */
 
 #pseudo{
 
-    font-size:36px;
+    font-size:38px;
 
     font-weight:bold;
 
+    margin-top:5px;
+
 }
 
 
-/* ========================= */
 /* DESCRIPTION COURTE */
-/* ========================= */
 
 #descriptionCourte{
 
-    color:#bbb;
+    color:#bdbdbd;
 
     font-size:17px;
 
-    margin-top:8px;
+    margin-top:10px;
 
 }
 
 
-/* ========================= */
-/* SECTIONS */
-/* ========================= */
+/* =========================
+   SECTIONS
+========================= */
 
 .section{
 
     margin-top:35px;
 
+    padding:25px;
+
+    background:#292929;
+
+    border-radius:16px;
+
+    border:1px solid #333;
+
 }
+
 
 .section h2{
 
-    margin-bottom:15px;
+    margin-top:0;
 
-    font-size:24px;
+    margin-bottom:20px;
 
 }
 
 
-/* ========================= */
-/* DESCRIPTION LONGUE */
-/* ========================= */
+/* =========================
+   DESCRIPTION
+========================= */
 
 #descriptionLongue{
 
     color:#ddd;
 
-    line-height:1.7;
+    line-height:1.6;
 
     white-space:pre-wrap;
 
 }
 
 
-/* ========================= */
-/* CATEGORIES */
-/* ========================= */
+/* =========================
+   CATEGORIES
+========================= */
 
 #categories{
 
@@ -420,6 +419,7 @@ main{
 
 }
 
+
 .tag{
 
     display:inline-block;
@@ -427,6 +427,8 @@ main{
     padding:8px 14px;
 
     background:#3ea6ff;
+
+    color:white;
 
     border-radius:20px;
 
@@ -436,36 +438,73 @@ main{
 
     box-shadow:
 
-        0 0 6px rgba(62,166,255,.35);
+        0 0 7px rgba(62,166,255,.3);
 
 }
 
 
-/* ========================= */
-/* RESEAUX */
-/* ========================= */
+/* =========================
+   VIDEO
+========================= */
+
+#videoContainer{
+
+    width:100%;
+
+    overflow:hidden;
+
+    border-radius:14px;
+
+}
+
+
+#videoContainer iframe{
+
+    display:block;
+
+    width:100%;
+
+    height:500px;
+
+    border:none;
+
+}
+
+
+/* =========================
+   RESEAUX
+========================= */
 
 #reseaux{
 
     display:flex;
 
-    flex-wrap:wrap;
+    flex-direction:column;
 
     gap:12px;
 
 }
 
+
 .reseau{
 
-    background:#2a2a2a;
+    padding:14px;
 
-    padding:12px 18px;
+    background:#202020;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    border:1px solid #3a3a3a;
+    border:1px solid #333;
 
 }
+
+
+.reseau strong{
+
+    color:#fff;
+
+}
+
 
 .reseau a{
 
@@ -473,7 +512,10 @@ main{
 
     text-decoration:none;
 
+    word-break:break-all;
+
 }
+
 
 .reseau a:hover{
 
@@ -482,71 +524,41 @@ main{
 }
 
 
-/* ========================= */
-/* VIDEO */
-/* ========================= */
+/* =========================
+   BOUTON RETOUR
+========================= */
 
-#videoContainer{
+#retourAccueil{
 
-    width:100%;
+    margin-top:25px;
 
-    max-width:900px;
+    padding:12px 20px;
 
-}
-
-#videoContainer iframe{
-
-    width:100%;
-
-    height:500px;
+    background:#3ea6ff;
 
     border:none;
 
-    border-radius:15px;
-
-}
-
-
-/* ========================= */
-/* RETOUR */
-/* ========================= */
-
-.retour{
-
-    margin-top:40px;
-
-}
-
-.retour button{
-
-    background:#2f2f2f;
+    border-radius:10px;
 
     color:white;
-
-    border:1px solid #444;
-
-    padding:11px 20px;
-
-    border-radius:10px;
 
     cursor:pointer;
 
     font-size:15px;
 
-    transition:.2s;
-
-}
-
-.retour button:hover{
-
-    background:#3ea6ff;
-
 }
 
 
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
+#retourAccueil:hover{
+
+    background:#61b8ff;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:700px){
 
@@ -556,11 +568,6 @@ main{
 
     }
 
-    .logo img{
-
-        height:36px;
-
-    }
 
     .search input{
 
@@ -568,56 +575,45 @@ main{
 
     }
 
+
     .banner{
 
         height:180px;
 
-        border-radius:0;
+    }
+
+
+    .profilHeader{
+
+        padding:0 20px;
 
     }
 
-    .photoContainer{
 
-        margin-left:auto;
+    .photo{
 
-        margin-right:auto;
+        width:130px;
 
-        margin-top:-70px;
+        height:130px;
 
-        width:150px;
-
-        height:150px;
+        margin-top:-65px;
 
     }
 
-    #photo{
-
-        width:140px;
-
-        height:140px;
-
-    }
 
     .infos{
 
         padding:20px;
 
-        text-align:center;
-
     }
 
-    #categories,
-    #reseaux{
-
-        justify-content:center;
-
-    }
 
     #pseudo{
 
         font-size:30px;
 
     }
+
 
     #videoContainer iframe{
 
@@ -635,48 +631,37 @@ main{
 <body>
 
 
-<!-- ========================= -->
-<!-- HEADER -->
-<!-- ========================= -->
+<!-- =========================
+     BARRE DU HAUT
+========================= -->
 
 <header>
 
 
-    <!-- LOGO -->
-
     <div class="logo">
 
-        <a href="index.html">
-
-            <img
-                src="Photo de profil/Accueil.jpg"
-                alt="Accueil"
-            >
-
-        </a>
-
-    </div>
-
-
-    <!-- RECHERCHE -->
-
-    <div class="search">
-
-        <input
-            type="text"
-            placeholder="🔍 Rechercher un profil..."
-            id="rechercheProfil"
+        <img
+            src="Photo de profil/titre.jpg"
+            id="retourAccueil"
+            alt="Accueil"
         >
 
     </div>
 
 
-    <!-- COMPTE -->
+    <div class="search">
+
+        <input
+            id="rechercheProfil"
+            type="text"
+            placeholder="Rechercher un profil..."
+        >
+
+    </div>
+
 
     <div class="account">
 
-
-        <!-- BOUTON CONNEXION -->
 
         <button id="loginBtn">
 
@@ -685,11 +670,9 @@ main{
         </button>
 
 
-        <!-- PROFIL CONNECTÉ -->
-
         <div
-            class="profile"
             id="profile"
+            class="profile"
         >
 
             <img
@@ -698,25 +681,23 @@ main{
             >
 
 
-            <!-- MENU -->
-
             <div
-                class="menu"
                 id="menu"
+                class="menu"
             >
 
-                <a href="#">
+                <a href="index.html">
 
-                    👤 Mon profil
+                    🏠 Accueil
 
                 </a>
 
 
-                <button id="changePhoto">
+                <a href="creation-profil.html">
 
-                    🖼️ Changer la photo
+                    ✏️ Modifier mon profil
 
-                </button>
+                </a>
 
 
                 <button id="logout">
@@ -734,21 +715,21 @@ main{
 </header>
 
 
-<!-- ========================= -->
-<!-- PROFIL -->
-<!-- ========================= -->
+<!-- =========================
+     BANNIERE
+========================= -->
+
+<div class="banner"></div>
+
+
+<!-- =========================
+     PROFIL
+========================= -->
 
 <main>
 
 
-    <!-- BANNIERE -->
-
-    <div class="banner"></div>
-
-
-    <!-- PHOTO -->
-
-    <div class="photoContainer">
+    <div class="profilHeader">
 
         <img
             id="photo"
@@ -759,12 +740,8 @@ main{
     </div>
 
 
-    <!-- INFORMATIONS -->
-
     <div class="infos">
 
-
-        <!-- PSEUDO -->
 
         <div id="pseudo">
 
@@ -773,35 +750,42 @@ main{
         </div>
 
 
-        <!-- DESCRIPTION COURTE -->
+        <div id="descriptionCourte">
 
-        <div id="descriptionCourte"></div>
+            Chargement...
+
+        </div>
 
 
-        <!-- ========================= -->
-        <!-- A PROPOS -->
-        <!-- ========================= -->
+        <!-- =====================
+             A PROPOS
+        ====================== -->
 
         <div class="section">
 
             <h2>
 
-                À propos
+                📖 À propos
 
             </h2>
 
-            <p id="descriptionLongue"></p>
+
+            <p id="descriptionLongue">
+
+                Chargement...
+
+            </p>
 
         </div>
 
 
-        <!-- ========================= -->
-        <!-- VIDEO -->
-        <!-- ========================= -->
+        <!-- =====================
+             VIDEO
+        ====================== -->
 
         <div
-            class="section"
             id="sectionVideo"
+            class="section"
         >
 
             <h2>
@@ -810,14 +794,15 @@ main{
 
             </h2>
 
+
             <div id="videoContainer"></div>
 
         </div>
 
 
-        <!-- ========================= -->
-        <!-- CATEGORIES -->
-        <!-- ========================= -->
+        <!-- =====================
+             CATEGORIES
+        ====================== -->
 
         <div class="section">
 
@@ -827,14 +812,15 @@ main{
 
             </h2>
 
+
             <div id="categories"></div>
 
         </div>
 
 
-        <!-- ========================= -->
-        <!-- RESEAUX -->
-        <!-- ========================= -->
+        <!-- =====================
+             RESEAUX
+        ====================== -->
 
         <div class="section">
 
@@ -844,26 +830,17 @@ main{
 
             </h2>
 
+
             <div id="reseaux"></div>
 
         </div>
 
 
-        <!-- ========================= -->
-        <!-- RETOUR -->
-        <!-- ========================= -->
+        <button id="retourAccueil">
 
-        <div class="retour">
+            ← Retour à l'accueil
 
-            <button
-                id="retourAccueil"
-            >
-
-                ← Retour à l'accueil
-
-            </button>
-
-        </div>
+        </button>
 
 
     </div>
