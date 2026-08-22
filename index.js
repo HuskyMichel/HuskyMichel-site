@@ -348,7 +348,14 @@ async function chargerProfils(){
 
             listeProfils.appendChild(carte);
 
-        });
+carte.addEventListener("click", () => {
+
+    window.location.href =
+        "profil.html?pseudo=" +
+        encodeURIComponent(data.pseudo);
+
+});
+
 
 
     }catch(error){

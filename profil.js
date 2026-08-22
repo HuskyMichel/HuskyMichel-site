@@ -1,6 +1,3 @@
-const videoContainer = document.getElementById("videoContainer");
-if(data.videoYoutube){
-
     let url = data.videoYoutube;
 
     url = url.replace("watch?v=", "embed/");
@@ -71,6 +68,9 @@ if(resultat.empty){
     categories.innerHTML = "";
 
     data.categories.forEach((categorie)=>{
+		
+		const videoContainer = document.getElementById("videoContainer");
+if(data.videoYoutube){
 
         const tag = document.createElement("div");
 
