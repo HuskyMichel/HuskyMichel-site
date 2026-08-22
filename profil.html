@@ -4,14 +4,21 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Profil</title>
 
+<link rel="icon" href="Photo de profil/titre.jpg">
+
 <style>
 
-body{
-
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
 
     font-family:Arial,sans-serif;
 
@@ -21,31 +28,241 @@ body{
 
 }
 
-.banner{
 
-    height:250px;
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+header{
+
+    position:sticky;
+
+    top:0;
+
+    height:60px;
+
+    background:#0f0f0f;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 20px;
+
+    border-bottom:1px solid #2b2b2b;
+
+    z-index:1000;
+
+}
+
+
+/* ========================= */
+/* LOGO */
+/* ========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.logo img{
+
+    height:42px;
+
+    cursor:pointer;
+
+}
+
+
+/* ========================= */
+/* RECHERCHE */
+/* ========================= */
+
+.search{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.search input{
+
+    width:520px;
+
+    max-width:90%;
+
+    background:#151515;
+
+    color:white;
+
+    border:1px solid #333;
+
+    border-radius:30px;
+
+    padding:11px 18px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+.search input:focus{
+
+    border-color:#3ea6ff;
+
+}
+
+
+/* ========================= */
+/* COMPTE */
+/* ========================= */
+
+.account{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+/* ========================= */
+/* CONNEXION */
+/* ========================= */
+
+#loginBtn{
+
+    background:#3ea6ff;
+
+    color:white;
+
+    border:none;
+
+    border-radius:25px;
+
+    padding:10px 18px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+#loginBtn:hover{
+
+    background:#61b8ff;
+
+}
+
+
+/* ========================= */
+/* PHOTO COMPTE */
+/* ========================= */
+
+.profile{
+
+    display:none;
+
+    position:relative;
+
+}
+
+#avatar{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    cursor:pointer;
+
+    border:2px solid #3ea6ff;
+
+}
+
+
+/* ========================= */
+/* MENU COMPTE */
+/* ========================= */
+
+.menu{
+
+    display:none;
+
+    position:absolute;
+
+    top:55px;
+
+    right:0;
+
+    width:230px;
+
+    background:#242424;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+
+}
+
+.menu a,
+.menu button{
+
+    width:100%;
+
+    display:block;
+
+    padding:14px;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+}
+
+.menu a{
+
+    text-decoration:none;
+
+}
+
+.menu a:hover,
+.menu button:hover{
 
     background:#333;
 
 }
 
-.photo{
 
-    width:170px;
-
-    height:170px;
-
-    border-radius:50%;
-
-    border:6px solid #1f1f1f;
-
-    margin-top:-85px;
-
-    margin-left:40px;
-
-    object-fit:cover;
-
-}
+/* ========================= */
+/* PROFIL */
+/* ========================= */
 
 main{
 
@@ -53,33 +270,153 @@ main{
 
     margin:auto;
 
+    padding-bottom:60px;
+
 }
+
+
+/* ========================= */
+/* BANNIERE */
+/* ========================= */
+
+.banner{
+
+    width:100%;
+
+    height:250px;
+
+    background:#333;
+
+    border-radius:0 0 20px 20px;
+
+}
+
+
+/* ========================= */
+/* PHOTO PROFIL */
+/* ========================= */
+
+.photoContainer{
+
+    position:relative;
+
+    margin-left:40px;
+
+    margin-top:-90px;
+
+    width:180px;
+
+    height:180px;
+
+}
+
+#photo{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    display:block;
+
+    border:6px solid #1f1f1f;
+
+    box-shadow:
+
+        0 0 10px white,
+
+        0 0 25px rgba(255,255,255,.8);
+
+}
+
+
+/* ========================= */
+/* INFORMATIONS */
+/* ========================= */
 
 .infos{
 
-    padding:20px 40px;
+    padding:25px 40px;
 
 }
 
+
+/* ========================= */
+/* PSEUDO */
+/* ========================= */
+
 #pseudo{
 
-    font-size:35px;
+    font-size:36px;
 
     font-weight:bold;
 
 }
 
+
+/* ========================= */
+/* DESCRIPTION COURTE */
+/* ========================= */
+
 #descriptionCourte{
 
-    color:#bbbbbb;
+    color:#bbb;
 
-    margin-top:10px;
+    font-size:17px;
+
+    margin-top:8px;
 
 }
 
+
+/* ========================= */
+/* SECTIONS */
+/* ========================= */
+
+.section{
+
+    margin-top:35px;
+
+}
+
+.section h2{
+
+    margin-bottom:15px;
+
+    font-size:24px;
+
+}
+
+
+/* ========================= */
+/* DESCRIPTION LONGUE */
+/* ========================= */
+
+#descriptionLongue{
+
+    color:#ddd;
+
+    line-height:1.7;
+
+    white-space:pre-wrap;
+
+}
+
+
+/* ========================= */
+/* CATEGORIES */
+/* ========================= */
+
 #categories{
 
-    margin-top:20px;
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
 
 }
 
@@ -87,25 +424,206 @@ main{
 
     display:inline-block;
 
-    padding:8px 15px;
-
-    margin:5px;
+    padding:8px 14px;
 
     background:#3ea6ff;
 
     border-radius:20px;
 
+    font-size:14px;
+
+    font-weight:bold;
+
+    box-shadow:
+
+        0 0 6px rgba(62,166,255,.35);
+
 }
+
+
+/* ========================= */
+/* RESEAUX */
+/* ========================= */
 
 #reseaux{
 
-    margin-top:30px;
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
 
 }
 
 .reseau{
 
-    margin-bottom:10px;
+    background:#2a2a2a;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    border:1px solid #3a3a3a;
+
+}
+
+.reseau a{
+
+    color:#3ea6ff;
+
+    text-decoration:none;
+
+}
+
+.reseau a:hover{
+
+    text-decoration:underline;
+
+}
+
+
+/* ========================= */
+/* VIDEO */
+/* ========================= */
+
+#videoContainer{
+
+    width:100%;
+
+    max-width:900px;
+
+}
+
+#videoContainer iframe{
+
+    width:100%;
+
+    height:500px;
+
+    border:none;
+
+    border-radius:15px;
+
+}
+
+
+/* ========================= */
+/* RETOUR */
+/* ========================= */
+
+.retour{
+
+    margin-top:40px;
+
+}
+
+.retour button{
+
+    background:#2f2f2f;
+
+    color:white;
+
+    border:1px solid #444;
+
+    padding:11px 20px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.2s;
+
+}
+
+.retour button:hover{
+
+    background:#3ea6ff;
+
+}
+
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media(max-width:700px){
+
+    header{
+
+        padding:0 10px;
+
+    }
+
+    .logo img{
+
+        height:36px;
+
+    }
+
+    .search input{
+
+        width:250px;
+
+    }
+
+    .banner{
+
+        height:180px;
+
+        border-radius:0;
+
+    }
+
+    .photoContainer{
+
+        margin-left:auto;
+
+        margin-right:auto;
+
+        margin-top:-70px;
+
+        width:150px;
+
+        height:150px;
+
+    }
+
+    #photo{
+
+        width:140px;
+
+        height:140px;
+
+    }
+
+    .infos{
+
+        padding:20px;
+
+        text-align:center;
+
+    }
+
+    #categories,
+    #reseaux{
+
+        justify-content:center;
+
+    }
+
+    #pseudo{
+
+        font-size:30px;
+
+    }
+
+    #videoContainer iframe{
+
+        height:300px;
+
+    }
 
 }
 
@@ -113,43 +631,251 @@ main{
 
 </head>
 
+
 <body>
 
-<div class="banner"></div>
+
+<!-- ========================= -->
+<!-- HEADER -->
+<!-- ========================= -->
+
+<header>
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <a href="index.html">
+
+            <img
+                src="Photo de profil/Accueil.jpg"
+                alt="Accueil"
+            >
+
+        </a>
+
+    </div>
+
+
+    <!-- RECHERCHE -->
+
+    <div class="search">
+
+        <input
+            type="text"
+            placeholder="🔍 Rechercher un profil..."
+            id="rechercheProfil"
+        >
+
+    </div>
+
+
+    <!-- COMPTE -->
+
+    <div class="account">
+
+
+        <!-- BOUTON CONNEXION -->
+
+        <button id="loginBtn">
+
+            Se connecter
+
+        </button>
+
+
+        <!-- PROFIL CONNECTÉ -->
+
+        <div
+            class="profile"
+            id="profile"
+        >
+
+            <img
+                id="avatar"
+                alt="Compte"
+            >
+
+
+            <!-- MENU -->
+
+            <div
+                class="menu"
+                id="menu"
+            >
+
+                <a href="#">
+
+                    👤 Mon profil
+
+                </a>
+
+
+                <button id="changePhoto">
+
+                    🖼️ Changer la photo
+
+                </button>
+
+
+                <button id="logout">
+
+                    🚪 Déconnexion
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ========================= -->
+<!-- PROFIL -->
+<!-- ========================= -->
 
 <main>
 
-<img
-id="photo"
-class="photo">
 
-<div class="infos">
+    <!-- BANNIERE -->
 
-<div id="pseudo"></div>
+    <div class="banner"></div>
 
-<div id="descriptionCourte"></div>
 
-<h2>À propos</h2>
+    <!-- PHOTO -->
 
-<h2>🎬 Vidéo mise en avant</h2>
+    <div class="photoContainer">
 
-<div id="videoContainer"></div>
+        <img
+            id="photo"
+            class="photo"
+            alt="Photo de profil"
+        >
 
-<p id="descriptionLongue"></p>
+    </div>
 
-<h2>Catégories</h2>
 
-<div id="categories"></div>
+    <!-- INFORMATIONS -->
 
-<h2>Réseaux</h2>
+    <div class="infos">
 
-<div id="reseaux"></div>
 
-</div>
+        <!-- PSEUDO -->
+
+        <div id="pseudo">
+
+            Chargement...
+
+        </div>
+
+
+        <!-- DESCRIPTION COURTE -->
+
+        <div id="descriptionCourte"></div>
+
+
+        <!-- ========================= -->
+        <!-- A PROPOS -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>
+
+                À propos
+
+            </h2>
+
+            <p id="descriptionLongue"></p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- VIDEO -->
+        <!-- ========================= -->
+
+        <div
+            class="section"
+            id="sectionVideo"
+        >
+
+            <h2>
+
+                🎬 Vidéo mise en avant
+
+            </h2>
+
+            <div id="videoContainer"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- CATEGORIES -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>
+
+                🏷️ Catégories
+
+            </h2>
+
+            <div id="categories"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- RESEAUX -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>
+
+                🌐 Réseaux
+
+            </h2>
+
+            <div id="reseaux"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- RETOUR -->
+        <!-- ========================= -->
+
+        <div class="retour">
+
+            <button
+                id="retourAccueil"
+            >
+
+                ← Retour à l'accueil
+
+            </button>
+
+        </div>
+
+
+    </div>
 
 </main>
 
-<script type="module" src="profil.js"></script>
+
+<script
+    type="module"
+    src="profil.js">
+</script>
+
 
 </body>
 
