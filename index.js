@@ -194,9 +194,29 @@ async function chargerProfils(){
     ${
         data.categories && data.categories.length > 3
         ? `
-            <span class="categorieCarte categoriePlus">
+            <span
+                class="categorieCarte categoriePlus"
+                onclick="afficherCategories(this)"
+            >
                 +${data.categories.length - 3}
             </span>
+
+            <div class="categoriesCachees">
+
+                ${
+                    data.categories
+                    .slice(3)
+                    .map(categorie => `
+                        
+                        <span class="categorieCarte">
+                            🏷️ ${categorie}
+                        </span>
+
+                    `)
+                    .join("")
+                }
+
+            </div>
         `
         : ""
     }
@@ -224,6 +244,34 @@ async function chargerProfils(){
 
         listeProfils.innerHTML =
             "<p>Impossible de charger les profils.</p>";
+
+    }
+
+}
+
+function afficherCategories(element){
+
+    const carteCategories =
+        element.parentElement;
+
+    const categoriesCachees =
+        carteCategories.querySelector(".categoriesCachees");
+
+    if(categoriesCachees.style.display === "flex"){
+
+        categoriesCachees.style.display = "none";
+
+        element.textContent =
+            "+" +
+            categoriesCachees
+            .querySelectorAll(".categorieCarte")
+            .length;
+
+    }else{
+
+        categoriesCachees.style.display = "flex";
+
+        element.textContent = "−";
 
     }
 
