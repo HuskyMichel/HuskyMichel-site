@@ -3,7 +3,8 @@ let reseauxAjoutes = [];
 import { auth, db } from "./firebase.js";
 
 import {
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
@@ -44,23 +45,11 @@ const saveProfile = document.getElementById("saveProfile");
 const descriptionCourte = document.getElementById("descriptionCourte");
 const descriptionLongue = document.getElementById("descriptionLongue");
 
-if(data.categories){
+const compteConnecte =
+    document.getElementById("compteConnecte");
 
-    data.categories.forEach((categorie)=>{
-
-        document.querySelectorAll("#categoriesContainer button").forEach((button)=>{
-
-            if(button.textContent === categorie){
-
-                selectionnerCategorie(categorie, button);
-
-            }
-
-        });
-
-    });
-
-}
+const deconnexion =
+    document.getElementById("deconnexion");
 
 onAuthStateChanged(auth, async (user)=>{
 
@@ -73,16 +62,22 @@ onAuthStateChanged(auth, async (user)=>{
 
     photo.src = user.photoURL;
 
-await chargerCategories();
+    if(compteConnecte){
 
-await chargerProfil(user);
+        compteConnecte.textContent =
+            "👤 " + user.email;
+
+    }
+
+    await chargerCategories();
+
+    await chargerProfil(user);
 
 });
 
 async function chargerCategories(){
 
     categoriesContainer.innerHTML="";
-
     const snapshot = await getDocs(collection(db,"categories"));
 
     snapshot.forEach((doc)=>{
@@ -278,8 +273,6 @@ function afficherCategoriesChoisies(){
 
 }
 async function chargerProfil(user){
-	
-	videoYoutube.value = data.videoYoutube || "";
 
     const profil = await getDoc(doc(db,"users",user.uid));
 
@@ -288,6 +281,34 @@ async function chargerProfil(user){
     }
 
     const data = profil.data();
+	
+	videoYoutube.value = data.videoYoutube || "";
+	
+	/* ===========================
+   RECHARGER LES CATEGORIES
+=========================== */
+
+if(data.categories){
+
+    data.categories.forEach((categorie)=>{
+
+        document
+        .querySelectorAll("#categoriesContainer button")
+        .forEach((button)=>{
+
+            if(button.textContent === categorie){
+
+                selectionnerCategorie(categorie, button);
+
+            }
+
+        });
+
+    });
+
+}
+
+afficherCategoriesChoisies();
 
     pseudo.value = data.pseudo || "";
     descriptionCourte.value = data.descriptionCourte || "";
@@ -422,5 +443,35 @@ document.querySelectorAll("#reseaux > div").forEach((div)=>{
     alert("Profil enregistré avec succès !");
 
     window.location.href="index.html";
+
+});
+
+/* ===========================
+   DECONNEXION
+=========================== */
+
+const compteConnecte =
+    document.getElementById("compteConnecte");
+
+const deconnexion =
+    document.getElementById("deconnexion");
+
+
+deconnexion.addEventListener("click", async ()=>{
+
+    try{
+
+        await signOut(auth);
+
+        window.location.href = "index.html";
+
+    }catch(error){
+
+        console.error(
+            "Erreur lors de la déconnexion :",
+            error
+        );
+
+    }
 
 });
