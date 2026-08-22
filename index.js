@@ -45,9 +45,9 @@ provider.setCustomParameters({
 
 if(avatar){
 
-    avatar.addEventListener("click", (e)=>{
+    avatar.addEventListener("click",(event)=>{
 
-        e.stopPropagation();
+        event.stopPropagation();
 
         menu.style.display =
             menu.style.display === "block"
@@ -59,9 +59,9 @@ if(avatar){
 }
 
 
-document.addEventListener("click",(e)=>{
+document.addEventListener("click",(event)=>{
 
-    if(profile && !profile.contains(e.target)){
+    if(profile && !profile.contains(event.target)){
 
         menu.style.display = "none";
 
@@ -76,11 +76,11 @@ document.addEventListener("click",(e)=>{
 
 if(loginBtn){
 
-    loginBtn.addEventListener("click", async ()=>{
+    loginBtn.addEventListener("click",async()=>{
 
         try{
 
-            await signInWithPopup(auth, provider);
+            await signInWithPopup(auth,provider);
 
         }
 
@@ -104,7 +104,7 @@ if(loginBtn){
 
 if(logout){
 
-    logout.addEventListener("click", async ()=>{
+    logout.addEventListener("click",async()=>{
 
         try{
 
@@ -130,7 +130,7 @@ if(logout){
    ETAT DE LA CONNEXION
 =========================== */
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth,async(user)=>{
 
     /* ===========================
        UTILISATEUR CONNECTE
@@ -279,13 +279,8 @@ async function chargerProfils(){
                 : [];
 
 
-            /* Les 3 premières */
-
             const troisCategories =
                 categories.slice(0,3);
-
-
-            /* Les suivantes */
 
             const autresCategories =
                 categories.slice(3);
@@ -295,7 +290,7 @@ async function chargerProfils(){
 
 
             /* ===========================
-               AFFICHER LES 3 PREMIERES
+               3 PREMIERES CATEGORIES
             =========================== */
 
             troisCategories.forEach((categorie)=>{
@@ -312,7 +307,7 @@ async function chargerProfils(){
 
 
             /* ===========================
-               AFFICHER +X
+               CATEGORIES SUPPLEMENTAIRES
             =========================== */
 
             if(autresCategories.length > 0){
@@ -348,6 +343,110 @@ async function chargerProfils(){
 
 
             /* ===========================
+               RESEAUX SOCIAUX
+            =========================== */
+
+            const reseaux =
+                Array.isArray(data.reseaux)
+                ? data.reseaux
+                : [];
+
+
+            let reseauxHTML = "";
+
+
+            reseaux.forEach((reseau)=>{
+
+                if(!reseau || !reseau.lien){
+
+                    return;
+
+                }
+
+
+                let emoji = "🌐";
+
+
+                if(reseau.type === "YouTube"){
+
+                    emoji = "▶️";
+
+                }
+
+                else if(reseau.type === "Twitch"){
+
+                    emoji = "🎮";
+
+                }
+
+                else if(reseau.type === "Discord"){
+
+                    emoji = "💬";
+
+                }
+
+                else if(reseau.type === "TikTok"){
+
+                    emoji = "🎵";
+
+                }
+
+                else if(reseau.type === "Instagram"){
+
+                    emoji = "📸";
+
+                }
+
+                else if(reseau.type === "Snapchat"){
+
+                    emoji = "👻";
+
+                }
+
+                else if(reseau.type === "Facebook"){
+
+                    emoji = "🔵";
+
+                }
+
+                else if(reseau.type === "Kick"){
+
+                    emoji = "🟢";
+
+                }
+
+                else if(reseau.type === "Paypal"){
+
+                    emoji = "💰";
+
+                }
+
+                else if(reseau.type === "Site Web"){
+
+                    emoji = "🌐";
+
+                }
+
+
+                reseauxHTML += `
+
+                    <a
+                        class="reseauCarte"
+                        href="${reseau.lien}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        ${emoji} ${reseau.type}
+
+                    </a>
+
+                `;
+
+            });
+
+
+            /* ===========================
                CONTENU DE LA CARTE
             =========================== */
 
@@ -362,7 +461,6 @@ async function chargerProfils(){
 
                 <div class="carteContenu">
 
-
                     <div class="cartePseudo">
 
                         ${data.pseudo || "Sans pseudo"}
@@ -372,10 +470,7 @@ async function chargerProfils(){
 
                     <div class="carteDescription">
 
-                        ${
-                            data.descriptionCourte
-                            || "Aucune description"
-                        }
+                        ${data.descriptionCourte || "Aucune description"}
 
                     </div>
 
@@ -387,12 +482,36 @@ async function chargerProfils(){
                     </div>
 
 
+                    ${
+                        reseauxHTML
+                        ? `
+
+                            <div class="carteReseaux">
+
+                                ${reseauxHTML}
+
+                            </div>
+
+                        `
+                        : ""
+                    }
+
+
                     <div class="carteLikes">
 
                         ❤️ 0 likes
 
                     </div>
 
+
+                    <button
+                        class="boutonVoirProfil"
+                        type="button"
+                    >
+
+                        👤 Voir profil
+
+                    </button>
 
                 </div>
 
@@ -483,6 +602,62 @@ async function chargerProfils(){
 
 
             /* ===========================
+               RESEAUX
+               EMPECHE LE CLIC PROFIL
+            =========================== */
+
+            const liensReseaux =
+                carte.querySelectorAll(
+                    ".reseauCarte"
+                );
+
+
+            liensReseaux.forEach((lien)=>{
+
+                lien.addEventListener(
+                    "click",
+                    (event)=>{
+
+                        event.stopPropagation();
+
+                    }
+                );
+
+            });
+
+
+            /* ===========================
+               BOUTON VOIR PROFIL
+            =========================== */
+
+            const boutonVoirProfil =
+                carte.querySelector(
+                    ".boutonVoirProfil"
+                );
+
+
+            if(boutonVoirProfil){
+
+                boutonVoirProfil.addEventListener(
+                    "click",
+                    (event)=>{
+
+                        event.stopPropagation();
+
+
+                        window.location.href =
+                            "profil.html?pseudo=" +
+                            encodeURIComponent(
+                                data.pseudo
+                            );
+
+                    }
+                );
+
+            }
+
+
+            /* ===========================
                AJOUTER LA CARTE
             =========================== */
 
@@ -490,7 +665,7 @@ async function chargerProfils(){
 
 
             /* ===========================
-               OUVRIR LE PROFIL
+               CLIQUER SUR LA CARTE
             =========================== */
 
             carte.addEventListener(
@@ -498,13 +673,13 @@ async function chargerProfils(){
                 (event)=>{
 
                     /*
-                       Si on clique sur +X,
-                       le profil ne s'ouvre pas.
+                       Si on clique sur le +X,
+                       on ne quitte pas la page.
                     */
 
                     if(
-                        event.target.classList.contains(
-                            "categoriePlus"
+                        event.target.closest(
+                            ".categoriePlus"
                         )
                     ){
 
@@ -514,9 +689,38 @@ async function chargerProfils(){
 
 
                     /*
-                       Ouverture du profil
-                       avec le pseudo
+                       Si on clique sur un réseau,
+                       le réseau s'occupe du clic.
                     */
+
+                    if(
+                        event.target.closest(
+                            ".reseauCarte"
+                        )
+                    ){
+
+                        return;
+
+                    }
+
+
+                    /*
+                       Si on clique sur le bouton,
+                       le bouton s'occupe du clic.
+                    */
+
+                    if(
+                        event.target.closest(
+                            ".boutonVoirProfil"
+                        )
+                    ){
+
+                        return;
+
+                    }
+
+
+                    /* OUVERTURE DU PROFIL */
 
                     window.location.href =
                         "profil.html?pseudo=" +
