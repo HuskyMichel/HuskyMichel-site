@@ -27,6 +27,14 @@ let utilisateurActuel = null;
 
 
 /* =========================================================
+   DONNEES DU PROFIL ACTUEL
+========================================================= */
+
+let profilActuel = null;
+let profilActuelUid = null;
+
+
+/* =========================================================
    ELEMENTS DU PROFIL
 ========================================================= */
 
@@ -56,21 +64,23 @@ const sectionVideo =
 
 
 /* =========================================================
-   ELEMENTS FAVORIS
+   ELEMENTS DES FAVORIS
 ========================================================= */
 
 const boutonFavoriProfil =
     document.getElementById("boutonFavoriProfil");
 
+
 const sectionFavoris =
     document.getElementById("sectionFavoris");
+
 
 const listeFavoris =
     document.getElementById("listeFavoris");
 
 
 /* =========================================================
-   ELEMENTS BARRE DU HAUT
+   ELEMENTS DE LA BARRE DU HAUT
 ========================================================= */
 
 const loginBtn =
@@ -96,7 +106,7 @@ const resultatsRecherche =
 
 
 /* =========================================================
-   ELEMENTS LIKES
+   ELEMENTS DES LIKES
 ========================================================= */
 
 const boutonLikeProfil =
@@ -118,27 +128,16 @@ const params =
         window.location.search
     );
 
+
 const pseudoRecherche =
     params.get("pseudo");
-
-
-/* =========================================================
-   GOOGLE
-========================================================= */
-
-const provider =
-    new GoogleAuthProvider();
-
-provider.setCustomParameters({
-    prompt: "select_account"
-});
 
 
 /* =========================================================
    VERIFICATION DU PSEUDO
 ========================================================= */
 
-if (!pseudoRecherche) {
+if(!pseudoRecherche){
 
     document.body.innerHTML = `
 
@@ -166,22 +165,27 @@ if (!pseudoRecherche) {
                     cursor:pointer;
                 "
             >
+
                 ← Retour à l'accueil
+
             </button>
 
         </div>
+
     `;
 
 
     const retourErreur =
-        document.getElementById("retourErreur");
+        document.getElementById(
+            "retourErreur"
+        );
 
 
-    if (retourErreur) {
+    if(retourErreur){
 
         retourErreur.addEventListener(
             "click",
-            () => {
+            ()=>{
 
                 window.location.href =
                     "index.html";
@@ -195,25 +199,39 @@ if (!pseudoRecherche) {
 
 
 /* =========================================================
+   GOOGLE
+========================================================= */
+
+const provider =
+    new GoogleAuthProvider();
+
+
+provider.setCustomParameters({
+    prompt:"select_account"
+});
+
+
+/* =========================================================
    MENU DU COMPTE
 ========================================================= */
 
-if (
+if(
     avatar &&
     menu &&
     profile
-) {
+){
 
     avatar.addEventListener(
         "click",
-        (event) => {
+        (event)=>{
 
             event.stopPropagation();
 
+
             menu.style.display =
                 menu.style.display === "block"
-                    ? "none"
-                    : "block";
+                ? "none"
+                : "block";
 
         }
     );
@@ -221,13 +239,13 @@ if (
 
     document.addEventListener(
         "click",
-        (event) => {
+        (event)=>{
 
-            if (
+            if(
                 !profile.contains(
                     event.target
                 )
-            ) {
+            ){
 
                 menu.style.display =
                     "none";
@@ -244,9 +262,9 @@ if (
    AFFICHER COMPTE CONNECTE
 ========================================================= */
 
-function afficherCompteConnecte(user) {
+function afficherCompteConnecte(user){
 
-    if (loginBtn) {
+    if(loginBtn){
 
         loginBtn.style.display =
             "none";
@@ -257,7 +275,7 @@ function afficherCompteConnecte(user) {
     }
 
 
-    if (profile) {
+    if(profile){
 
         profile.style.display =
             "block";
@@ -268,12 +286,12 @@ function afficherCompteConnecte(user) {
     }
 
 
-    if (avatar) {
+    if(avatar){
 
-        if (
+        if(
             user &&
             user.photoURL
-        ) {
+        ){
 
             avatar.src =
                 user.photoURL.replace(
@@ -292,9 +310,9 @@ function afficherCompteConnecte(user) {
    AFFICHER COMPTE DECONNECTE
 ========================================================= */
 
-function afficherCompteDeconnecte() {
+function afficherCompteDeconnecte(){
 
-    if (loginBtn) {
+    if(loginBtn){
 
         loginBtn.style.display =
             "block";
@@ -305,7 +323,7 @@ function afficherCompteDeconnecte() {
     }
 
 
-    if (profile) {
+    if(profile){
 
         profile.style.display =
             "none";
@@ -316,7 +334,7 @@ function afficherCompteDeconnecte() {
     }
 
 
-    if (menu) {
+    if(menu){
 
         menu.style.display =
             "none";
@@ -327,95 +345,16 @@ function afficherCompteDeconnecte() {
 
 
 /* =========================================================
-   VERIFIER SI L'UTILISATEUR POSSEDE UN PROFIL
-========================================================= */
-
-async function verifierProfilUtilisateur(user) {
-
-    if (!user) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const utilisateurRef =
-            doc(
-                db,
-                "users",
-                user.uid
-            );
-
-
-        const utilisateurSnap =
-            await getDoc(
-                utilisateurRef
-            );
-
-
-        /* ==============================================
-           PAS DE PROFIL
-        ============================================== */
-
-        if (
-            !utilisateurSnap.exists()
-        ) {
-
-            console.log(
-                "Aucun profil trouvé pour ce compte."
-            );
-
-
-            window.location.href =
-                "creation-profil.html";
-
-
-            return false;
-
-        }
-
-
-        /* ==============================================
-           PROFIL EXISTANT
-        ============================================== */
-
-        console.log(
-            "Profil utilisateur trouvé."
-        );
-
-
-        return true;
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erreur lors de la vérification du profil :",
-            error
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
    CONNEXION GOOGLE
 ========================================================= */
 
-if (loginBtn) {
+if(loginBtn){
 
     loginBtn.addEventListener(
         "click",
-        async () => {
+        async()=>{
 
-            try {
+            try{
 
                 await signInWithPopup(
                     auth,
@@ -424,7 +363,7 @@ if (loginBtn) {
 
             }
 
-            catch (error) {
+            catch(error){
 
                 console.error(
                     "Erreur lors de la connexion Google :",
@@ -443,13 +382,13 @@ if (loginBtn) {
    DECONNEXION
 ========================================================= */
 
-if (logout) {
+if(logout){
 
     logout.addEventListener(
         "click",
-        async () => {
+        async()=>{
 
-            try {
+            try{
 
                 await signOut(auth);
 
@@ -458,7 +397,7 @@ if (logout) {
 
             }
 
-            catch (error) {
+            catch(error){
 
                 console.error(
                     "Erreur lors de la déconnexion :",
@@ -479,7 +418,7 @@ if (logout) {
 
 onAuthStateChanged(
     auth,
-    async (user) => {
+    async(user)=>{
 
         utilisateurActuel =
             user;
@@ -489,7 +428,7 @@ onAuthStateChanged(
            CONNECTE
         ================================================ */
 
-        if (user) {
+        if(user){
 
             afficherCompteConnecte(
                 user
@@ -497,46 +436,26 @@ onAuthStateChanged(
 
 
             /*
-             * Vérification du profil personnel.
-             *
-             * IMPORTANT :
-             * Cette vérification concerne uniquement
-             * le compte qui vient de se connecter.
-             */
-
-            const profilExiste =
-                await verifierProfilUtilisateur(
-                    user
-                );
-
-
-            if (!profilExiste) {
-
-                return;
-
-            }
-
-
-            /* ==========================================
-               LIKES
-            ========================================== */
+               On recharge les likes.
+            */
 
             await chargerLikesProfil();
 
 
-            /* ==========================================
-               FAVORIS
-            ========================================== */
+            /*
+               On vérifie le favori.
+            */
 
-            await chargerEtatFavori();
+            await verifierFavoriProfil();
 
 
             /*
-             * Si l'utilisateur consulte son propre
-             * profil, afficher ses favoris privés.
-             */
+               On charge l'espace privé des favoris
+               si le profil affiché est celui
+               de l'utilisateur connecté.
+            */
 
-            await chargerFavoris();
+            await chargerFavorisPrives();
 
         }
 
@@ -545,42 +464,28 @@ onAuthStateChanged(
            DECONNECTE
         ================================================ */
 
-        else {
+        else{
 
             afficherCompteDeconnecte();
 
 
             /*
-             * IMPORTANT :
-             *
-             * Les likes sont PUBLICS.
-             *
-             * Donc même déconnecté on les charge.
-             */
+               Les likes restent visibles même
+               lorsqu'on est déconnecté.
+            */
 
             await chargerLikesProfil();
 
 
             /*
-             * Les favoris sont privés.
-             *
-             * Donc on les cache lorsqu'on est déconnecté.
-             */
+               Aucun favori personnel accessible
+               sans connexion.
+            */
 
-            if (sectionFavoris) {
-
-                sectionFavoris.style.display =
-                    "none";
-
-            }
+            cacherFavorisPrives();
 
 
-            if (boutonFavoriProfil) {
-
-                boutonFavoriProfil.style.display =
-                    "none";
-
-            }
+            mettreBoutonFavoriNonActif();
 
         }
 
@@ -592,22 +497,22 @@ onAuthStateChanged(
    RECHERCHE DE PROFIL
 ========================================================= */
 
-if (
+if(
     recherche &&
     resultatsRecherche
-) {
+){
 
     recherche.addEventListener(
         "input",
-        async () => {
+        async()=>{
 
             const texte =
                 recherche.value.trim();
 
 
-            if (
+            if(
                 texte === ""
-            ) {
+            ){
 
                 resultatsRecherche.innerHTML =
                     "";
@@ -620,7 +525,7 @@ if (
             }
 
 
-            try {
+            try{
 
                 const snapshot =
                     await getDocs(
@@ -644,7 +549,7 @@ if (
 
 
                 snapshot.forEach(
-                    (profilDoc) => {
+                    (profilDoc)=>{
 
                         const data =
                             profilDoc.data();
@@ -655,13 +560,13 @@ if (
                             "";
 
 
-                        if (
+                        if(
                             nomProfil
                                 .toLowerCase()
                                 .includes(
                                     texteRecherche
                                 )
-                        ) {
+                        ){
 
                             nombreResultats++;
 
@@ -717,7 +622,7 @@ if (
 
                             resultat.addEventListener(
                                 "click",
-                                () => {
+                                ()=>{
 
                                     window.location.href =
                                         "profil.html?pseudo=" +
@@ -739,16 +644,16 @@ if (
                 );
 
 
-                if (
+                if(
                     nombreResultats > 0
-                ) {
+                ){
 
                     resultatsRecherche.style.display =
                         "block";
 
                 }
 
-                else {
+                else{
 
                     resultatsRecherche.innerHTML =
                         "";
@@ -760,7 +665,7 @@ if (
 
             }
 
-            catch (error) {
+            catch(error){
 
                 console.error(
                     "Erreur lors de la recherche :",
@@ -786,16 +691,9 @@ if (
    CHARGER LE PROFIL
 ========================================================= */
 
-async function chargerProfil() {
+async function chargerProfil(){
 
-    if (!pseudoRecherche) {
-
-        return;
-
-    }
-
-
-    try {
+    try{
 
         const q =
             query(
@@ -819,9 +717,9 @@ async function chargerProfil() {
            PROFIL INTROUVABLE
         ============================================== */
 
-        if (
+        if(
             resultat.empty
-        ) {
+        ){
 
             document.body.innerHTML = `
 
@@ -855,10 +753,13 @@ async function chargerProfil() {
                             cursor:pointer;
                         "
                     >
+
                         ← Retour à l'accueil
+
                     </button>
 
                 </div>
+
             `;
 
 
@@ -868,11 +769,11 @@ async function chargerProfil() {
                 );
 
 
-            if (retourIntrouvable) {
+            if(retourIntrouvable){
 
                 retourIntrouvable.addEventListener(
                     "click",
-                    () => {
+                    ()=>{
 
                         window.location.href =
                             "index.html";
@@ -889,33 +790,32 @@ async function chargerProfil() {
 
 
         /* ==============================================
-           DONNEES
+           RECUPERATION DU DOCUMENT
         ============================================== */
 
         const profilDoc =
             resultat.docs[0];
 
 
-        const data =
+        profilActuelUid =
+            profilDoc.id;
+
+
+        profilActuel =
             profilDoc.data();
 
 
-        /*
-         * On conserve l'ID Firestore du profil.
-         * Il sera utile pour les favoris.
-         */
-
-        window.profilActuelId =
-            profilDoc.id;
+        const data =
+            profilActuel;
 
 
         /* ==============================================
            PHOTO
         ============================================== */
 
-        if (photo) {
+        if(photo){
 
-            if (data.photo) {
+            if(data.photo){
 
                 photo.src =
                     data.photo.replace(
@@ -925,7 +825,7 @@ async function chargerProfil() {
 
             }
 
-            else {
+            else{
 
                 photo.src =
                     "";
@@ -939,7 +839,7 @@ async function chargerProfil() {
            PSEUDO
         ============================================== */
 
-        if (pseudo) {
+        if(pseudo){
 
             pseudo.textContent =
                 data.pseudo ||
@@ -952,7 +852,7 @@ async function chargerProfil() {
            DESCRIPTION COURTE
         ============================================== */
 
-        if (descriptionCourte) {
+        if(descriptionCourte){
 
             descriptionCourte.textContent =
                 data.descriptionCourte ||
@@ -965,7 +865,7 @@ async function chargerProfil() {
            DESCRIPTION LONGUE
         ============================================== */
 
-        if (descriptionLongue) {
+        if(descriptionLongue){
 
             descriptionLongue.textContent =
                 data.descriptionLongue ||
@@ -978,7 +878,7 @@ async function chargerProfil() {
            CATEGORIES
         ============================================== */
 
-        if (categories) {
+        if(categories){
 
             categories.innerHTML =
                 "";
@@ -988,28 +888,30 @@ async function chargerProfil() {
                 Array.isArray(
                     data.categories
                 )
-                    ? data.categories
-                    : [];
+                ? data.categories
+                : [];
 
 
-            if (
+            if(
                 listeCategories.length === 0
-            ) {
+            ){
 
                 categories.innerHTML = `
 
                     <span style="color:#aaa;">
+
                         Aucune catégorie
+
                     </span>
 
                 `;
 
             }
 
-            else {
+            else{
 
                 listeCategories.forEach(
-                    (categorie) => {
+                    (categorie)=>{
 
                         const tag =
                             document.createElement(
@@ -1042,7 +944,7 @@ async function chargerProfil() {
            RESEAUX
         ============================================== */
 
-        if (reseaux) {
+        if(reseaux){
 
             reseaux.innerHTML =
                 "";
@@ -1052,30 +954,34 @@ async function chargerProfil() {
                 Array.isArray(
                     data.reseaux
                 )
-                    ? data.reseaux
-                    : [];
+                ? data.reseaux
+                : [];
 
 
-            if (
+            if(
                 listeReseaux.length === 0
-            ) {
+            ){
 
                 reseaux.innerHTML = `
 
                     <div style="color:#aaa;">
+
                         Aucun réseau renseigné.
+
                     </div>
 
                 `;
 
             }
 
-            else {
+            else{
 
                 listeReseaux.forEach(
-                    (reseau) => {
+                    (reseau)=>{
 
-                        if (!reseau) {
+                        if(
+                            !reseau
+                        ){
 
                             return;
 
@@ -1160,7 +1066,7 @@ async function chargerProfil() {
            VIDEO YOUTUBE
         ============================================== */
 
-        if (videoContainer) {
+        if(videoContainer){
 
             videoContainer.innerHTML =
                 "";
@@ -1170,10 +1076,10 @@ async function chargerProfil() {
                 data.videoYoutube;
 
 
-            if (
+            if(
                 video &&
                 video.trim() !== ""
-            ) {
+            ){
 
                 const url =
                     video.trim();
@@ -1183,13 +1089,13 @@ async function chargerProfil() {
                     "";
 
 
-                if (
+                if(
                     url.includes(
                         "youtube.com/watch?v="
                     )
-                ) {
+                ){
 
-                    try {
+                    try{
 
                         const urlObjet =
                             new URL(url);
@@ -1203,7 +1109,7 @@ async function chargerProfil() {
 
                     }
 
-                    catch (error) {
+                    catch(error){
 
                         console.error(
                             "URL YouTube invalide :",
@@ -1215,11 +1121,11 @@ async function chargerProfil() {
                 }
 
 
-                else if (
+                else if(
                     url.includes(
                         "youtu.be/"
                     )
-                ) {
+                ){
 
                     videoId =
                         url.split(
@@ -1236,11 +1142,11 @@ async function chargerProfil() {
                 }
 
 
-                else if (
+                else if(
                     url.includes(
                         "youtube.com/embed/"
                     )
-                ) {
+                ){
 
                     videoId =
                         url.split(
@@ -1257,14 +1163,18 @@ async function chargerProfil() {
                 }
 
 
-                if (videoId) {
+                if(videoId){
 
                     videoContainer.innerHTML = `
 
                         <iframe
+
                             src="https://www.youtube.com/embed/${videoId}"
+
                             title="Vidéo YouTube"
+
                             frameborder="0"
+
                             allow="
                                 accelerometer;
                                 autoplay;
@@ -1274,19 +1184,23 @@ async function chargerProfil() {
                                 picture-in-picture;
                                 web-share
                             "
+
                             allowfullscreen>
+
                         </iframe>
 
                     `;
 
                 }
 
-                else {
+                else{
 
                     videoContainer.innerHTML = `
 
                         <p style="color:#aaa;">
+
                             Impossible de lire cette vidéo YouTube.
+
                         </p>
 
                     `;
@@ -1295,9 +1209,9 @@ async function chargerProfil() {
 
             }
 
-            else {
+            else{
 
-                if (sectionVideo) {
+                if(sectionVideo){
 
                     sectionVideo.style.display =
                         "none";
@@ -1309,22 +1223,22 @@ async function chargerProfil() {
         }
 
 
+        /*
+           Une fois le profil chargé,
+           on vérifie le bouton favori.
+        */
+
+        await verifierFavoriProfil();
+
+
         console.log(
             "Profil chargé :",
             data.pseudo
         );
 
-
-        /*
-         * Une fois le profil chargé,
-         * on actualise l'état du favori.
-         */
-
-        await chargerEtatFavori();
-
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(
             "Erreur lors du chargement du profil :",
@@ -1360,10 +1274,13 @@ async function chargerProfil() {
                         cursor:pointer;
                     "
                 >
+
                     ← Retour à l'accueil
+
                 </button>
 
             </div>
+
         `;
 
 
@@ -1373,11 +1290,11 @@ async function chargerProfil() {
             );
 
 
-        if (retour) {
+        if(retour){
 
             retour.addEventListener(
                 "click",
-                () => {
+                ()=>{
 
                     window.location.href =
                         "index.html";
@@ -1393,525 +1310,99 @@ async function chargerProfil() {
 
 
 /* =========================================================
-   CHARGER LES LIKES
-   CONNECTE OU DECONNECTE
+   FAVORIS
 ========================================================= */
 
-async function chargerLikesProfil() {
+/*
+   Structure Firestore utilisée :
 
-    if (
-        !pseudoRecherche
-    ) {
+   users
+      └── UID utilisateur
+           └── favoris
+                └── UID du profil favori
 
-        return;
+   Exemple :
 
-    }
+   users/ABC123/favoris/XYZ456
 
+   Le document contient notamment :
 
-    try {
+   {
+       uid: "XYZ456",
+       pseudo: "Michel",
+       photo: "...",
+       date: ...
+   }
 
-        const likesRef =
-            collection(
-                db,
-                "users",
-                pseudoRecherche,
-                "likes"
-            );
-
-
-        const snapshot =
-            await getDocs(
-                likesRef
-            );
-
-
-        const nombre =
-            snapshot.size;
-
-
-        /* ==============================================
-           COMPTEUR PUBLIC
-        ============================================== */
-
-        if (compteurLikesProfil) {
-
-            compteurLikesProfil.textContent =
-                "❤️ " +
-                nombre +
-                (
-                    nombre > 1
-                        ? " likes"
-                        : " like"
-                );
-
-        }
-
-
-        /* ==============================================
-           SI PERSONNE N'EST CONNECTE
-        ============================================== */
-
-        if (!utilisateurActuel) {
-
-            if (boutonLikeProfil) {
-
-                boutonLikeProfil.classList.remove(
-                    "liked"
-                );
-
-
-                boutonLikeProfil.textContent =
-                    "♡ J'aime";
-
-            }
-
-
-            /*
-             * MAIS LES LIKERS RESTENT PUBLICS.
-             */
-
-            await chargerLikersProfil();
-
-
-            return;
-
-        }
-
-
-        /* ==============================================
-           VERIFIER MON LIKE
-        ============================================== */
-
-        if (boutonLikeProfil) {
-
-            const monLikeRef =
-                doc(
-                    db,
-                    "users",
-                    pseudoRecherche,
-                    "likes",
-                    utilisateurActuel.uid
-                );
-
-
-            const monLikeSnap =
-                await getDoc(
-                    monLikeRef
-                );
-
-
-            if (
-                monLikeSnap.exists()
-            ) {
-
-                boutonLikeProfil.classList.add(
-                    "liked"
-                );
-
-
-                boutonLikeProfil.textContent =
-                    "♥ J'aime";
-
-            }
-
-            else {
-
-                boutonLikeProfil.classList.remove(
-                    "liked"
-                );
-
-
-                boutonLikeProfil.textContent =
-                    "♡ J'aime";
-
-            }
-
-        }
-
-
-        /* ==============================================
-           LIKERS
-        ============================================== */
-
-        await chargerLikersProfil();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erreur lors du chargement des likes du profil :",
-            error
-        );
-
-    }
-
-}
+*/
 
 
 /* =========================================================
-   CHARGER LES PERSONNES QUI ONT LIKE
-   PUBLIC
+   METTRE LE BOUTON FAVORI NON ACTIF
 ========================================================= */
 
-async function chargerLikersProfil() {
+function mettreBoutonFavoriNonActif(){
 
-    if (
-        !pseudoRecherche ||
-        !listeLikers
-    ) {
+    if(!boutonFavoriProfil){
 
         return;
 
     }
 
 
-    try {
-
-        const likesRef =
-            collection(
-                db,
-                "users",
-                pseudoRecherche,
-                "likes"
-            );
-
-
-        const likesSnapshot =
-            await getDocs(
-                likesRef
-            );
-
-
-        listeLikers.innerHTML =
-            "";
-
-
-        if (
-            likesSnapshot.empty
-        ) {
-
-            return;
-
-        }
-
-
-        for (
-            const likeDoc
-            of likesSnapshot.docs
-        ) {
-
-            const uid =
-                likeDoc.id;
-
-
-            try {
-
-                const utilisateurRef =
-                    doc(
-                        db,
-                        "users",
-                        uid
-                    );
-
-
-                const utilisateurSnap =
-                    await getDoc(
-                        utilisateurRef
-                    );
-
-
-                if (
-                    !utilisateurSnap.exists()
-                ) {
-
-                    continue;
-
-                }
-
-
-                const data =
-                    utilisateurSnap.data();
-
-
-                const liker =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                liker.className =
-                    "liker";
-
-
-                const image =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                image.src =
-                    data.photo ||
-                    "";
-
-
-                image.alt =
-                    data.pseudo ||
-                    "Utilisateur";
-
-
-                const nom =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                nom.textContent =
-                    data.pseudo ||
-                    "Utilisateur";
-
-
-                liker.appendChild(
-                    image
-                );
-
-
-                liker.appendChild(
-                    nom
-                );
-
-
-                liker.style.cursor =
-                    "pointer";
-
-
-                liker.addEventListener(
-                    "click",
-                    () => {
-
-                        if (
-                            data.pseudo
-                        ) {
-
-                            window.location.href =
-                                "profil.html?pseudo=" +
-                                encodeURIComponent(
-                                    data.pseudo
-                                );
-
-                        }
-
-                    }
-                );
-
-
-                listeLikers.appendChild(
-                    liker
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Impossible de charger le liker :",
-                    error
-                );
-
-            }
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erreur lors du chargement des likers :",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   GERER LIKE / UNLIKE
-========================================================= */
-
-async function gererLikeProfil() {
-
-    if (!utilisateurActuel) {
-
-        alert(
-            "Tu dois être connecté pour aimer un profil ❤️"
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !boutonLikeProfil ||
-        !pseudoRecherche
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        boutonLikeProfil.dataset.chargement ===
-        "true"
-    ) {
-
-        return;
-
-    }
-
-
-    boutonLikeProfil.dataset.chargement =
-        "true";
-
-
-    try {
-
-        const likeRef =
-            doc(
-                db,
-                "users",
-                pseudoRecherche,
-                "likes",
-                utilisateurActuel.uid
-            );
-
-
-        const likeSnap =
-            await getDoc(
-                likeRef
-            );
-
-
-        /* ==============================================
-           UNLIKE
-        ============================================== */
-
-        if (
-            likeSnap.exists()
-        ) {
-
-            await deleteDoc(
-                likeRef
-            );
-
-
-            boutonLikeProfil.classList.remove(
-                "liked"
-            );
-
-
-            boutonLikeProfil.textContent =
-                "♡ J'aime";
-
-        }
-
-
-        /* ==============================================
-           LIKE
-        ============================================== */
-
-        else {
-
-            await setDoc(
-                likeRef,
-                {
-
-                    uid:
-                        utilisateurActuel.uid,
-
-                    date:
-                        new Date()
-
-                }
-            );
-
-
-            boutonLikeProfil.classList.add(
-                "liked"
-            );
-
-
-            boutonLikeProfil.textContent =
-                "♥ J'aime";
-
-
-            animerBoutonLikeProfil();
-
-
-            lancerAnimationCoeursProfil();
-
-        }
-
-
-        await chargerLikesProfil();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erreur lors du like du profil :",
-            error
-        );
-
-
-        alert(
-            "Impossible de modifier le like."
-        );
-
-    }
-
-
-    boutonLikeProfil.dataset.chargement =
-        "false";
-
-}
-
-
-/* =========================================================
-   BOUTON LIKE
-========================================================= */
-
-if (
-    boutonLikeProfil
-) {
-
-    boutonLikeProfil.addEventListener(
-        "click",
-        (event) => {
-
-            event.stopPropagation();
-
-            gererLikeProfil();
-
-        }
+    boutonFavoriProfil.classList.remove(
+        "favoriActif"
     );
 
+
+    boutonFavoriProfil.textContent =
+        "☆";
+
+
+    boutonFavoriProfil.title =
+        "Ajouter aux favoris";
+
 }
 
 
 /* =========================================================
-   CHARGER L'ETAT DU FAVORI
+   METTRE LE BOUTON FAVORI ACTIF
 ========================================================= */
 
-async function chargerEtatFavori() {
+function mettreBoutonFavoriActif(){
 
-    if (
-        !boutonFavoriProfil
-    ) {
+    if(!boutonFavoriProfil){
+
+        return;
+
+    }
+
+
+    boutonFavoriProfil.classList.add(
+        "favoriActif"
+    );
+
+
+    boutonFavoriProfil.textContent =
+        "★";
+
+
+    boutonFavoriProfil.title =
+        "Retirer des favoris";
+
+}
+
+
+/* =========================================================
+   VERIFIER SI LE PROFIL EST EN FAVORI
+========================================================= */
+
+async function verifierFavoriProfil(){
+
+    if(
+        !boutonFavoriProfil ||
+        !profilActuelUid
+    ){
 
         return;
 
@@ -1919,34 +1410,34 @@ async function chargerEtatFavori() {
 
 
     /*
-     * Pas connecté :
-     * le bouton favori est caché.
-     */
+       Pas connecté :
+       le bouton reste vide.
+    */
 
-    if (
+    if(
         !utilisateurActuel
-    ) {
+    ){
+
+        mettreBoutonFavoriNonActif();
+
+        return;
+
+    }
+
+
+    /*
+       Le propriétaire de son propre profil
+       ne peut pas ajouter son propre profil
+       en favori.
+    */
+
+    if(
+        utilisateurActuel.uid ===
+        profilActuelUid
+    ){
 
         boutonFavoriProfil.style.display =
             "none";
-
-        return;
-
-    }
-
-
-    /*
-     * On ne peut pas ajouter son propre profil
-     * en favori.
-     */
-
-    const profilActuel =
-        pseudoRecherche;
-
-
-    if (
-        !profilActuel
-    ) {
 
         return;
 
@@ -1957,7 +1448,7 @@ async function chargerEtatFavori() {
         "inline-flex";
 
 
-    try {
+    try{
 
         const favoriRef =
             doc(
@@ -1965,7 +1456,7 @@ async function chargerEtatFavori() {
                 "users",
                 utilisateurActuel.uid,
                 "favoris",
-                profilActuel
+                profilActuelUid
             );
 
 
@@ -1975,43 +1466,23 @@ async function chargerEtatFavori() {
             );
 
 
-        if (
+        if(
             favoriSnap.exists()
-        ) {
+        ){
 
-            boutonFavoriProfil.textContent =
-                "⭐";
-
-
-            boutonFavoriProfil.classList.add(
-                "favoriActif"
-            );
-
-
-            boutonFavoriProfil.title =
-                "Retirer des favoris";
+            mettreBoutonFavoriActif();
 
         }
 
-        else {
+        else{
 
-            boutonFavoriProfil.textContent =
-                "☆";
-
-
-            boutonFavoriProfil.classList.remove(
-                "favoriActif"
-            );
-
-
-            boutonFavoriProfil.title =
-                "Ajouter aux favoris";
+            mettreBoutonFavoriNonActif();
 
         }
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(
             "Erreur lors de la vérification du favori :",
@@ -2027,14 +1498,18 @@ async function chargerEtatFavori() {
    AJOUTER / RETIRER UN FAVORI
 ========================================================= */
 
-async function gererFavoriProfil() {
+async function gererFavoriProfil(){
 
-    if (
+    /*
+       Il faut être connecté.
+    */
+
+    if(
         !utilisateurActuel
-    ) {
+    ){
 
         alert(
-            "Tu dois être connecté pour ajouter un profil en favori ⭐"
+            "Tu dois être connecté pour ajouter un profil à tes favoris ⭐"
         );
 
         return;
@@ -2042,31 +1517,59 @@ async function gererFavoriProfil() {
     }
 
 
-    if (
-        !pseudoRecherche ||
-        !boutonFavoriProfil
-    ) {
+    /*
+       Vérifications.
+    */
+
+    if(
+        !profilActuelUid ||
+        !profilActuel
+    ){
 
         return;
 
     }
 
 
-    if (
+    /*
+       Impossible de mettre son propre profil
+       en favori.
+    */
+
+    if(
+        utilisateurActuel.uid ===
+        profilActuelUid
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Empêcher les doubles clics.
+    */
+
+    if(
+        boutonFavoriProfil &&
         boutonFavoriProfil.dataset.chargement ===
         "true"
-    ) {
+    ){
 
         return;
 
     }
 
 
-    boutonFavoriProfil.dataset.chargement =
-        "true";
+    if(boutonFavoriProfil){
+
+        boutonFavoriProfil.dataset.chargement =
+            "true";
+
+    }
 
 
-    try {
+    try{
 
         const favoriRef =
             doc(
@@ -2074,7 +1577,7 @@ async function gererFavoriProfil() {
                 "users",
                 utilisateurActuel.uid,
                 "favoris",
-                pseudoRecherche
+                profilActuelUid
             );
 
 
@@ -2084,46 +1587,44 @@ async function gererFavoriProfil() {
             );
 
 
-        /* ==============================================
-           RETIRER
-        ============================================== */
+        /* ==========================================
+           RETIRER DES FAVORIS
+        ========================================== */
 
-        if (
+        if(
             favoriSnap.exists()
-        ) {
+        ){
 
             await deleteDoc(
                 favoriRef
             );
 
 
-            boutonFavoriProfil.textContent =
-                "☆";
-
-
-            boutonFavoriProfil.classList.remove(
-                "favoriActif"
-            );
-
-
-            boutonFavoriProfil.title =
-                "Ajouter aux favoris";
+            mettreBoutonFavoriNonActif();
 
         }
 
 
-        /* ==============================================
-           AJOUTER
-        ============================================== */
+        /* ==========================================
+           AJOUTER AUX FAVORIS
+        ========================================== */
 
-        else {
+        else{
 
             await setDoc(
                 favoriRef,
                 {
 
+                    uid:
+                        profilActuelUid,
+
                     pseudo:
-                        pseudoRecherche,
+                        profilActuel.pseudo ||
+                        "",
+
+                    photo:
+                        profilActuel.photo ||
+                        "",
 
                     date:
                         new Date()
@@ -2132,44 +1633,20 @@ async function gererFavoriProfil() {
             );
 
 
-            boutonFavoriProfil.textContent =
-                "⭐";
-
-
-            boutonFavoriProfil.classList.add(
-                "favoriActif"
-            );
-
-
-            boutonFavoriProfil.title =
-                "Retirer des favoris";
-
-
-            /*
-             * Petite animation
-             */
-
-            boutonFavoriProfil.classList.add(
-                "favoriClick"
-            );
-
-
-            setTimeout(
-                () => {
-
-                    boutonFavoriProfil.classList.remove(
-                        "favoriClick"
-                    );
-
-                },
-                300
-            );
+            mettreBoutonFavoriActif();
 
         }
 
+
+        /*
+           On recharge l'espace privé.
+        */
+
+        await chargerFavorisPrives();
+
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(
             "Erreur lors de la modification du favori :",
@@ -2178,14 +1655,18 @@ async function gererFavoriProfil() {
 
 
         alert(
-            "Impossible de modifier le favori."
+            "Impossible de modifier les favoris."
         );
 
     }
 
 
-    boutonFavoriProfil.dataset.chargement =
-        "false";
+    if(boutonFavoriProfil){
+
+        boutonFavoriProfil.dataset.chargement =
+            "false";
+
+    }
 
 }
 
@@ -2194,13 +1675,15 @@ async function gererFavoriProfil() {
    BOUTON FAVORI
 ========================================================= */
 
-if (
+if(
     boutonFavoriProfil
-) {
+){
 
     boutonFavoriProfil.addEventListener(
         "click",
-        (event) => {
+        (event)=>{
+
+            event.preventDefault();
 
             event.stopPropagation();
 
@@ -2213,15 +1696,48 @@ if (
 
 
 /* =========================================================
-   CHARGER MES FAVORIS
+   CACHER ESPACE FAVORIS
 ========================================================= */
 
-async function chargerFavoris() {
+function cacherFavorisPrives(){
 
-    if (
-        !sectionFavoris ||
-        !listeFavoris
-    ) {
+    if(!sectionFavoris){
+
+        return;
+
+    }
+
+
+    sectionFavoris.style.display =
+        "none";
+
+
+    if(listeFavoris){
+
+        listeFavoris.innerHTML =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARGER LES FAVORIS PRIVES
+========================================================= */
+
+async function chargerFavorisPrives(){
+
+    /*
+       L'espace favoris doit uniquement
+       être visible par son propriétaire.
+    */
+
+    if(
+        !utilisateurActuel
+    ){
+
+        cacherFavorisPrives();
 
         return;
 
@@ -2229,84 +1745,33 @@ async function chargerFavoris() {
 
 
     /*
-     * Les favoris sont privés.
-     *
-     * On ne les affiche que sur le profil
-     * de la personne connectée.
-     */
+       On vérifie que le profil actuellement
+       affiché est bien celui du compte connecté.
+    */
 
-    if (
-        !utilisateurActuel
-    ) {
+    if(
+        utilisateurActuel.uid !==
+        profilActuelUid
+    ){
 
-        sectionFavoris.style.display =
-            "none";
+        cacherFavorisPrives();
 
         return;
 
     }
 
 
-    try {
+    if(
+        !sectionFavoris ||
+        !listeFavoris
+    ){
 
-        /*
-         * On récupère le profil actuellement affiché
-         * pour savoir si c'est bien le profil du compte.
-         */
+        return;
 
-        const profilSnapshot =
-            await getDocs(
-                query(
-                    collection(
-                        db,
-                        "users"
-                    ),
-                    where(
-                        "pseudo",
-                        "==",
-                        pseudoRecherche
-                    )
-                )
-            );
+    }
 
 
-        if (
-            profilSnapshot.empty
-        ) {
-
-            sectionFavoris.style.display =
-                "none";
-
-            return;
-
-        }
-
-
-        const profilDoc =
-            profilSnapshot.docs[0];
-
-
-        /*
-         * Ce n'est PAS le profil de l'utilisateur connecté.
-         * On ne montre donc pas ses favoris.
-         */
-
-        if (
-            profilDoc.id !==
-            utilisateurActuel.uid
-        ) {
-
-            sectionFavoris.style.display =
-                "none";
-
-            return;
-
-        }
-
-
-        /* ==============================================
-           RECUPERATION FAVORIS
-        ============================================== */
+    try{
 
         const favorisRef =
             collection(
@@ -2327,13 +1792,13 @@ async function chargerFavoris() {
             "";
 
 
-        /* ==============================================
-           AUCUN FAVORI
-        ============================================== */
+        /*
+           Aucun favori.
+        */
 
-        if (
+        if(
             favorisSnapshot.empty
-        ) {
+        ){
 
             sectionFavoris.style.display =
                 "block";
@@ -2343,10 +1808,11 @@ async function chargerFavoris() {
 
                 <div style="
                     color:#aaa;
-                    padding:10px 0;
+                    padding:15px 0;
                 ">
 
-                    Aucun profil dans tes favoris pour le moment ⭐
+                    Tu n'as encore aucun profil
+                    en favoris ⭐
 
                 </div>
 
@@ -2358,52 +1824,47 @@ async function chargerFavoris() {
         }
 
 
-        /* ==============================================
-           AFFICHER LA SECTION
-        ============================================== */
-
         sectionFavoris.style.display =
             "block";
 
 
-        /* ==============================================
-           CHARGER CHAQUE FAVORI
-        ============================================== */
+        /*
+           Charger chaque profil.
+        */
 
-        for (
+        for(
             const favoriDoc
             of favorisSnapshot.docs
-        ) {
+        ){
 
-            const pseudoFavori =
+            const profilUid =
                 favoriDoc.id;
 
 
-            try {
+            try{
 
                 const profilRef =
-                    query(
-                        collection(
-                            db,
-                            "users"
-                        ),
-                        where(
-                            "pseudo",
-                            "==",
-                            pseudoFavori
-                        )
+                    doc(
+                        db,
+                        "users",
+                        profilUid
                     );
 
 
-                const profilSnapshotFavori =
-                    await getDocs(
+                const profilSnap =
+                    await getDoc(
                         profilRef
                     );
 
 
-                if (
-                    profilSnapshotFavori.empty
-                ) {
+                /*
+                   Si le profil n'existe plus,
+                   on passe au suivant.
+                */
+
+                if(
+                    !profilSnap.exists()
+                ){
 
                     continue;
 
@@ -2411,9 +1872,7 @@ async function chargerFavoris() {
 
 
                 const data =
-                    profilSnapshotFavori
-                        .docs[0]
-                        .data();
+                    profilSnap.data();
 
 
                 /* ======================================
@@ -2454,6 +1913,10 @@ async function chargerFavoris() {
                     "Profil";
 
 
+                image.className =
+                    "photoFavori";
+
+
                 /* ======================================
                    INFORMATIONS
                 ====================================== */
@@ -2475,12 +1938,12 @@ async function chargerFavoris() {
 
 
                 nom.className =
-                    "nomFavori";
+                    "pseudoFavori";
 
 
                 nom.textContent =
                     data.pseudo ||
-                    pseudoFavori;
+                    "Sans pseudo";
 
 
                 const description =
@@ -2508,6 +1971,28 @@ async function chargerFavoris() {
                 );
 
 
+                /* ======================================
+                   ETOILE
+                ====================================== */
+
+                const etoile =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                etoile.className =
+                    "etoileFavori";
+
+
+                etoile.textContent =
+                    "★";
+
+
+                /* ======================================
+                   CONSTRUCTION
+                ====================================== */
+
                 carte.appendChild(
                     image
                 );
@@ -2518,20 +2003,30 @@ async function chargerFavoris() {
                 );
 
 
+                carte.appendChild(
+                    etoile
+                );
+
+
                 /* ======================================
-                   CLIQUER SUR LE PROFIL
+                   OUVRIR LE PROFIL
                 ====================================== */
 
                 carte.addEventListener(
                     "click",
-                    () => {
+                    ()=>{
 
-                        window.location.href =
-                            "profil.html?pseudo=" +
-                            encodeURIComponent(
-                                data.pseudo ||
-                                pseudoFavori
-                            );
+                        if(
+                            data.pseudo
+                        ){
+
+                            window.location.href =
+                                "profil.html?pseudo=" +
+                                encodeURIComponent(
+                                    data.pseudo
+                                );
+
+                        }
 
                     }
                 );
@@ -2543,10 +2038,10 @@ async function chargerFavoris() {
 
             }
 
-            catch (error) {
+            catch(error){
 
                 console.error(
-                    "Erreur lors du chargement du favori :",
+                    "Impossible de charger le favori :",
                     error
                 );
 
@@ -2556,7 +2051,7 @@ async function chargerFavoris() {
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(
             "Erreur lors du chargement des favoris :",
@@ -2564,8 +2059,7 @@ async function chargerFavoris() {
         );
 
 
-        sectionFavoris.style.display =
-            "none";
+        cacherFavorisPrives();
 
     }
 
@@ -2576,7 +2070,7 @@ async function chargerFavoris() {
    ANIMATION DES COEURS
 ========================================================= */
 
-function lancerAnimationCoeursProfil() {
+function lancerAnimationCoeursProfil(){
 
     document.body.classList.remove(
         "animationAmour"
@@ -2595,11 +2089,11 @@ function lancerAnimationCoeursProfil() {
         35;
 
 
-    for (
+    for(
         let i = 0;
         i < nombreCoeurs;
         i++
-    ) {
+    ){
 
         const coeur =
             document.createElement(
@@ -2671,7 +2165,7 @@ function lancerAnimationCoeursProfil() {
 
 
         setTimeout(
-            () => {
+            ()=>{
 
                 coeur.remove();
 
@@ -2683,7 +2177,7 @@ function lancerAnimationCoeursProfil() {
 
 
     setTimeout(
-        () => {
+        ()=>{
 
             document.body.classList.remove(
                 "animationAmour"
@@ -2700,11 +2194,9 @@ function lancerAnimationCoeursProfil() {
    ANIMATION BOUTON LIKE
 ========================================================= */
 
-function animerBoutonLikeProfil() {
+function animerBoutonLikeProfil(){
 
-    if (
-        !boutonLikeProfil
-    ) {
+    if(!boutonLikeProfil){
 
         return;
 
@@ -2717,7 +2209,7 @@ function animerBoutonLikeProfil() {
 
 
     setTimeout(
-        () => {
+        ()=>{
 
             boutonLikeProfil.classList.remove(
                 "likeClick"
@@ -2725,6 +2217,506 @@ function animerBoutonLikeProfil() {
 
         },
         300
+    );
+
+}
+
+
+/* =========================================================
+   CHARGER LES PERSONNES QUI ONT LIKE
+========================================================= */
+
+async function chargerLikersProfil(){
+
+    if(
+        !pseudoRecherche ||
+        !listeLikers
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes"
+            );
+
+
+        const likesSnapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        listeLikers.innerHTML =
+            "";
+
+
+        if(
+            likesSnapshot.empty
+        ){
+
+            return;
+
+        }
+
+
+        for(
+            const likeDoc
+            of likesSnapshot.docs
+        ){
+
+            const uid =
+                likeDoc.id;
+
+
+            try{
+
+                const utilisateurRef =
+                    doc(
+                        db,
+                        "users",
+                        uid
+                    );
+
+
+                const utilisateurSnap =
+                    await getDoc(
+                        utilisateurRef
+                    );
+
+
+                if(
+                    !utilisateurSnap.exists()
+                ){
+
+                    continue;
+
+                }
+
+
+                const data =
+                    utilisateurSnap.data();
+
+
+                const liker =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                liker.className =
+                    "liker";
+
+
+                const image =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                image.src =
+                    data.photo ||
+                    "";
+
+
+                image.alt =
+                    data.pseudo ||
+                    "Utilisateur";
+
+
+                const nom =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                nom.textContent =
+                    data.pseudo ||
+                    "Utilisateur";
+
+
+                liker.appendChild(
+                    image
+                );
+
+
+                liker.appendChild(
+                    nom
+                );
+
+
+                liker.style.cursor =
+                    "pointer";
+
+
+                liker.addEventListener(
+                    "click",
+                    ()=>{
+
+                        if(
+                            data.pseudo
+                        ){
+
+                            window.location.href =
+                                "profil.html?pseudo=" +
+                                encodeURIComponent(
+                                    data.pseudo
+                                );
+
+                        }
+
+                    }
+                );
+
+
+                listeLikers.appendChild(
+                    liker
+                );
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Impossible de charger le liker :",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des likers :",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARGER LES LIKES
+========================================================= */
+
+async function chargerLikesProfil(){
+
+    if(
+        !pseudoRecherche
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        const nombre =
+            snapshot.size;
+
+
+        /* ==============================================
+           COMPTEUR
+        ============================================== */
+
+        if(compteurLikesProfil){
+
+            compteurLikesProfil.textContent =
+                "❤️ " +
+                nombre +
+                (
+                    nombre > 1
+                    ? " likes"
+                    : " like"
+                );
+
+        }
+
+
+        /* ==============================================
+           VERIFIER MON LIKE
+        ============================================== */
+
+        if(
+            boutonLikeProfil
+        ){
+
+            if(
+                utilisateurActuel
+            ){
+
+                const monLikeRef =
+                    doc(
+                        db,
+                        "users",
+                        pseudoRecherche,
+                        "likes",
+                        utilisateurActuel.uid
+                    );
+
+
+                const monLikeSnap =
+                    await getDoc(
+                        monLikeRef
+                    );
+
+
+                if(
+                    monLikeSnap.exists()
+                ){
+
+                    boutonLikeProfil.classList.add(
+                        "liked"
+                    );
+
+
+                    boutonLikeProfil.textContent =
+                        "♥ J'aime";
+
+                }
+
+                else{
+
+                    boutonLikeProfil.classList.remove(
+                        "liked"
+                    );
+
+
+                    boutonLikeProfil.textContent =
+                        "♡ J'aime";
+
+                }
+
+            }
+
+            else{
+
+                boutonLikeProfil.classList.remove(
+                    "liked"
+                );
+
+
+                boutonLikeProfil.textContent =
+                    "♡ J'aime";
+
+            }
+
+        }
+
+
+        /* ==============================================
+           CHARGER LES LIKERS
+        ============================================== */
+
+        await chargerLikersProfil();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des likes du profil :",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GERER LIKE / UNLIKE
+========================================================= */
+
+async function gererLikeProfil(){
+
+    if(
+        !utilisateurActuel
+    ){
+
+        alert(
+            "Tu dois être connecté pour aimer un profil ❤️"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !boutonLikeProfil ||
+        !pseudoRecherche
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        boutonLikeProfil.dataset.chargement ===
+        "true"
+    ){
+
+        return;
+
+    }
+
+
+    boutonLikeProfil.dataset.chargement =
+        "true";
+
+
+    try{
+
+        const likeRef =
+            doc(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes",
+                utilisateurActuel.uid
+            );
+
+
+        const likeSnap =
+            await getDoc(
+                likeRef
+            );
+
+
+        /* ==============================================
+           UNLIKE
+        ============================================== */
+
+        if(
+            likeSnap.exists()
+        ){
+
+            await deleteDoc(
+                likeRef
+            );
+
+
+            boutonLikeProfil.classList.remove(
+                "liked"
+            );
+
+
+            boutonLikeProfil.textContent =
+                "♡ J'aime";
+
+        }
+
+
+        /* ==============================================
+           LIKE
+        ============================================== */
+
+        else{
+
+            await setDoc(
+                likeRef,
+                {
+
+                    uid:
+                        utilisateurActuel.uid,
+
+                    date:
+                        new Date()
+
+                }
+            );
+
+
+            boutonLikeProfil.classList.add(
+                "liked"
+            );
+
+
+            boutonLikeProfil.textContent =
+                "♥ J'aime";
+
+
+            animerBoutonLikeProfil();
+
+
+            lancerAnimationCoeursProfil();
+
+        }
+
+
+        await chargerLikesProfil();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du like du profil :",
+            error
+        );
+
+
+        alert(
+            "Impossible de modifier le like."
+        );
+
+    }
+
+
+    boutonLikeProfil.dataset.chargement =
+        "false";
+
+}
+
+
+/* =========================================================
+   BOUTON LIKE
+========================================================= */
+
+if(
+    boutonLikeProfil
+){
+
+    boutonLikeProfil.addEventListener(
+        "click",
+        (event)=>{
+
+            event.stopPropagation();
+
+            gererLikeProfil();
+
+        }
     );
 
 }
@@ -2746,11 +2738,11 @@ const retourAccueil =
     );
 
 
-if (logoAccueil) {
+if(logoAccueil){
 
     logoAccueil.addEventListener(
         "click",
-        () => {
+        ()=>{
 
             window.location.href =
                 "index.html";
@@ -2761,11 +2753,11 @@ if (logoAccueil) {
 }
 
 
-if (retourAccueil) {
+if(retourAccueil){
 
     retourAccueil.addEventListener(
         "click",
-        () => {
+        ()=>{
 
             window.location.href =
                 "index.html";
@@ -2779,13 +2771,5 @@ if (retourAccueil) {
 /* =========================================================
    LANCEMENT
 ========================================================= */
-
-/*
- * Le profil doit être chargé immédiatement,
- * même lorsqu'on est déconnecté.
- *
- * C'est important pour que les likes publics
- * puissent être affichés sans connexion.
- */
 
 chargerProfil();
