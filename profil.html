@@ -11,13 +11,22 @@
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
-body{
 
-    margin:0;
+/* =========================================================
+   BODY
+========================================================= */
+
+body{
 
     font-family:Arial,sans-serif;
 
@@ -25,14 +34,22 @@ body{
 
     color:white;
 
+    min-height:100vh;
+
 }
 
 
-/* =========================
+/* =========================================================
    BARRE DU HAUT
-========================= */
+========================================================= */
 
 header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
 
     height:60px;
 
@@ -48,18 +65,12 @@ header{
 
     border-bottom:1px solid #2b2b2b;
 
-    position:sticky;
-
-    top:0;
-
-    z-index:1000;
-
 }
 
 
-/* =========================
+/* =========================================================
    LOGO
-========================= */
+========================================================= */
 
 .logo{
 
@@ -73,14 +84,26 @@ header{
 
     height:42px;
 
+    width:auto;
+
     cursor:pointer;
+
+    border-radius:8px;
+
+    transition:.2s;
+
+}
+
+.logo img:hover{
+
+    transform:scale(1.05);
 
 }
 
 
-/* =========================
+/* =========================================================
    RECHERCHE
-========================= */
+========================================================= */
 
 .search{
 
@@ -90,15 +113,17 @@ header{
 
     justify-content:center;
 
+    margin:0 25px;
+
 }
 
 .search input{
 
     width:520px;
 
-    max-width:90%;
+    max-width:100%;
 
-    padding:11px 18px;
+    padding:11px 20px;
 
     border-radius:30px;
 
@@ -112,18 +137,28 @@ header{
 
     font-size:15px;
 
+    transition:.2s;
+
 }
 
 .search input:focus{
 
     border-color:#3ea6ff;
 
+    box-shadow:0 0 10px rgba(62,166,255,.2);
+
+}
+
+.search input::placeholder{
+
+    color:#888;
+
 }
 
 
-/* =========================
+/* =========================================================
    COMPTE
-========================= */
+========================================================= */
 
 .account{
 
@@ -136,7 +171,9 @@ header{
 }
 
 
-/* CONNEXION */
+/* =========================================================
+   BOUTON CONNEXION
+========================================================= */
 
 #loginBtn{
 
@@ -150,14 +187,26 @@ header{
 
     padding:10px 18px;
 
+    font-size:15px;
+
     cursor:pointer;
 
-    font-size:15px;
+    transition:.2s;
+
+}
+
+#loginBtn:hover{
+
+    background:#61b8ff;
+
+    transform:translateY(-1px);
 
 }
 
 
-/* PROFIL */
+/* =========================================================
+   PROFIL COMPTE
+========================================================= */
 
 .profile{
 
@@ -166,6 +215,11 @@ header{
     position:relative;
 
 }
+
+
+/* =========================================================
+   AVATAR COMPTE
+========================================================= */
 
 #avatar{
 
@@ -185,12 +239,24 @@ header{
 
         0 0 7px white,
 
-        0 0 15px rgba(255,255,255,.7);
+        0 0 15px rgba(255,255,255,.7),
+
+        0 0 25px rgba(255,255,255,.25);
+
+    transition:.2s;
+
+}
+
+#avatar:hover{
+
+    transform:scale(1.06);
 
 }
 
 
-/* MENU */
+/* =========================================================
+   MENU COMPTE
+========================================================= */
 
 .menu{
 
@@ -206,20 +272,24 @@ header{
 
     background:#242424;
 
-    border-radius:12px;
+    border:1px solid #383838;
+
+    border-radius:14px;
 
     overflow:hidden;
 
-    box-shadow:0 0 20px rgba(0,0,0,.6);
+    box-shadow:
+
+        0 10px 35px rgba(0,0,0,.6);
 
 }
 
 .menu a,
 .menu button{
 
-    display:block;
-
     width:100%;
+
+    display:block;
 
     padding:14px;
 
@@ -233,9 +303,11 @@ header{
 
     text-decoration:none;
 
+    font-size:15px;
+
     cursor:pointer;
 
-    font-size:15px;
+    transition:.15s;
 
 }
 
@@ -247,109 +319,158 @@ header{
 }
 
 
-/* =========================
+/* =========================================================
    BANNIERE
-========================= */
+========================================================= */
 
 .banner{
 
-    height:280px;
+    height:300px;
 
     background:
 
         linear-gradient(
 
-            to bottom,
+            135deg,
 
-            #3a3a3a,
+            #353535,
 
-            #292929
+            #202020
 
         );
 
+    position:relative;
+
+    overflow:hidden;
+
 }
 
 
-/* =========================
-   CONTENU
-========================= */
+/* effet lumineux */
+
+.banner::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+
+    height:500px;
+
+    border-radius:50%;
+
+    background:rgba(62,166,255,.08);
+
+    top:-250px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    filter:blur(50px);
+
+}
+
+
+/* =========================================================
+   CONTENEUR PRINCIPAL
+========================================================= */
 
 main{
 
-    max-width:1100px;
+    max-width:1150px;
 
     margin:auto;
 
-    padding-bottom:60px;
+    padding-bottom:70px;
 
 }
 
 
-/* =========================
-   ENTETE PROFIL
-========================= */
+/* =========================================================
+   EN-TETE DU PROFIL
+========================================================= */
 
 .profilHeader{
 
     position:relative;
 
-    padding:0 40px;
+    padding:0 45px;
 
 }
 
 
+/* =========================================================
+   PHOTO DE PROFIL
+========================================================= */
+
 .photo{
 
-    width:180px;
+    width:185px;
 
-    height:180px;
-
-    border-radius:50%;
+    height:185px;
 
     object-fit:cover;
 
     display:block;
 
-    margin-top:-90px;
+    margin-top:-92px;
+
+    border-radius:50%;
 
     border:6px solid #1f1f1f;
 
+    background:#222;
+
     box-shadow:
 
-        0 0 10px white,
+        0 0 8px white,
 
-        0 0 25px rgba(255,255,255,.8),
+        0 0 18px white,
 
-        0 0 45px rgba(255,255,255,.35);
+        0 0 35px rgba(255,255,255,.8),
+
+        0 0 60px rgba(255,255,255,.25);
+
+    position:relative;
+
+    z-index:2;
 
 }
 
 
-/* =========================
-   INFOS
-========================= */
+/* =========================================================
+   INFOS PRINCIPALES
+========================================================= */
 
 .infos{
 
-    padding:25px 40px;
+    padding:25px 45px;
 
 }
 
 
-/* PSEUDO */
+/* =========================================================
+   PSEUDO
+========================================================= */
 
 #pseudo{
 
-    font-size:38px;
+    font-size:40px;
 
     font-weight:bold;
+
+    line-height:1.2;
 
     margin-top:5px;
 
 }
 
 
-/* DESCRIPTION COURTE */
+/* =========================================================
+   DESCRIPTION COURTE
+========================================================= */
 
 #descriptionCourte{
 
@@ -359,55 +480,72 @@ main{
 
     margin-top:10px;
 
+    line-height:1.5;
+
 }
 
 
-/* =========================
+/* =========================================================
    SECTIONS
-========================= */
+========================================================= */
 
 .section{
 
-    margin-top:35px;
+    margin-top:30px;
 
     padding:25px;
 
     background:#292929;
 
-    border-radius:16px;
+    border:1px solid #363636;
 
-    border:1px solid #333;
+    border-radius:18px;
+
+    box-shadow:
+
+        0 8px 25px rgba(0,0,0,.15);
+
+    transition:.2s;
 
 }
 
+.section:hover{
+
+    border-color:#444;
+
+    transform:translateY(-2px);
+
+}
 
 .section h2{
 
-    margin-top:0;
+    margin:0 0 20px 0;
 
-    margin-bottom:20px;
+    font-size:22px;
 
 }
 
 
-/* =========================
-   DESCRIPTION
-========================= */
+/* =========================================================
+   DESCRIPTION LONGUE
+========================================================= */
 
 #descriptionLongue{
 
     color:#ddd;
 
-    line-height:1.6;
+    line-height:1.7;
+
+    font-size:16px;
 
     white-space:pre-wrap;
 
 }
 
 
-/* =========================
+/* =========================================================
    CATEGORIES
-========================= */
+========================================================= */
 
 #categories{
 
@@ -415,22 +553,28 @@ main{
 
     flex-wrap:wrap;
 
-    gap:8px;
+    gap:9px;
 
 }
 
 
+/* =========================================================
+   TAG
+========================================================= */
+
 .tag{
 
-    display:inline-block;
+    display:inline-flex;
 
-    padding:8px 14px;
+    align-items:center;
+
+    padding:9px 15px;
 
     background:#3ea6ff;
 
     color:white;
 
-    border-radius:20px;
+    border-radius:25px;
 
     font-size:14px;
 
@@ -438,14 +582,26 @@ main{
 
     box-shadow:
 
-        0 0 7px rgba(62,166,255,.3);
+        0 0 8px rgba(62,166,255,.25);
+
+    transition:.2s;
+
+}
+
+.tag:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+        0 0 14px rgba(62,166,255,.45);
 
 }
 
 
-/* =========================
+/* =========================================================
    VIDEO
-========================= */
+========================================================= */
 
 #videoContainer{
 
@@ -453,10 +609,15 @@ main{
 
     overflow:hidden;
 
-    border-radius:14px;
+    border-radius:15px;
+
+    background:#111;
+
+    box-shadow:
+
+        0 8px 25px rgba(0,0,0,.35);
 
 }
-
 
 #videoContainer iframe{
 
@@ -471,9 +632,9 @@ main{
 }
 
 
-/* =========================
+/* =========================================================
    RESEAUX
-========================= */
+========================================================= */
 
 #reseaux{
 
@@ -488,20 +649,35 @@ main{
 
 .reseau{
 
-    padding:14px;
+    padding:15px 17px;
 
     background:#202020;
 
-    border-radius:10px;
+    border:1px solid #353535;
 
-    border:1px solid #333;
+    border-radius:12px;
+
+    transition:.2s;
+
+}
+
+
+.reseau:hover{
+
+    background:#252525;
+
+    border-color:#444;
+
+    transform:translateX(3px);
 
 }
 
 
 .reseau strong{
 
-    color:#fff;
+    color:white;
+
+    margin-right:5px;
 
 }
 
@@ -524,21 +700,21 @@ main{
 }
 
 
-/* =========================
+/* =========================================================
    BOUTON RETOUR
-========================= */
+========================================================= */
 
 #retourAccueil{
 
-    margin-top:25px;
+    margin-top:30px;
 
-    padding:12px 20px;
+    padding:12px 22px;
 
     background:#3ea6ff;
 
     border:none;
 
-    border-radius:10px;
+    border-radius:12px;
 
     color:white;
 
@@ -546,39 +722,110 @@ main{
 
     font-size:15px;
 
-}
+    font-weight:bold;
 
+    transition:.2s;
+
+}
 
 #retourAccueil:hover{
 
     background:#61b8ff;
 
+    transform:translateY(-2px);
+
+    box-shadow:
+
+        0 5px 15px rgba(62,166,255,.25);
+
 }
 
 
-/* =========================
+/* =========================================================
+   CHARGEMENT
+========================================================= */
+
+#pseudo:empty::after{
+
+    content:"Chargement...";
+
+    color:#888;
+
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media(max-width:700px){
 
     header{
 
-        padding:0 10px;
+        height:auto;
+
+        min-height:60px;
+
+        padding:8px 10px;
+
+        gap:8px;
+
+    }
+
+
+    .logo img{
+
+        height:38px;
+
+    }
+
+
+    .search{
+
+        margin:0 5px;
 
     }
 
 
     .search input{
 
-        width:250px;
+        width:100%;
+
+        padding:10px 14px;
+
+        font-size:14px;
+
+    }
+
+
+    #loginBtn{
+
+        padding:9px 12px;
+
+        font-size:13px;
+
+    }
+
+
+    #avatar{
+
+        width:38px;
+
+        height:38px;
 
     }
 
 
     .banner{
 
-        height:180px;
+        height:190px;
+
+    }
+
+
+    main{
+
+        width:100%;
 
     }
 
@@ -592,11 +839,13 @@ main{
 
     .photo{
 
-        width:130px;
+        width:135px;
 
-        height:130px;
+        height:135px;
 
-        margin-top:-65px;
+        margin-top:-67px;
+
+        border-width:5px;
 
     }
 
@@ -615,9 +864,81 @@ main{
     }
 
 
+    #descriptionCourte{
+
+        font-size:15px;
+
+    }
+
+
+    .section{
+
+        padding:20px;
+
+        border-radius:14px;
+
+    }
+
+
+    .section h2{
+
+        font-size:20px;
+
+    }
+
+
     #videoContainer iframe{
 
-        height:300px;
+        height:280px;
+
+    }
+
+
+    .menu{
+
+        right:-5px;
+
+        width:210px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PETITS TELEPHONES
+========================================================= */
+
+@media(max-width:450px){
+
+    .search input{
+
+        width:150px;
+
+    }
+
+
+    #pseudo{
+
+        font-size:27px;
+
+    }
+
+
+    .photo{
+
+        width:120px;
+
+        height:120px;
+
+        margin-top:-60px;
+
+    }
+
+
+    #videoContainer iframe{
+
+        height:220px;
 
     }
 
@@ -631,9 +952,9 @@ main{
 <body>
 
 
-<!-- =========================
+<!-- =======================================================
      BARRE DU HAUT
-========================= -->
+======================================================= -->
 
 <header>
 
@@ -715,16 +1036,16 @@ main{
 </header>
 
 
-<!-- =========================
+<!-- =======================================================
      BANNIERE
-========================= -->
+======================================================= -->
 
 <div class="banner"></div>
 
 
-<!-- =========================
+<!-- =======================================================
      PROFIL
-========================= -->
+======================================================= -->
 
 <main>
 
@@ -757,9 +1078,9 @@ main{
         </div>
 
 
-        <!-- =====================
+        <!-- =================================================
              A PROPOS
-        ====================== -->
+        ================================================== -->
 
         <div class="section">
 
@@ -779,9 +1100,9 @@ main{
         </div>
 
 
-        <!-- =====================
+        <!-- =================================================
              VIDEO
-        ====================== -->
+        ================================================== -->
 
         <div
             id="sectionVideo"
@@ -800,9 +1121,9 @@ main{
         </div>
 
 
-        <!-- =====================
+        <!-- =================================================
              CATEGORIES
-        ====================== -->
+        ================================================== -->
 
         <div class="section">
 
@@ -818,9 +1139,9 @@ main{
         </div>
 
 
-        <!-- =====================
+        <!-- =================================================
              RESEAUX
-        ====================== -->
+        ================================================== -->
 
         <div class="section">
 
@@ -836,6 +1157,10 @@ main{
         </div>
 
 
+        <!-- =================================================
+             RETOUR
+        ================================================== -->
+
         <button id="retourAccueil">
 
             ← Retour à l'accueil
@@ -848,10 +1173,13 @@ main{
 </main>
 
 
+<!-- =======================================================
+     JAVASCRIPT
+======================================================= -->
+
 <script
     type="module"
     src="profil.js">
-	
 </script>
 
 
