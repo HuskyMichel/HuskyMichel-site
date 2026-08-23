@@ -1028,3 +1028,745 @@ if(retourAccueil){
     });
 
 }
+
+/* =========================================================
+   LIKE DU PROFIL
+========================================================= */
+
+const boutonLikeProfil =
+    document.getElementById("boutonLikeProfil");
+
+const compteurLikesProfil =
+    document.getElementById("compteurLikesProfil");
+
+const listeLikers =
+    document.getElementById("listeLikers");
+
+
+/* =========================================================
+   ANIMATION DES COEURS SUR TOUTE LA PAGE
+========================================================= */
+
+function lancerAnimationCoeursProfil(){
+
+    /* =====================================================
+       EFFET ROSE / ROUGE SUR LA PAGE
+    ===================================================== */
+
+    document.body.classList.remove(
+        "animationAmour"
+    );
+
+
+    /* Force le navigateur à relancer l'animation */
+
+    void document.body.offsetWidth;
+
+
+    document.body.classList.add(
+        "animationAmour"
+    );
+
+
+    /* =====================================================
+       NOMBRE DE COEURS
+    ===================================================== */
+
+    const nombreCoeurs = 35;
+
+
+    /* =====================================================
+       CREATION DES COEURS
+    ===================================================== */
+
+    for(
+        let i = 0;
+        i < nombreCoeurs;
+        i++
+    ){
+
+        const coeur =
+            document.createElement("div");
+
+
+        coeur.className =
+            "coeurProfilAnimation";
+
+
+        coeur.textContent =
+            "❤️";
+
+
+        /* =================================================
+           POSITION DE DEPART
+        ================================================= */
+
+        coeur.style.left =
+            (
+                Math.random() * 100
+            ) +
+            "vw";
+
+
+        coeur.style.top =
+            (
+                45 +
+                Math.random() * 55
+            ) +
+            "vh";
+
+
+        /* =================================================
+           TAILLE
+        ================================================= */
+
+        coeur.style.fontSize =
+            (
+                25 +
+                Math.random() * 40
+            ) +
+            "px";
+
+
+        /* =================================================
+           DEPLACEMENT
+        ================================================= */
+
+        coeur.style.setProperty(
+            "--deplacement",
+            (
+                -150 +
+                Math.random() * 300
+            ) +
+            "px"
+        );
+
+
+        /* =================================================
+           ROTATION
+        ================================================= */
+
+        coeur.style.setProperty(
+            "--rotation",
+            (
+                -35 +
+                Math.random() * 70
+            ) +
+            "deg"
+        );
+
+
+        /* =================================================
+           DELAI
+        ================================================= */
+
+        coeur.style.animationDelay =
+            (
+                Math.random() * .5
+            ) +
+            "s";
+
+
+        document.body.appendChild(
+            coeur
+        );
+
+
+        /* =================================================
+           SUPPRESSION
+        ================================================= */
+
+        setTimeout(
+            ()=>{
+
+                coeur.remove();
+
+            },
+            2200
+        );
+
+    }
+
+
+    /* =====================================================
+       RETIRER L'EFFET DE LA PAGE
+    ===================================================== */
+
+    setTimeout(
+        ()=>{
+
+            document.body.classList.remove(
+                "animationAmour"
+            );
+
+        },
+        1200
+    );
+
+}
+
+
+/* =========================================================
+   ANIMATION DU BOUTON
+========================================================= */
+
+function animerBoutonLikeProfil(){
+
+    if(!boutonLikeProfil){
+
+        return;
+
+    }
+
+
+    boutonLikeProfil.classList.add(
+        "likeClick"
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            boutonLikeProfil.classList.remove(
+                "likeClick"
+            );
+
+        },
+        300
+    );
+
+}
+
+
+/* =========================================================
+   AFFICHER LES PERSONNES QUI ONT LIKÉ
+========================================================= */
+
+async function chargerLikersProfil(){
+
+    if(
+        !pseudoRecherche ||
+        !listeLikers
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        /* =================================================
+           RECUPERER LES LIKES
+        ================================================= */
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes"
+            );
+
+
+        const likesSnapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        listeLikers.innerHTML =
+            "";
+
+
+        /* =================================================
+           AUCUN LIKE
+        ================================================= */
+
+        if(
+            likesSnapshot.empty
+        ){
+
+            return;
+
+        }
+
+
+        /* =================================================
+           CHARGER LES PROFILS DES LIKERS
+        ================================================= */
+
+        for(
+            const likeDoc of likesSnapshot.docs
+        ){
+
+            const uid =
+                likeDoc.id;
+
+
+            try{
+
+                const utilisateurRef =
+                    doc(
+                        db,
+                        "users",
+                        uid
+                    );
+
+
+                const utilisateurSnap =
+                    await getDoc(
+                        utilisateurRef
+                    );
+
+
+                /*
+                   Si le document users/{uid}
+                   existe, on utilise son profil.
+                */
+
+                if(
+                    utilisateurSnap.exists()
+                ){
+
+                    const data =
+                        utilisateurSnap.data();
+
+
+                    const liker =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    liker.className =
+                        "liker";
+
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        data.photo ||
+                        "";
+
+
+                    image.alt =
+                        data.pseudo ||
+                        "Utilisateur";
+
+
+                    const nom =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    nom.textContent =
+                        data.pseudo ||
+                        "Utilisateur";
+
+
+                    liker.appendChild(
+                        image
+                    );
+
+
+                    liker.appendChild(
+                        nom
+                    );
+
+
+                    /*
+                       Cliquer sur le liker
+                       ouvre son profil.
+                    */
+
+                    liker.addEventListener(
+                        "click",
+                        ()=>{
+
+                            if(
+                                data.pseudo
+                            ){
+
+                                window.location.href =
+                                    "profil.html?pseudo=" +
+                                    encodeURIComponent(
+                                        data.pseudo
+                                    );
+
+                            }
+
+                        }
+                    );
+
+
+                    liker.style.cursor =
+                        "pointer";
+
+
+                    listeLikers.appendChild(
+                        liker
+                    );
+
+                }
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Impossible de charger le liker :",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des likers :",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARGER LES LIKES DU PROFIL
+========================================================= */
+
+async function chargerLikesProfil(){
+
+    if(
+        !pseudoRecherche ||
+        !compteurLikesProfil
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        /* =================================================
+           COLLECTION DES LIKES
+        ================================================= */
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        const nombre =
+            snapshot.size;
+
+
+        /* =================================================
+           COMPTEUR
+        ================================================= */
+
+        compteurLikesProfil.textContent =
+            "❤️ " +
+            nombre +
+            (
+                nombre > 1
+                ? " likes"
+                : " like"
+            );
+
+
+        /* =================================================
+           VERIFIER MON LIKE
+        ================================================= */
+
+        if(
+            utilisateurActuel &&
+            boutonLikeProfil
+        ){
+
+            const monLikeRef =
+                doc(
+                    db,
+                    "users",
+                    pseudoRecherche,
+                    "likes",
+                    utilisateurActuel.uid
+                );
+
+
+            const monLikeSnap =
+                await getDoc(
+                    monLikeRef
+                );
+
+
+            if(
+                monLikeSnap.exists()
+            ){
+
+                boutonLikeProfil.classList.add(
+                    "liked"
+                );
+
+
+                boutonLikeProfil.textContent =
+                    "♥ J'aime";
+
+            }
+
+            else{
+
+                boutonLikeProfil.classList.remove(
+                    "liked"
+                );
+
+
+                boutonLikeProfil.textContent =
+                    "♡ J'aime";
+
+            }
+
+        }
+
+
+        /* =================================================
+           CHARGER LES PERSONNES
+        ================================================= */
+
+        await chargerLikersProfil();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des likes du profil :",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LIKER / UNLIKER LE PROFIL
+========================================================= */
+
+async function gererLikeProfil(){
+
+    /* =====================================================
+       CONNEXION OBLIGATOIRE
+    ===================================================== */
+
+    if(!utilisateurActuel){
+
+        alert(
+            "Tu dois être connecté pour aimer un profil ❤️"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       VERIFICATION
+    ===================================================== */
+
+    if(
+        !boutonLikeProfil ||
+        !pseudoRecherche
+    ){
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       EVITER LES CLICS RAPIDES
+    ===================================================== */
+
+    if(
+        boutonLikeProfil.dataset.chargement ===
+        "true"
+    ){
+
+        return;
+
+    }
+
+
+    boutonLikeProfil.dataset.chargement =
+        "true";
+
+
+    try{
+
+        /* =================================================
+           REFERENCE DU LIKE
+        ================================================= */
+
+        const likeRef =
+            doc(
+                db,
+                "users",
+                pseudoRecherche,
+                "likes",
+                utilisateurActuel.uid
+            );
+
+
+        const likeSnap =
+            await getDoc(
+                likeRef
+            );
+
+
+        /* =================================================
+           RETIRER LE LIKE
+        ================================================= */
+
+        if(
+            likeSnap.exists()
+        ){
+
+            await deleteDoc(
+                likeRef
+            );
+
+
+            boutonLikeProfil.classList.remove(
+                "liked"
+            );
+
+
+            boutonLikeProfil.textContent =
+                "♡ J'aime";
+
+
+            /*
+               Recharge le compteur
+               et les personnes.
+            */
+
+            await chargerLikesProfil();
+
+        }
+
+
+        /* =================================================
+           AJOUTER LE LIKE
+        ================================================= */
+
+        else{
+
+            await setDoc(
+                likeRef,
+                {
+
+                    uid:
+                        utilisateurActuel.uid,
+
+                    date:
+                        new Date()
+
+                }
+            );
+
+
+            boutonLikeProfil.classList.add(
+                "liked"
+            );
+
+
+            boutonLikeProfil.textContent =
+                "♥ J'aime";
+
+
+            /* =================================================
+               ANIMATION BOUTON
+            ================================================= */
+
+            animerBoutonLikeProfil();
+
+
+            /* =================================================
+               GROSSE ANIMATION SUR LA PAGE
+            ================================================= */
+
+            lancerAnimationCoeursProfil();
+
+
+            /*
+               Recharge compteur + likers.
+            */
+
+            await chargerLikesProfil();
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du like du profil :",
+            error
+        );
+
+
+        alert(
+            "Impossible de modifier le like."
+        );
+
+    }
+
+
+    boutonLikeProfil.dataset.chargement =
+        "false";
+
+}
+
+
+/* =========================================================
+   BOUTON LIKE
+========================================================= */
+
+if(boutonLikeProfil){
+
+    boutonLikeProfil.addEventListener(
+        "click",
+        (event)=>{
+
+            event.stopPropagation();
+
+            gererLikeProfil();
+
+        }
+    );
+
+}
