@@ -40,7 +40,7 @@ const listeProfils =
     document.getElementById("listeProfils");
 
 const recherche =
-    document.querySelector(".search input");
+    document.getElementById("rechercheProfil");
 
 const resultatsRecherche =
     document.getElementById("resultatsRecherche");
@@ -66,359 +66,16 @@ provider.setCustomParameters({
 
 
 /* =========================================================
-   STYLE DES LIKES
-========================================================= */
-
-const styleLikes =
-    document.createElement("style");
-
-styleLikes.textContent = `
-
-/* =====================================================
-   BOUTON LIKE
-===================================================== */
-
-.boutonLike{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:8px;
-
-    min-width:145px;
-
-    padding:12px 18px;
-
-    margin-top:15px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#333;
-
-    color:white;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:
-
-        transform .2s ease,
-
-        background .25s ease,
-
-        box-shadow .25s ease;
-
-    overflow:hidden;
-
-}
-
-
-.boutonLike:hover{
-
-    transform:scale(1.06);
-
-    background:#444;
-
-}
-
-
-.boutonLike:active{
-
-    transform:scale(.94);
-
-}
-
-
-/* =====================================================
-   LIKE ACTIF
-===================================================== */
-
-.boutonLike.liked{
-
-    background:linear-gradient(
-        135deg,
-        #ff4f81,
-        #ff1744
-    );
-
-    box-shadow:
-
-        0 0 10px rgba(255,23,68,.5),
-
-        0 0 25px rgba(255,79,129,.35);
-
-}
-
-
-.boutonLike.liked:hover{
-
-    background:linear-gradient(
-        135deg,
-        #ff638f,
-        #ff2850
-    );
-
-}
-
-
-/* =====================================================
-   COEUR PRINCIPAL
-===================================================== */
-
-.coeurLike{
-
-    font-size:25px;
-
-    line-height:1;
-
-    transition:
-
-        transform .2s ease;
-
-}
-
-
-.boutonLike:hover .coeurLike{
-
-    transform:scale(1.2);
-
-}
-
-
-/* =====================================================
-   COMPTEUR
-===================================================== */
-
-.nombreLikes{
-
-    font-size:15px;
-
-}
-
-
-/* =====================================================
-   CONTENEUR DES COEURS
-===================================================== */
-
-.coeursLike{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-    overflow:hidden;
-
-    z-index:20;
-
-}
-
-
-/* =====================================================
-   PETITS COEURS
-===================================================== */
-
-.coeurAnimation{
-
-    position:absolute;
-
-    bottom:5px;
-
-    left:50%;
-
-    font-size:25px;
-
-    opacity:0;
-
-    animation:
-
-        coeurMonte 1.7s ease-out forwards;
-
-    filter:
-
-        drop-shadow(
-            0 0 5px rgba(255,80,130,.5)
-        );
-
-}
-
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
-@keyframes coeurMonte{
-
-    0%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                0,
-                10px
-            )
-            scale(.4)
-            rotate(0deg);
-
-    }
-
-    15%{
-
-        opacity:1;
-
-    }
-
-    50%{
-
-        opacity:1;
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                var(--deplacementX),
-                -150px
-            )
-            scale(1.2)
-            rotate(var(--rotation));
-
-    }
-
-}
-
-
-/* =====================================================
-   ANIMATION DU BOUTON
-===================================================== */
-
-.boutonLike.likeAnimation{
-
-    animation:
-
-        boutonLike .45s ease;
-
-}
-
-
-@keyframes boutonLike{
-
-    0%{
-
-        transform:scale(1);
-
-    }
-
-    35%{
-
-        transform:scale(1.18);
-
-    }
-
-    65%{
-
-        transform:scale(.92);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
-}
-
-
-/* =====================================================
-   CARTE
-===================================================== */
-
-.carteProfil{
-
-    position:relative;
-
-}
-
-
-/* =====================================================
-   LIKE SUR CARTE
-===================================================== */
-
-.carteLikes{
-
-    margin-top:12px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width:600px){
-
-    .boutonLike{
-
-        min-width:130px;
-
-        padding:11px 15px;
-
-        font-size:15px;
-
-    }
-
-    .coeurLike{
-
-        font-size:23px;
-
-    }
-
-}
-
-`;
-
-document.head.appendChild(styleLikes);
-
-
-/* =========================================================
    MENU DU COMPTE
 ========================================================= */
 
-if(avatar){
+if(avatar && menu){
 
     avatar.addEventListener(
         "click",
         (event)=>{
 
             event.stopPropagation();
-
-            if(!menu){
-
-                return;
-
-            }
 
             menu.style.display =
                 menu.style.display === "block"
@@ -442,8 +99,7 @@ document.addEventListener(
 
             if(menu){
 
-                menu.style.display =
-                    "none";
+                menu.style.display = "none";
 
             }
 
@@ -519,429 +175,6 @@ if(logout){
 
 
 /* =========================================================
-   CREER LES COEURS
-========================================================= */
-
-function lancerAnimationCoeurs(
-    conteneur,
-    nombre = 25
-){
-
-    if(!conteneur){
-
-        return;
-
-    }
-
-
-    const coeurs = [
-        "❤️",
-        "🩷",
-        "💕",
-        "💗",
-        "💖",
-        "💓"
-    ];
-
-
-    for(
-        let i = 0;
-        i < nombre;
-        i++
-    ){
-
-        const coeur =
-            document.createElement("span");
-
-
-        coeur.className =
-            "coeurAnimation";
-
-
-        coeur.textContent =
-            coeurs[
-                Math.floor(
-                    Math.random() *
-                    coeurs.length
-                )
-            ];
-
-
-        const position =
-            Math.random() * 100;
-
-
-        const deplacement =
-            (
-                Math.random() * 180
-                - 90
-            ) + "px";
-
-
-        const rotation =
-            (
-                Math.random() * 90
-                - 45
-            ) + "deg";
-
-
-        const taille =
-            18 +
-            Math.random() * 20;
-
-
-        const delai =
-            Math.random() * .6;
-
-
-        coeur.style.left =
-            position + "%";
-
-
-        coeur.style.fontSize =
-            taille + "px";
-
-
-        coeur.style.setProperty(
-            "--deplacementX",
-            deplacement
-        );
-
-
-        coeur.style.setProperty(
-            "--rotation",
-            rotation
-        );
-
-
-        coeur.style.animationDelay =
-            delai + "s";
-
-
-        conteneur.appendChild(
-            coeur
-        );
-
-
-        setTimeout(
-            ()=>{
-
-                coeur.remove();
-
-            },
-            2600
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RECUPERER LES LIKES
-========================================================= */
-
-async function recupererLikes(
-    userId
-){
-
-    try{
-
-        const likesRef =
-            collection(
-                db,
-                "users",
-                userId,
-                "likes"
-            );
-
-
-        const snapshot =
-            await getDocs(
-                likesRef
-            );
-
-
-        return snapshot.size;
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Erreur récupération likes :",
-            error
-        );
-
-        return 0;
-
-    }
-
-}
-
-
-/* =========================================================
-   VERIFIER SI L'UTILISATEUR A LIKE
-========================================================= */
-
-async function utilisateurAime(
-    userId
-){
-
-    if(!utilisateurActuel){
-
-        return false;
-
-    }
-
-
-    try{
-
-        const likeRef =
-            doc(
-                db,
-                "users",
-                userId,
-                "likes",
-                utilisateurActuel.uid
-            );
-
-
-        const likeSnap =
-            await getDoc(
-                likeRef
-            );
-
-
-        return likeSnap.exists();
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Erreur vérification like :",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   METTRE A JOUR LE BOUTON LIKE
-========================================================= */
-
-function mettreAJourBoutonLike(
-    bouton,
-    aime,
-    nombre
-){
-
-    if(!bouton){
-
-        return;
-
-    }
-
-
-    if(aime){
-
-        bouton.classList.add(
-            "liked"
-        );
-
-    }else{
-
-        bouton.classList.remove(
-            "liked"
-        );
-
-    }
-
-
-    const coeur =
-        bouton.querySelector(
-            ".coeurLike"
-        );
-
-
-    const compteur =
-        bouton.querySelector(
-            ".nombreLikes"
-        );
-
-
-    if(coeur){
-
-        coeur.textContent =
-            aime
-            ? "❤️"
-            : "♡";
-
-    }
-
-
-    if(compteur){
-
-        compteur.textContent =
-            nombre +
-            (
-                nombre <= 1
-                ? " like"
-                : " likes"
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   GERER UN LIKE
-========================================================= */
-
-async function gererLike(
-    userId,
-    bouton,
-    conteneurCoeurs
-){
-
-    if(!utilisateurActuel){
-
-        alert(
-            "Tu dois être connecté pour liker un profil ❤️"
-        );
-
-        return;
-
-    }
-
-
-    const likeRef =
-        doc(
-            db,
-            "users",
-            userId,
-            "likes",
-            utilisateurActuel.uid
-        );
-
-
-    try{
-
-        const likeSnap =
-            await getDoc(
-                likeRef
-            );
-
-
-        /* =================================================
-           DEJA LIKE
-        ================================================= */
-
-        if(likeSnap.exists()){
-
-            await deleteDoc(
-                likeRef
-            );
-
-
-            const nouveauNombre =
-                await recupererLikes(
-                    userId
-                );
-
-
-            mettreAJourBoutonLike(
-                bouton,
-                false,
-                nouveauNombre
-            );
-
-
-            return;
-
-        }
-
-
-        /* =================================================
-           NOUVEAU LIKE
-        ================================================= */
-
-        await setDoc(
-            likeRef,
-            {
-
-                uid:
-                    utilisateurActuel.uid,
-
-                date:
-                    new Date()
-
-            }
-        );
-
-
-        const nouveauNombre =
-            await recupererLikes(
-                userId
-            );
-
-
-        mettreAJourBoutonLike(
-            bouton,
-            true,
-            nouveauNombre
-        );
-
-
-        /* =================================================
-           ANIMATION
-        ================================================= */
-
-        bouton.classList.remove(
-            "likeAnimation"
-        );
-
-
-        void bouton.offsetWidth;
-
-
-        bouton.classList.add(
-            "likeAnimation"
-        );
-
-
-        lancerAnimationCoeurs(
-            conteneurCoeurs,
-            35
-        );
-
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Erreur lors du like :",
-            error
-        );
-
-
-        alert(
-            "Impossible d'enregistrer ton like."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
    ETAT DE LA CONNEXION
 ========================================================= */
 
@@ -949,8 +182,7 @@ onAuthStateChanged(
     auth,
     async(user)=>{
 
-        utilisateurActuel =
-            user;
+        utilisateurActuel = user;
 
 
         /* =================================================
@@ -959,7 +191,9 @@ onAuthStateChanged(
 
         if(user){
 
-            /* PHOTO GOOGLE */
+            /* =========================
+               PHOTO GOOGLE
+            ========================= */
 
             if(
                 avatar &&
@@ -975,7 +209,9 @@ onAuthStateChanged(
             }
 
 
-            /* AFFICHER LE COMPTE */
+            /* =========================
+               AFFICHER LE COMPTE
+            ========================= */
 
             if(loginBtn){
 
@@ -993,9 +229,9 @@ onAuthStateChanged(
             }
 
 
-            /* =================================================
+            /* =========================
                VERIFIER LE PROFIL FIRESTORE
-            ================================================= */
+            ========================= */
 
             try{
 
@@ -1036,6 +272,10 @@ onAuthStateChanged(
             }
 
 
+            /* =========================
+               CHARGER LES PROFILS
+            ========================= */
+
             chargerProfils();
 
         }
@@ -1063,12 +303,489 @@ onAuthStateChanged(
             }
 
 
+            /* =========================
+               PROFILS TOUJOURS VISIBLES
+            ========================= */
+
             chargerProfils();
 
         }
 
     }
 );
+
+
+/* =========================================================
+   ANIMATION DE COEURS
+========================================================= */
+
+function lancerAnimationCoeurs(carte){
+
+    if(!carte){
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       CARTE ROSE / ROUGE
+    ===================================================== */
+
+    carte.classList.add(
+        "animationLike"
+    );
+
+
+    /* =====================================================
+       NOMBRE DE COEURS
+    ===================================================== */
+
+    const nombreCoeurs = 18;
+
+
+    /* =====================================================
+       CREATION DES COEURS
+    ===================================================== */
+
+    for(
+        let i = 0;
+        i < nombreCoeurs;
+        i++
+    ){
+
+        const coeur =
+            document.createElement("div");
+
+
+        coeur.className =
+            "coeurAnimation";
+
+
+        coeur.textContent =
+            "❤️";
+
+
+        /* Position aléatoire */
+
+        coeur.style.left =
+            (10 + Math.random() * 80) +
+            "%";
+
+
+        coeur.style.bottom =
+            (10 + Math.random() * 20) +
+            "px";
+
+
+        /* Taille aléatoire */
+
+        coeur.style.fontSize =
+            (25 + Math.random() * 25) +
+            "px";
+
+
+        /* Délai aléatoire */
+
+        coeur.style.animationDelay =
+            (Math.random() * 0.35) +
+            "s";
+
+
+        /* Petit déplacement horizontal */
+
+        coeur.style.setProperty(
+            "--deplacement",
+            (
+                -80 +
+                Math.random() * 160
+            ) +
+            "px"
+        );
+
+
+        carte.appendChild(
+            coeur
+        );
+
+
+        /* Suppression après animation */
+
+        setTimeout(
+            ()=>{
+
+                coeur.remove();
+
+            },
+            1500
+        );
+
+    }
+
+
+    /* =====================================================
+       RETOUR A LA COULEUR NORMALE
+    ===================================================== */
+
+    setTimeout(
+        ()=>{
+
+            carte.classList.remove(
+                "animationLike"
+            );
+
+        },
+        1100
+    );
+
+}
+
+
+/* =========================================================
+   ANIMATION DU BOUTON LIKE
+========================================================= */
+
+function animerBoutonLike(bouton){
+
+    if(!bouton){
+
+        return;
+
+    }
+
+
+    bouton.classList.add(
+        "likeClick"
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            bouton.classList.remove(
+                "likeClick"
+            );
+
+        },
+        250
+    );
+
+}
+
+
+/* =========================================================
+   LIKER UN PROFIL
+========================================================= */
+
+async function gererLike(
+    pseudo,
+    bouton,
+    compteur,
+    carte
+){
+
+    /* =====================================================
+       IL FAUT ETRE CONNECTE
+    ===================================================== */
+
+    if(!utilisateurActuel){
+
+        alert(
+            "Tu dois être connecté pour aimer un profil ❤️"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       EMPECHER LES CLICS RAPIDES
+    ===================================================== */
+
+    if(
+        bouton.dataset.chargement === "true"
+    ){
+
+        return;
+
+    }
+
+
+    bouton.dataset.chargement =
+        "true";
+
+
+    try{
+
+        /* =================================================
+           DOCUMENT DU LIKE
+        ================================================= */
+
+        const likeRef =
+            doc(
+                db,
+                "users",
+                pseudo,
+                "likes",
+                utilisateurActuel.uid
+            );
+
+
+        const likeSnap =
+            await getDoc(
+                likeRef
+            );
+
+
+        /* =================================================
+           DEJA LIKE
+        ================================================= */
+
+        if(
+            likeSnap.exists()
+        ){
+
+            await deleteDoc(
+                likeRef
+            );
+
+
+            bouton.classList.remove(
+                "liked"
+            );
+
+
+            bouton.textContent =
+                "♡ J'aime";
+
+
+            let nombre =
+                parseInt(
+                    compteur.dataset.likes || "0"
+                );
+
+
+            nombre =
+                Math.max(
+                    0,
+                    nombre - 1
+                );
+
+
+            compteur.dataset.likes =
+                nombre;
+
+
+            compteur.textContent =
+                "❤️ " +
+                nombre +
+                (
+                    nombre > 1
+                    ? " likes"
+                    : " like"
+                );
+
+        }
+
+
+        /* =================================================
+           NOUVEAU LIKE
+        ================================================= */
+
+        else{
+
+            await setDoc(
+                likeRef,
+                {
+
+                    uid:
+                        utilisateurActuel.uid,
+
+                    date:
+                        new Date()
+
+                }
+            );
+
+
+            bouton.classList.add(
+                "liked"
+            );
+
+
+            bouton.textContent =
+                "♥ J'aime";
+
+
+            let nombre =
+                parseInt(
+                    compteur.dataset.likes || "0"
+                );
+
+
+            nombre++;
+
+
+            compteur.dataset.likes =
+                nombre;
+
+
+            compteur.textContent =
+                "❤️ " +
+                nombre +
+                (
+                    nombre > 1
+                    ? " likes"
+                    : " like"
+                );
+
+
+            /* =================================================
+               ANIMATION
+            ================================================= */
+
+            animerBoutonLike(
+                bouton
+            );
+
+
+            lancerAnimationCoeurs(
+                carte
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du like :",
+            error
+        );
+
+
+        alert(
+            "Impossible de modifier le like."
+        );
+
+    }
+
+
+    bouton.dataset.chargement =
+        "false";
+
+}
+
+
+/* =========================================================
+   COMPTER LES LIKES
+========================================================= */
+
+async function chargerLikes(
+    pseudo,
+    bouton,
+    compteur
+){
+
+    try{
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                pseudo,
+                "likes"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        const nombre =
+            snapshot.size;
+
+
+        compteur.dataset.likes =
+            nombre;
+
+
+        compteur.textContent =
+            "❤️ " +
+            nombre +
+            (
+                nombre > 1
+                ? " likes"
+                : " like"
+            );
+
+
+        /* =================================================
+           VERIFIER SI L'UTILISATEUR A LIKE
+        ================================================= */
+
+        if(utilisateurActuel){
+
+            const monLikeRef =
+                doc(
+                    db,
+                    "users",
+                    pseudo,
+                    "likes",
+                    utilisateurActuel.uid
+                );
+
+
+            const monLikeSnap =
+                await getDoc(
+                    monLikeRef
+                );
+
+
+            if(
+                monLikeSnap.exists()
+            ){
+
+                bouton.classList.add(
+                    "liked"
+                );
+
+
+                bouton.textContent =
+                    "♥ J'aime";
+
+            }
+
+            else{
+
+                bouton.classList.remove(
+                    "liked"
+                );
+
+
+                bouton.textContent =
+                    "♡ J'aime";
+
+            }
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des likes :",
+            error
+        );
+
+    }
+
+}
 
 
 /* =========================================================
@@ -1084,11 +801,18 @@ async function chargerProfils(){
     }
 
 
-    listeProfils.innerHTML =
-        "";
+    /* =====================================================
+       VIDER LA LISTE
+    ===================================================== */
+
+    listeProfils.innerHTML = "";
 
 
     try{
+
+        /* =================================================
+           RECUPERER LES UTILISATEURS
+        ================================================= */
 
         const snapshot =
             await getDocs(
@@ -1099,15 +823,20 @@ async function chargerProfils(){
             );
 
 
+        /* =================================================
+           PARCOURIR LES PROFILS
+        ================================================= */
+
         snapshot.forEach(
-            async(profilDoc)=>{
+            (profilDoc)=>{
 
                 const data =
                     profilDoc.data();
 
 
-                const userId =
-                    profilDoc.id;
+                const pseudo =
+                    data.pseudo ||
+                    "Sans pseudo";
 
 
                 /* =================================================
@@ -1153,15 +882,19 @@ async function chargerProfils(){
                     "";
 
 
+                /* =================================================
+                   3 PREMIERES CATEGORIES
+                ================================================= */
+
                 troisCategories.forEach(
                     (categorie)=>{
 
                         categoriesHTML += `
 
-                            <span
-                                class="categorieCarte"
-                            >
+                            <span class="categorieCarte">
+
                                 🏷️ ${categorie}
+
                             </span>
 
                         `;
@@ -1169,6 +902,10 @@ async function chargerProfils(){
                     }
                 );
 
+
+                /* =================================================
+                   CATEGORIES SUPPLEMENTAIRES
+                ================================================= */
 
                 if(
                     autresCategories.length > 0
@@ -1182,25 +919,23 @@ async function chargerProfils(){
                                 categoriePlus
                             "
                         >
+
                             +${autresCategories.length}
+
                         </span>
 
 
-                        <div
-                            class="categoriesCachees"
-                        >
+                        <div class="categoriesCachees">
 
                             ${
                                 autresCategories
                                 .map(
                                     (categorie)=>`
 
-                                        <span
-                                            class="
-                                                categorieCarte
-                                            "
-                                        >
+                                        <span class="categorieCarte">
+
                                             🏷️ ${categorie}
+
                                         </span>
 
                                     `
@@ -1216,7 +951,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   RESEAUX
+                   RESEAUX SOCIAUX
                 ================================================= */
 
                 const reseaux =
@@ -1249,8 +984,8 @@ async function chargerProfils(){
 
 
                         if(
-                            reseau.type
-                            === "YouTube"
+                            reseau.type ===
+                            "YouTube"
                         ){
 
                             emoji =
@@ -1259,8 +994,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Twitch"
+                            reseau.type ===
+                            "Twitch"
                         ){
 
                             emoji =
@@ -1269,8 +1004,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Discord"
+                            reseau.type ===
+                            "Discord"
                         ){
 
                             emoji =
@@ -1279,8 +1014,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "TikTok"
+                            reseau.type ===
+                            "TikTok"
                         ){
 
                             emoji =
@@ -1289,8 +1024,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Instagram"
+                            reseau.type ===
+                            "Instagram"
                         ){
 
                             emoji =
@@ -1299,8 +1034,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Snapchat"
+                            reseau.type ===
+                            "Snapchat"
                         ){
 
                             emoji =
@@ -1309,8 +1044,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Facebook"
+                            reseau.type ===
+                            "Facebook"
                         ){
 
                             emoji =
@@ -1319,8 +1054,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Kick"
+                            reseau.type ===
+                            "Kick"
                         ){
 
                             emoji =
@@ -1329,8 +1064,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Paypal"
+                            reseau.type ===
+                            "Paypal"
                         ){
 
                             emoji =
@@ -1339,8 +1074,8 @@ async function chargerProfils(){
                         }
 
                         else if(
-                            reseau.type
-                            === "Site Web"
+                            reseau.type ===
+                            "Site Web"
                         ){
 
                             emoji =
@@ -1355,10 +1090,7 @@ async function chargerProfils(){
                                 class="reseauCarte"
                                 href="${reseau.lien}"
                                 target="_blank"
-                                rel="
-                                    noopener
-                                    noreferrer
-                                "
+                                rel="noopener noreferrer"
                             >
 
                                 ${emoji}
@@ -1376,128 +1108,35 @@ async function chargerProfils(){
                    CONTENU DE LA CARTE
                 ================================================= */
 
-                carte.innerHTML = 
-				
-				/* =========================================================
-   BOUTON LIKE
-========================================================= */
-
-const boutonLike =
-    carte.querySelector(".boutonLike");
-
-
-const nombreLikes =
-    carte.querySelector(".nombreLikes");
-
-
-/* =========================================================
-   ANIMATION DES COEURS
-========================================================= */
-
-function lancerAnimationCoeurs(){
-
-    carte.classList.add("animationLike");
-
-
-    for(let i = 0; i < 12; i++){
-
-        const coeur =
-            document.createElement("div");
-
-        coeur.className =
-            "coeurAnimation";
-
-        coeur.textContent =
-            "❤️";
-
-
-        /* Position aléatoire */
-
-        coeur.style.left =
-            Math.random() * 90 + "%";
-
-
-        coeur.style.bottom =
-            Math.random() * 30 + "%";
-
-
-        /* Taille aléatoire */
-
-        coeur.style.fontSize =
-            (25 + Math.random() * 25) + "px";
-
-
-        /* Petit décalage */
-
-        coeur.style.animationDelay =
-            (Math.random() * 0.25) + "s";
-
-
-        carte.appendChild(coeur);
-
-
-        /* Supprimer après l'animation */
-
-        setTimeout(()=>{
-
-            coeur.remove();
-
-        },1300);
-
-    }
-
-
-    /* Retour à la couleur normale */
-
-    setTimeout(()=>{
-
-        carte.classList.remove(
-            "animationLike"
-        );
-
-    },1000);
-
-}`
+                carte.innerHTML = `
 
                     <img
                         class="cartePhoto"
                         src="${data.photo || ""}"
-                        alt="
-                            Photo de
-                            ${data.pseudo || "profil"}
-                        "
+                        alt="Photo de ${pseudo}"
                     >
 
 
-                    <div
-                        class="carteContenu"
-                    >
+                    <div class="carteContenu">
 
-                        <div
-                            class="cartePseudo"
-                        >
+                        <div class="cartePseudo">
 
-                            ${data.pseudo || "Sans pseudo"}
+                            ${pseudo}
 
                         </div>
 
 
-                        <div
-                            class="carteDescription"
-                        >
+                        <div class="carteDescription">
 
                             ${
-                                data.descriptionCourte
-                                ||
+                                data.descriptionCourte ||
                                 "Aucune description"
                             }
 
                         </div>
 
 
-                        <div
-                            class="carteCategories"
-                        >
+                        <div class="carteCategories">
 
                             ${categoriesHTML}
 
@@ -1508,9 +1147,7 @@ function lancerAnimationCoeurs(){
                             reseauxHTML
                             ? `
 
-                                <div
-                                    class="carteReseaux"
-                                >
+                                <div class="carteReseaux">
 
                                     ${reseauxHTML}
 
@@ -1521,45 +1158,25 @@ function lancerAnimationCoeurs(){
                         }
 
 
-                        <!-- =================================
-                             LIKE
-                        ================================== -->
-
                         <div
                             class="carteLikes"
+                            data-likes="0"
                         >
 
-                            <button
-                                class="boutonLike"
-                                type="button"
-                            >
-
-                                <span
-                                    class="coeurLike"
-                                >
-                                    ♡
-                                </span>
-
-
-                                <span
-                                    class="nombreLikes"
-                                >
-                                    0 likes
-                                </span>
-
-
-                                <div
-                                    class="coeursLike"
-                                ></div>
-
-                            </button>
+                            ❤️ 0 likes
 
                         </div>
 
 
-                        <!-- =================================
-                             VOIR PROFIL
-                        ================================== -->
+                        <button
+                            class="boutonLike"
+                            type="button"
+                        >
+
+                            ♡ J'aime
+
+                        </button>
+
 
                         <button
                             class="boutonVoirProfil"
@@ -1585,65 +1202,41 @@ function lancerAnimationCoeurs(){
                     );
 
 
-                const coeursLike =
+                const compteur =
                     carte.querySelector(
-                        ".coeursLike"
+                        ".carteLikes"
                     );
 
 
                 /* =================================================
-                   CHARGER LE NOMBRE DE LIKES
+                   CHARGER LES LIKES
                 ================================================= */
 
-                try{
-
-                    const nombreLikes =
-                        await recupererLikes(
-                            userId
-                        );
-
-
-                    const aime =
-                        await utilisateurAime(
-                            userId
-                        );
-
-
-                    mettreAJourBoutonLike(
-                        boutonLike,
-                        aime,
-                        nombreLikes
-                    );
-
-                }
-
-                catch(error){
-
-                    console.error(
-                        "Erreur chargement likes :",
-                        error
-                    );
-
-                }
+                chargerLikes(
+                    pseudo,
+                    boutonLike,
+                    compteur
+                );
 
 
                 /* =================================================
-                   CLIC LIKE
+                   BOUTON LIKE
                 ================================================= */
 
                 if(boutonLike){
 
                     boutonLike.addEventListener(
                         "click",
-                        async(event)=>{
+                        (event)=>{
 
                             event.stopPropagation();
 
 
-                            await gererLike(
-                                userId,
+                            gererLike(
+                                pseudo,
                                 boutonLike,
-                                coeursLike
+                                compteur,
+                                carte
                             );
 
                         }
@@ -1687,20 +1280,15 @@ function lancerAnimationCoeurs(){
 
 
                             if(
-                                categoriesCachees
-                                .style
-                                .display
+                                categoriesCachees.style.display
                                 === "flex"
                             ){
 
-                                categoriesCachees
-                                .style
-                                .display =
+                                categoriesCachees.style.display =
                                     "none";
 
 
-                                boutonPlus
-                                .textContent =
+                                boutonPlus.textContent =
                                     "+" +
                                     categoriesCachees
                                     .querySelectorAll(
@@ -1712,14 +1300,11 @@ function lancerAnimationCoeurs(){
 
                             else{
 
-                                categoriesCachees
-                                .style
-                                .display =
+                                categoriesCachees.style.display =
                                     "flex";
 
 
-                                boutonPlus
-                                .textContent =
+                                boutonPlus.textContent =
                                     "−";
 
                             }
@@ -1778,7 +1363,7 @@ function lancerAnimationCoeurs(){
                             window.location.href =
                                 "profil.html?pseudo=" +
                                 encodeURIComponent(
-                                    data.pseudo
+                                    pseudo
                                 );
 
                         }
@@ -1851,7 +1436,7 @@ function lancerAnimationCoeurs(){
                         window.location.href =
                             "profil.html?pseudo=" +
                             encodeURIComponent(
-                                data.pseudo
+                                pseudo
                             );
 
                     }
@@ -1955,15 +1540,20 @@ if(
 
 
                         const pseudo =
-                            data.pseudo || "";
+                            data.pseudo ||
+                            "";
 
+
+                        /* =================================================
+                           RECHERCHE
+                        ================================================= */
 
                         if(
                             pseudo
-                            .toLowerCase()
-                            .includes(
-                                texteRecherche
-                            )
+                                .toLowerCase()
+                                .includes(
+                                    texteRecherche
+                                )
                         ){
 
                             nombreResultats++;
@@ -2012,7 +1602,8 @@ if(
 
 
                             image.src =
-                                data.photo || "";
+                                data.photo ||
+                                "";
 
 
                             image.alt =
@@ -2103,62 +1694,6 @@ if(
                     "none";
 
             }
-
-        }
-    );
-
-}
-
-if(boutonLike){
-
-    boutonLike.addEventListener(
-        "click",
-        (event)=>{
-
-            event.stopPropagation();
-
-
-            /* =========================
-               ANIMATION
-            ========================= */
-
-            lancerAnimationCoeurs();
-
-
-            /* =========================
-               ANIMATION DU BOUTON
-            ========================= */
-
-            boutonLike.classList.add(
-                "liked",
-                "likeClick"
-            );
-
-
-            setTimeout(()=>{
-
-                boutonLike.classList.remove(
-                    "likeClick"
-                );
-
-            },250);
-
-
-            /* =========================
-               COMPTEUR
-            ========================= */
-
-            let likes =
-                parseInt(
-                    nombreLikes.textContent
-                ) || 0;
-
-
-            likes++;
-
-
-            nombreLikes.textContent =
-                likes;
 
         }
     );
