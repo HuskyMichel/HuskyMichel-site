@@ -1376,7 +1376,88 @@ async function chargerProfils(){
                    CONTENU DE LA CARTE
                 ================================================= */
 
-                carte.innerHTML = `
+                carte.innerHTML = 
+				
+				/* =========================================================
+   BOUTON LIKE
+========================================================= */
+
+const boutonLike =
+    carte.querySelector(".boutonLike");
+
+
+const nombreLikes =
+    carte.querySelector(".nombreLikes");
+
+
+/* =========================================================
+   ANIMATION DES COEURS
+========================================================= */
+
+function lancerAnimationCoeurs(){
+
+    carte.classList.add("animationLike");
+
+
+    for(let i = 0; i < 12; i++){
+
+        const coeur =
+            document.createElement("div");
+
+        coeur.className =
+            "coeurAnimation";
+
+        coeur.textContent =
+            "❤️";
+
+
+        /* Position aléatoire */
+
+        coeur.style.left =
+            Math.random() * 90 + "%";
+
+
+        coeur.style.bottom =
+            Math.random() * 30 + "%";
+
+
+        /* Taille aléatoire */
+
+        coeur.style.fontSize =
+            (25 + Math.random() * 25) + "px";
+
+
+        /* Petit décalage */
+
+        coeur.style.animationDelay =
+            (Math.random() * 0.25) + "s";
+
+
+        carte.appendChild(coeur);
+
+
+        /* Supprimer après l'animation */
+
+        setTimeout(()=>{
+
+            coeur.remove();
+
+        },1300);
+
+    }
+
+
+    /* Retour à la couleur normale */
+
+    setTimeout(()=>{
+
+        carte.classList.remove(
+            "animationLike"
+        );
+
+    },1000);
+
+}`
 
                     <img
                         class="cartePhoto"
@@ -2022,6 +2103,62 @@ if(
                     "none";
 
             }
+
+        }
+    );
+
+}
+
+if(boutonLike){
+
+    boutonLike.addEventListener(
+        "click",
+        (event)=>{
+
+            event.stopPropagation();
+
+
+            /* =========================
+               ANIMATION
+            ========================= */
+
+            lancerAnimationCoeurs();
+
+
+            /* =========================
+               ANIMATION DU BOUTON
+            ========================= */
+
+            boutonLike.classList.add(
+                "liked",
+                "likeClick"
+            );
+
+
+            setTimeout(()=>{
+
+                boutonLike.classList.remove(
+                    "likeClick"
+                );
+
+            },250);
+
+
+            /* =========================
+               COMPTEUR
+            ========================= */
+
+            let likes =
+                parseInt(
+                    nombreLikes.textContent
+                ) || 0;
+
+
+            likes++;
+
+
+            nombreLikes.textContent =
+                likes;
 
         }
     );
