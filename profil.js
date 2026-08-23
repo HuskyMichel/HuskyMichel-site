@@ -13,7 +13,9 @@ import {
     where,
     getDocs,
     doc,
-    getDoc
+    getDoc,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
@@ -228,6 +230,8 @@ if(logout){
 ========================================================= */
 
 onAuthStateChanged(auth,(user)=>{
+
+utilisateurActuel = user;
 
     if(user){
 
