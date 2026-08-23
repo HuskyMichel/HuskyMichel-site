@@ -292,63 +292,174 @@ onAuthStateChanged(auth,(user)=>{
 
 
 /* =========================================================
-   RECHERCHE DE PROFIL
+   RECHERCHE DE PROFIL EN DIRECT
 ========================================================= */
 
-if(recherche){
+const resultatsRecherche =
+    document.getElementById("resultatsRecherche");
+
+
+if(recherche && resultatsRecherche){
 
     recherche.addEventListener(
-        "keydown",
-        async(event)=>{
-
-            if(event.key !== "Enter"){
-                return;
-            }
+        "input",
+        async()=>{
 
             const texte =
                 recherche.value.trim();
 
+
+            /* =========================
+               RECHERCHE VIDE
+            ========================= */
+
             if(texte === ""){
+
+                resultatsRecherche.innerHTML = "";
+
+                resultatsRecherche.style.display =
+                    "none";
+
                 return;
+
             }
+
 
             try{
 
-                const q = query(
-                    collection(db,"users"),
-                    where(
-                        "pseudo",
-                        "==",
-                        texte
-                    )
-                );
-
-
-                const resultat =
-                    await getDocs(q);
-
-
-                if(resultat.empty){
-
-                    alert(
-                        "Aucun profil trouvé pour : " +
-                        texte
+                const snapshot =
+                    await getDocs(
+                        collection(db,"users")
                     );
 
-                    return;
+
+                resultatsRecherche.innerHTML = "";
+
+
+                const texteRecherche =
+                    texte.toLowerCase();
+
+
+                let nombreResultats = 0;
+
+
+                snapshot.forEach((profilDoc)=>{
+
+                    const data =
+                        profilDoc.data();
+
+
+                    const pseudo =
+                        data.pseudo || "";
+
+
+                    if(
+                        pseudo
+                            .toLowerCase()
+                            .includes(
+                                texteRecherche
+                            )
+                    ){
+
+                        nombreResultats++;
+
+
+                        /* =========================
+                           RESULTAT
+                        ========================= */
+
+                        const resultat =
+                            document.createElement("div");
+
+                        resultat.className =
+                            "resultatRecherche";
+
+
+                        /* =========================
+                           PSEUDO
+                        ========================= */
+
+                        const nom =
+                            document.createElement("div");
+
+                        nom.className =
+                            "resultatRecherchePseudo";
+
+                        nom.textContent =
+                            pseudo;
+
+
+                        /* =========================
+                           PHOTO
+                        ========================= */
+
+                        const image =
+                            document.createElement("img");
+
+                        image.src =
+                            data.photo || "";
+
+                        image.alt =
+                            pseudo;
+
+
+                        /* =========================
+                           AJOUT
+                        ========================= */
+
+                        resultat.appendChild(
+                            nom
+                        );
+
+                        resultat.appendChild(
+                            image
+                        );
+
+
+                        /* =========================
+                           CLIC
+                        ========================= */
+
+                        resultat.addEventListener(
+                            "click",
+                            ()=>{
+
+                                window.location.href =
+                                    "profil.html?pseudo=" +
+                                    encodeURIComponent(
+                                        pseudo
+                                    );
+
+                            }
+                        );
+
+
+                        resultatsRecherche.appendChild(
+                            resultat
+                        );
+
+                    }
+
+                });
+
+
+                /* =========================
+                   AFFICHAGE
+                ========================= */
+
+                if(nombreResultats > 0){
+
+                    resultatsRecherche.style.display =
+                        "block";
+
+                }else{
+
+                    resultatsRecherche.innerHTML = "";
+
+                    resultatsRecherche.style.display =
+                        "none";
 
                 }
-
-
-                const profilTrouve =
-                    resultat.docs[0].data();
-
-
-                window.location.href =
-                    "profil.html?pseudo=" +
-                    encodeURIComponent(
-                        profilTrouve.pseudo
-                    );
 
 
             }catch(error){
@@ -358,9 +469,10 @@ if(recherche){
                     error
                 );
 
-                alert(
-                    "Impossible d'effectuer la recherche."
-                );
+                resultatsRecherche.innerHTML = "";
+
+                resultatsRecherche.style.display =
+                    "none";
 
             }
 

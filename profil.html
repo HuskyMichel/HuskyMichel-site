@@ -944,6 +944,132 @@ main{
 
 }
 
+/* =========================
+   RESULTATS DE RECHERCHE
+========================= */
+
+.search{
+    position:relative;
+}
+
+#resultatsRecherche{
+
+    position:absolute;
+
+    top:55px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:520px;
+
+    max-width:90%;
+
+    background:#242424;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.5);
+
+    z-index:2000;
+
+    display:none;
+}
+
+
+/* =========================
+   RESULTAT
+========================= */
+
+.resultatRecherche{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+
+.resultatRecherche:hover{
+
+    background:#333;
+
+}
+
+
+/* =========================
+   PSEUDO
+========================= */
+
+.resultatRecherchePseudo{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:white;
+
+    transition:transform .2s ease;
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.resultatRecherche img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid white;
+
+    box-shadow:
+        0 0 6px white,
+        0 0 12px rgba(255,255,255,.6);
+
+    transition:transform .2s ease;
+
+}
+
+
+/* =========================
+   ZOOM AU SURVOL
+========================= */
+
+.resultatRecherche:hover
+.resultatRecherchePseudo{
+
+    transform:scale(1.05);
+
+}
+
+
+.resultatRecherche:hover img{
+
+    transform:scale(1.12);
+
+}
+
 </style>
 
 </head>
@@ -972,13 +1098,15 @@ main{
 
     <div class="search">
 
-        <input
-            id="rechercheProfil"
-            type="text"
-            placeholder="Rechercher un profil..."
-        >
+    <input
+        id="rechercheProfil"
+        type="text"
+        placeholder="🔍 Rechercher un profil..."
+    >
 
-    </div>
+    <div id="resultatsRecherche"></div>
+
+</div>
 
 
     <div class="account">
