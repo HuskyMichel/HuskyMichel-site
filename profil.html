@@ -115,6 +115,8 @@ header{
 
     margin:0 25px;
 
+    position:relative;
+
 }
 
 .search input{
@@ -157,6 +159,114 @@ header{
 
 
 /* =========================================================
+   RESULTATS RECHERCHE
+========================================================= */
+
+#resultatsRecherche{
+
+    position:absolute;
+
+    top:55px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:520px;
+
+    max-width:90%;
+
+    background:#242424;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.5);
+
+    z-index:2000;
+
+    display:none;
+
+}
+
+
+.resultatRecherche{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+
+.resultatRecherche:hover{
+
+    background:#333;
+
+}
+
+
+.resultatRecherchePseudo{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:white;
+
+    transition:transform .2s ease;
+
+}
+
+
+.resultatRecherche img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid white;
+
+    box-shadow:
+        0 0 6px white,
+        0 0 12px rgba(255,255,255,.6);
+
+    transition:transform .2s ease;
+
+}
+
+
+.resultatRecherche:hover
+.resultatRecherchePseudo{
+
+    transform:scale(1.05);
+
+}
+
+
+.resultatRecherche:hover img{
+
+    transform:scale(1.12);
+
+}
+
+
+/* =========================================================
    COMPTE
 ========================================================= */
 
@@ -170,10 +280,6 @@ header{
 
 }
 
-
-/* =========================================================
-   BOUTON CONNEXION
-========================================================= */
 
 #loginBtn{
 
@@ -217,10 +323,6 @@ header{
 }
 
 
-/* =========================================================
-   AVATAR COMPTE
-========================================================= */
-
 #avatar{
 
     width:42px;
@@ -246,6 +348,7 @@ header{
     transition:.2s;
 
 }
+
 
 #avatar:hover{
 
@@ -284,6 +387,7 @@ header{
 
 }
 
+
 .menu a,
 .menu button{
 
@@ -310,6 +414,7 @@ header{
     transition:.15s;
 
 }
+
 
 .menu a:hover,
 .menu button:hover{
@@ -345,8 +450,6 @@ header{
 
 }
 
-
-/* effet lumineux */
 
 .banner::before{
 
@@ -389,7 +492,7 @@ main{
 
 
 /* =========================================================
-   EN-TETE DU PROFIL
+   EN-TETE PROFIL
 ========================================================= */
 
 .profilHeader{
@@ -402,7 +505,7 @@ main{
 
 
 /* =========================================================
-   PHOTO DE PROFIL
+   PHOTO PROFIL
 ========================================================= */
 
 .photo{
@@ -441,7 +544,7 @@ main{
 
 
 /* =========================================================
-   INFOS PRINCIPALES
+   INFOS
 ========================================================= */
 
 .infos{
@@ -486,6 +589,189 @@ main{
 
 
 /* =========================================================
+   FAVORIS
+========================================================= */
+
+.sectionFavoris{
+
+    margin-top:10px;
+
+    margin-bottom:30px;
+
+    padding:25px;
+
+    background:#242424;
+
+    border:1px solid #3a3a3a;
+
+    border-radius:18px;
+
+    box-shadow:
+
+        0 8px 25px rgba(0,0,0,.25);
+
+}
+
+
+/* =========================================================
+   TITRE FAVORIS
+========================================================= */
+
+.titreFavoris{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+}
+
+
+/* =========================================================
+   LISTE FAVORIS
+========================================================= */
+
+.listeFavoris{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+
+/* =========================================================
+   CARTE FAVORI
+========================================================= */
+
+.carteFavori{
+
+    width:180px;
+
+    min-height:190px;
+
+    padding:15px;
+
+    background:#2d2d2d;
+
+    border:1px solid #414141;
+
+    border-radius:16px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .2s ease,
+
+        background .2s ease,
+
+        border-color .2s ease,
+
+        box-shadow .2s ease;
+
+}
+
+
+.carteFavori:hover{
+
+    transform:translateY(-5px);
+
+    background:#353535;
+
+    border-color:#3ea6ff;
+
+    box-shadow:
+
+        0 8px 25px rgba(0,0,0,.35),
+
+        0 0 15px rgba(62,166,255,.15);
+
+}
+
+
+/* =========================================================
+   PHOTO FAVORI
+========================================================= */
+
+.photoFavori{
+
+    width:100px;
+
+    height:100px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:4px solid #555;
+
+    box-shadow:
+
+        0 0 10px rgba(255,255,255,.15);
+
+    margin-bottom:12px;
+
+    transition:.2s;
+
+}
+
+
+.carteFavori:hover .photoFavori{
+
+    transform:scale(1.06);
+
+    border-color:#3ea6ff;
+
+}
+
+
+/* =========================================================
+   PSEUDO FAVORI
+========================================================= */
+
+.pseudoFavori{
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    word-break:break-word;
+
+}
+
+
+/* =========================================================
+   AUCUN FAVORI
+========================================================= */
+
+.aucunFavori{
+
+    color:#999;
+
+    font-size:15px;
+
+    padding:10px 0;
+
+}
+
+
+/* =========================================================
    SECTIONS
 ========================================================= */
 
@@ -509,6 +795,7 @@ main{
 
 }
 
+
 .section:hover{
 
     border-color:#444;
@@ -516,6 +803,7 @@ main{
     transform:translateY(-2px);
 
 }
+
 
 .section h2{
 
@@ -558,10 +846,6 @@ main{
 }
 
 
-/* =========================================================
-   TAG
-========================================================= */
-
 .tag{
 
     display:inline-flex;
@@ -587,6 +871,7 @@ main{
     transition:.2s;
 
 }
+
 
 .tag:hover{
 
@@ -618,6 +903,7 @@ main{
         0 8px 25px rgba(0,0,0,.35);
 
 }
+
 
 #videoContainer iframe{
 
@@ -701,7 +987,176 @@ main{
 
 
 /* =========================================================
-   BOUTON RETOUR
+   LIKE
+========================================================= */
+
+.profilLikeZone{
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+}
+
+
+.boutonLikeProfil{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#333;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .2s ease,
+
+        background .25s ease,
+
+        box-shadow .25s ease;
+
+}
+
+
+.boutonLikeProfil:hover{
+
+    transform:scale(1.08);
+
+    background:#444;
+
+}
+
+
+.boutonLikeProfil.liked{
+
+    background:#ff1744;
+
+    color:white;
+
+    box-shadow:
+
+        0 0 12px rgba(255,23,68,.7),
+
+        0 0 30px rgba(255,23,68,.35);
+
+}
+
+
+.boutonLikeProfil.likeClick{
+
+    transform:scale(1.3);
+
+}
+
+
+.compteurLikesProfil{
+
+    color:#ff1744;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================================================
+   LIKERS
+========================================================= */
+
+.listeLikers{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:4px;
+
+}
+
+
+.liker{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#292929;
+
+    border:1px solid #444;
+
+    border-radius:25px;
+
+    padding:5px 10px 5px 5px;
+
+    transition:
+
+        transform .2s ease,
+
+        background .2s ease;
+
+}
+
+
+.liker:hover{
+
+    transform:scale(1.06);
+
+    background:#333;
+
+}
+
+
+.liker img{
+
+    width:30px;
+
+    height:30px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid #ff1744;
+
+}
+
+
+.liker span{
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================================================
+   RETOUR
 ========================================================= */
 
 #retourAccueil{
@@ -728,6 +1183,7 @@ main{
 
 }
 
+
 #retourAccueil:hover{
 
     background:#61b8ff;
@@ -737,6 +1193,161 @@ main{
     box-shadow:
 
         0 5px 15px rgba(62,166,255,.25);
+
+}
+
+
+/* =========================================================
+   COEURS
+========================================================= */
+
+.coeurProfilAnimation{
+
+    position:fixed;
+
+    z-index:9999;
+
+    pointer-events:none;
+
+    color:#ff1744;
+
+    font-size:45px;
+
+    filter:
+
+        drop-shadow(
+            0 0 8px rgba(255,255,255,.8)
+        );
+
+    animation:
+
+        coeurProfilMontee
+
+        1.5s
+
+        ease-out
+
+        forwards;
+
+}
+
+
+@keyframes coeurProfilMontee{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+
+            translate(
+                0,
+                50px
+            )
+
+            scale(.3)
+
+            rotate(0deg);
+
+    }
+
+    15%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:1;
+
+        transform:
+
+            translate(
+                var(--deplacement),
+                -100px
+            )
+
+            scale(1.4)
+
+            rotate(var(--rotation));
+
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+
+            translate(
+                calc(var(--deplacement) * 1.5),
+                -350px
+            )
+
+            scale(.8)
+
+            rotate(var(--rotation));
+
+    }
+
+}
+
+
+/* =========================================================
+   ANIMATION AMOUR
+========================================================= */
+
+body.animationAmour{
+
+    animation:
+
+        amourPage
+
+        1.1s
+
+        ease;
+
+}
+
+
+@keyframes amourPage{
+
+    0%{
+
+        filter:none;
+
+    }
+
+    25%{
+
+        filter:
+
+            sepia(.15)
+
+            saturate(1.7)
+
+            hue-rotate(315deg);
+
+    }
+
+    55%{
+
+        filter:
+
+            sepia(.2)
+
+            saturate(1.9)
+
+            hue-rotate(320deg);
+
+    }
+
+    100%{
+
+        filter:none;
+
+    }
 
 }
 
@@ -902,6 +1513,42 @@ main{
 
     }
 
+
+    /* FAVORIS MOBILE */
+
+    .sectionFavoris{
+
+        padding:20px;
+
+    }
+
+
+    .listeFavoris{
+
+        gap:10px;
+
+    }
+
+
+    .carteFavori{
+
+        width:calc(50% - 5px);
+
+        min-height:170px;
+
+        padding:12px;
+
+    }
+
+
+    .photoFavori{
+
+        width:80px;
+
+        height:80px;
+
+    }
+
 }
 
 
@@ -942,646 +1589,10 @@ main{
 
     }
 
-}
 
-/* =========================
-   RESULTATS DE RECHERCHE
-========================= */
+    .carteFavori{
 
-.search{
-    position:relative;
-}
-
-#resultatsRecherche{
-
-    position:absolute;
-
-    top:55px;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:520px;
-
-    max-width:90%;
-
-    background:#242424;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    box-shadow:0 8px 25px rgba(0,0,0,.5);
-
-    z-index:2000;
-
-    display:none;
-}
-
-
-/* =========================
-   RESULTAT
-========================= */
-
-.resultatRecherche{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:12px;
-
-    padding:10px 15px;
-
-    cursor:pointer;
-
-    transition:.15s;
-
-}
-
-
-.resultatRecherche:hover{
-
-    background:#333;
-
-}
-
-
-/* =========================
-   PSEUDO
-========================= */
-
-.resultatRecherchePseudo{
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    color:white;
-
-    transition:transform .2s ease;
-
-}
-
-
-/* =========================
-   PHOTO
-========================= */
-
-.resultatRecherche img{
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    border:2px solid white;
-
-    box-shadow:
-        0 0 6px white,
-        0 0 12px rgba(255,255,255,.6);
-
-    transition:transform .2s ease;
-
-}
-
-
-/* =========================
-   ZOOM AU SURVOL
-========================= */
-
-.resultatRecherche:hover
-.resultatRecherchePseudo{
-
-    transform:scale(1.05);
-
-}
-
-
-.resultatRecherche:hover img{
-
-    transform:scale(1.12);
-
-}
-
-/* =========================================================
-   LIKE DU PROFIL
-========================================================= */
-
-.profilLike{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-    margin-top:20px;
-
-}
-
-
-/* BOUTON */
-
-.boutonLikeProfil{
-
-    border:none;
-
-    background:#333;
-
-    color:white;
-
-    padding:11px 20px;
-
-    border-radius:25px;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:
-        transform .2s ease,
-        background .25s ease,
-        box-shadow .25s ease;
-
-}
-
-
-/* SURVOL */
-
-.boutonLikeProfil:hover{
-
-    transform:scale(1.08);
-
-}
-
-
-/* LIKE ACTIF */
-
-.boutonLikeProfil.liked{
-
-    background:#ff1744;
-
-    color:white;
-
-    box-shadow:
-        0 0 12px rgba(255,23,68,.7),
-        0 0 25px rgba(255,23,68,.4);
-
-}
-
-
-/* COMPTEUR */
-
-#nombreLikesProfil{
-
-    color:#aaa;
-
-    font-weight:bold;
-
-}
-
-
-/* =========================================================
-   COEURS PAGE PROFIL
-========================================================= */
-
-.coeurProfil{
-
-    position:fixed;
-
-    left:0;
-    top:0;
-
-    pointer-events:none;
-
-    z-index:99999;
-
-    font-size:35px;
-
-    color:#ff1744;
-
-    animation:
-        coeurPage 1.8s ease-out forwards;
-
-    filter:
-        drop-shadow(
-            0 0 8px rgba(255,255,255,.9)
-        );
-
-}
-
-
-@keyframes coeurPage{
-
-    0%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                0,
-                30px
-            )
-            scale(.3)
-            rotate(0deg);
-
-    }
-
-    15%{
-
-        opacity:1;
-
-    }
-
-    50%{
-
-        opacity:1;
-
-        transform:
-            translate(
-                var(--x),
-                var(--y)
-            )
-            scale(1.4)
-            rotate(
-                var(--rotation)
-            );
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                var(--x2),
-                var(--y2)
-            )
-            scale(.7)
-            rotate(
-                var(--rotation)
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   EFFET ROSE TEMPORAIRE
-========================================================= */
-
-body.effetAmour{
-
-    animation:
-        amourPage .8s ease-in-out;
-
-}
-
-
-@keyframes amourPage{
-
-    0%{
-
-        box-shadow:
-            inset 0 0 0 rgba(255,23,68,0);
-
-    }
-
-    50%{
-
-        box-shadow:
-            inset 0 0 120px rgba(255,23,68,.35);
-
-    }
-
-    100%{
-
-        box-shadow:
-            inset 0 0 0 rgba(255,23,68,0);
-
-    }
-
-}
-
-/* =========================================================
-   LIKE DU PROFIL
-========================================================= */
-
-.profilLikeZone{
-
-    margin-top:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:10px;
-
-}
-
-
-/* =========================
-   BOUTON
-========================= */
-
-.boutonLikeProfil{
-
-    padding:12px 24px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#333;
-
-    color:white;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:
-        transform .2s ease,
-        background .25s ease,
-        box-shadow .25s ease;
-
-}
-
-
-.boutonLikeProfil:hover{
-
-    transform:scale(1.08);
-
-    background:#444;
-
-}
-
-
-/* =========================
-   LIKE ACTIF
-========================= */
-
-.boutonLikeProfil.liked{
-
-    background:#ff1744;
-
-    color:white;
-
-    box-shadow:
-        0 0 12px rgba(255,23,68,.7),
-        0 0 30px rgba(255,23,68,.35);
-
-}
-
-
-/* =========================
-   CLIC
-========================= */
-
-.boutonLikeProfil.likeClick{
-
-    transform:scale(1.3);
-
-}
-
-
-/* =========================
-   COMPTEUR
-========================= */
-
-.compteurLikesProfil{
-
-    color:#ff1744;
-
-    font-size:17px;
-
-    font-weight:bold;
-
-}
-
-
-/* =========================
-   PERSONNES QUI ONT LIKÉ
-========================= */
-
-.listeLikers{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    align-items:center;
-
-    gap:8px;
-
-    margin-top:4px;
-
-}
-
-
-/* =========================
-   PETITE PHOTO
-========================= */
-
-.liker{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    background:#292929;
-
-    border:1px solid #444;
-
-    border-radius:25px;
-
-    padding:5px 10px 5px 5px;
-
-    transition:
-        transform .2s ease,
-        background .2s ease;
-
-}
-
-
-.liker:hover{
-
-    transform:scale(1.06);
-
-    background:#333;
-
-}
-
-
-.liker img{
-
-    width:30px;
-
-    height:30px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    border:2px solid #ff1744;
-
-}
-
-
-.liker span{
-
-    color:white;
-
-    font-size:13px;
-
-    font-weight:bold;
-
-}
-
-
-/* =========================================================
-   ANIMATION COEURS PROFIL
-========================================================= */
-
-.coeurProfilAnimation{
-
-    position:fixed;
-
-    z-index:9999;
-
-    pointer-events:none;
-
-    color:#ff1744;
-
-    font-size:45px;
-
-    filter:
-        drop-shadow(
-            0 0 8px rgba(255,255,255,.8)
-        );
-
-    animation:
-        coeurProfilMontee
-        1.5s
-        ease-out
-        forwards;
-
-}
-
-
-@keyframes coeurProfilMontee{
-
-    0%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                0,
-                50px
-            )
-            scale(.3)
-            rotate(0deg);
-
-    }
-
-    15%{
-
-        opacity:1;
-
-    }
-
-    50%{
-
-        opacity:1;
-
-        transform:
-            translate(
-                var(--deplacement),
-                -100px
-            )
-            scale(1.4)
-            rotate(var(--rotation));
-
-    }
-
-    100%{
-
-        opacity:0;
-
-        transform:
-            translate(
-                calc(var(--deplacement) * 1.5),
-                -350px
-            )
-            scale(.8)
-            rotate(var(--rotation));
-
-    }
-
-}
-
-
-/* =========================================================
-   EFFET AMOUR SUR TOUTE LA PAGE
-========================================================= */
-
-body.animationAmour{
-
-    animation:
-        amourPage
-        1.1s
-        ease;
-
-}
-
-
-@keyframes amourPage{
-
-    0%{
-
-        filter:none;
-
-    }
-
-    25%{
-
-        filter:
-            sepia(.15)
-            saturate(1.7)
-            hue-rotate(315deg);
-
-    }
-
-    55%{
-
-        filter:
-            sepia(.2)
-            saturate(1.9)
-            hue-rotate(320deg);
-
-    }
-
-    100%{
-
-        filter:none;
+        width:100%;
 
     }
 
@@ -1615,15 +1626,16 @@ body.animationAmour{
 
     <div class="search">
 
-    <input
-        id="rechercheProfil"
-        type="text"
-        placeholder="🔍 Rechercher un profil..."
-    >
+        <input
+            id="rechercheProfil"
+            type="text"
+            placeholder="🔍 Rechercher un profil..."
+        >
 
-    <div id="resultatsRecherche"></div>
 
-</div>
+        <div id="resultatsRecherche"></div>
+
+    </div>
 
 
     <div class="account">
@@ -1709,6 +1721,35 @@ body.animationAmour{
     <div class="infos">
 
 
+        <!-- =================================================
+             FAVORIS PRIVÉS
+        ================================================== -->
+
+        <section
+            id="sectionFavoris"
+            class="sectionFavoris"
+            style="display:none;"
+        >
+
+            <div class="titreFavoris">
+
+                ⭐ Mes favoris
+
+            </div>
+
+
+            <div
+                id="listeFavoris"
+                class="listeFavoris"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================================
+             INFORMATIONS
+        ================================================== -->
+
         <div id="pseudo">
 
             Chargement...
@@ -1721,30 +1762,43 @@ body.animationAmour{
             Chargement...
 
         </div>
-		
-		<div class="profilLikeZone">
 
-    <button
-        id="boutonLikeProfil"
-        class="boutonLikeProfil"
-        type="button"
-    >
-        ♡ J'aime
-    </button>
 
-    <div
-        id="compteurLikesProfil"
-        class="compteurLikesProfil"
-    >
-        ❤️ 0 likes
-    </div>
+        <!-- =================================================
+             LIKES
+        ================================================== -->
 
-    <div
-        id="listeLikers"
-        class="listeLikers"
-    ></div>
+        <div class="profilLikeZone">
 
-</div>
+
+            <button
+                id="boutonLikeProfil"
+                class="boutonLikeProfil"
+                type="button"
+            >
+
+                ♡ J'aime
+
+            </button>
+
+
+            <div
+                id="compteurLikesProfil"
+                class="compteurLikesProfil"
+            >
+
+                ❤️ 0 likes
+
+            </div>
+
+
+            <div
+                id="listeLikers"
+                class="listeLikers"
+            ></div>
+
+
+        </div>
 
 
         <!-- =================================================

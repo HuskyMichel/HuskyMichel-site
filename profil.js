@@ -27,6 +27,14 @@ let utilisateurActuel = null;
 
 
 /* =========================================================
+   DONNEES DU PROFIL AFFICHÉ
+========================================================= */
+
+let profilAffiche = null;
+let profilAfficheId = null;
+
+
+/* =========================================================
    ELEMENTS DU PROFIL
 ========================================================= */
 
@@ -93,6 +101,17 @@ const compteurLikesProfil =
 
 const listeLikers =
     document.getElementById("listeLikers");
+
+
+/* =========================================================
+   ELEMENTS DES FAVORIS
+========================================================= */
+
+const sectionFavoris =
+    document.getElementById("sectionFavoris");
+
+const listeFavoris =
+    document.getElementById("listeFavoris");
 
 
 /* =========================================================
@@ -226,7 +245,7 @@ if(
 
 
 /* =========================================================
-   AFFICHER / CACHER LE COMPTE
+   AFFICHER COMPTE CONNECTE
 ========================================================= */
 
 function afficherCompteConnecte(user){
@@ -255,7 +274,10 @@ function afficherCompteConnecte(user){
 
     if(avatar){
 
-        if(user && user.photoURL){
+        if(
+            user &&
+            user.photoURL
+        ){
 
             avatar.src =
                 user.photoURL.replace(
@@ -271,7 +293,7 @@ function afficherCompteConnecte(user){
 
 
 /* =========================================================
-   AFFICHER LA CONNEXION
+   AFFICHER COMPTE DECONNECTE
 ========================================================= */
 
 function afficherCompteDeconnecte(){
@@ -388,43 +410,33 @@ onAuthStateChanged(
             user;
 
 
-        /* ================================================
-           CONNECTE
-        ================================================ */
-
         if(user){
 
             afficherCompteConnecte(
                 user
             );
 
-
-            /*
-               IMPORTANT :
-               On recharge les likes maintenant que
-               l'utilisateur actuel est connu.
-            */
-
-            await chargerLikesProfil();
-
         }
-
-
-        /* ================================================
-           DECONNECTE
-        ================================================ */
 
         else{
 
             afficherCompteDeconnecte();
 
+        }
 
-            /*
-               On recharge aussi les likes sans
-               utilisateur connecté.
-            */
+
+        /*
+         * Le profil est déjà chargé ou va être chargé.
+         * On recharge les éléments dépendant de la connexion.
+         */
+
+        if(
+            profilAffiche
+        ){
 
             await chargerLikesProfil();
+
+            await gererAffichageFavoris();
 
         }
 
@@ -448,10 +460,6 @@ if(
             const texte =
                 recherche.value.trim();
 
-
-            /* ==============================================
-               RECHERCHE VIDE
-            ============================================== */
 
             if(
                 texte === ""
@@ -636,6 +644,15 @@ if(
 
 async function chargerProfil(){
 
+    if(
+        !pseudoRecherche
+    ){
+
+        return;
+
+    }
+
+
     try{
 
         const q =
@@ -656,9 +673,9 @@ async function chargerProfil(){
             await getDocs(q);
 
 
-        /* ==============================================
+        /* =================================================
            PROFIL INTROUVABLE
-        ============================================== */
+        ================================================= */
 
         if(
             resultat.empty
@@ -732,17 +749,29 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
-           DONNEES
-        ============================================== */
+        /* =================================================
+           RECUPERATION DU PROFIL
+        ================================================= */
+
+        const profilDoc =
+            resultat.docs[0];
+
+
+        profilAfficheId =
+            profilDoc.id;
+
+
+        profilAffiche =
+            profilDoc.data();
+
 
         const data =
-            resultat.docs[0].data();
+            profilAffiche;
 
 
-        /* ==============================================
+        /* =================================================
            PHOTO
-        ============================================== */
+        ================================================= */
 
         if(photo){
 
@@ -766,9 +795,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            PSEUDO
-        ============================================== */
+        ================================================= */
 
         if(pseudo){
 
@@ -779,9 +808,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            DESCRIPTION COURTE
-        ============================================== */
+        ================================================= */
 
         if(descriptionCourte){
 
@@ -792,9 +821,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            DESCRIPTION LONGUE
-        ============================================== */
+        ================================================= */
 
         if(descriptionLongue){
 
@@ -805,9 +834,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            CATEGORIES
-        ============================================== */
+        ================================================= */
 
         if(categories){
 
@@ -871,9 +900,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            RESEAUX
-        ============================================== */
+        ================================================= */
 
         if(reseaux){
 
@@ -993,9 +1022,9 @@ async function chargerProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            VIDEO YOUTUBE
-        ============================================== */
+        ================================================= */
 
         if(videoContainer){
 
@@ -1019,8 +1048,6 @@ async function chargerProfil(){
                 let videoId =
                     "";
 
-
-                /* youtube.com/watch?v= */
 
                 if(
                     url.includes(
@@ -1054,8 +1081,6 @@ async function chargerProfil(){
                 }
 
 
-                /* youtu.be/ */
-
                 else if(
                     url.includes(
                         "youtu.be/"
@@ -1076,8 +1101,6 @@ async function chargerProfil(){
 
                 }
 
-
-                /* youtube.com/embed/ */
 
                 else if(
                     url.includes(
@@ -1128,6 +1151,13 @@ async function chargerProfil(){
 
                     `;
 
+                    if(sectionVideo){
+
+                        sectionVideo.style.display =
+                            "block";
+
+                    }
+
                 }
 
                 else{
@@ -1158,6 +1188,20 @@ async function chargerProfil(){
             }
 
         }
+
+
+        /* =================================================
+           LIKES
+        ================================================= */
+
+        await chargerLikesProfil();
+
+
+        /* =================================================
+           FAVORIS
+        ================================================= */
+
+        await gererAffichageFavoris();
 
 
         console.log(
@@ -1239,163 +1283,7 @@ async function chargerProfil(){
 
 
 /* =========================================================
-   ANIMATION DES COEURS
-========================================================= */
-
-function lancerAnimationCoeursProfil(){
-
-    document.body.classList.remove(
-        "animationAmour"
-    );
-
-
-    void document.body.offsetWidth;
-
-
-    document.body.classList.add(
-        "animationAmour"
-    );
-
-
-    const nombreCoeurs =
-        35;
-
-
-    for(
-        let i = 0;
-        i < nombreCoeurs;
-        i++
-    ){
-
-        const coeur =
-            document.createElement(
-                "div"
-            );
-
-
-        coeur.className =
-            "coeurProfilAnimation";
-
-
-        coeur.textContent =
-            "❤️";
-
-
-        coeur.style.left =
-            (
-                Math.random() * 100
-            ) +
-            "vw";
-
-
-        coeur.style.top =
-            (
-                45 +
-                Math.random() * 55
-            ) +
-            "vh";
-
-
-        coeur.style.fontSize =
-            (
-                25 +
-                Math.random() * 40
-            ) +
-            "px";
-
-
-        coeur.style.setProperty(
-            "--deplacement",
-            (
-                -150 +
-                Math.random() * 300
-            ) +
-            "px"
-        );
-
-
-        coeur.style.setProperty(
-            "--rotation",
-            (
-                -35 +
-                Math.random() * 70
-            ) +
-            "deg"
-        );
-
-
-        coeur.style.animationDelay =
-            (
-                Math.random() * .5
-            ) +
-            "s";
-
-
-        document.body.appendChild(
-            coeur
-        );
-
-
-        setTimeout(
-            ()=>{
-
-                coeur.remove();
-
-            },
-            2200
-        );
-
-    }
-
-
-    setTimeout(
-        ()=>{
-
-            document.body.classList.remove(
-                "animationAmour"
-            );
-
-        },
-        1200
-    );
-
-}
-
-
-/* =========================================================
-   ANIMATION DU BOUTON LIKE
-========================================================= */
-
-function animerBoutonLikeProfil(){
-
-    if(!boutonLikeProfil){
-
-        return;
-
-    }
-
-
-    boutonLikeProfil.classList.add(
-        "likeClick"
-    );
-
-
-    setTimeout(
-        ()=>{
-
-            boutonLikeProfil.classList.remove(
-                "likeClick"
-            );
-
-        },
-        300
-    );
-
-}
-
-
-/* =========================================================
-   CHARGER LES PERSONNES QUI ONT LIKÉ
+   CHARGER LES PERSONNES QUI ONT LIKE
 ========================================================= */
 
 async function chargerLikersProfil(){
@@ -1616,9 +1504,9 @@ async function chargerLikesProfil(){
             snapshot.size;
 
 
-        /* ==============================================
+        /* =================================================
            COMPTEUR
-        ============================================== */
+        ================================================= */
 
         if(compteurLikesProfil){
 
@@ -1634,9 +1522,9 @@ async function chargerLikesProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            VERIFIER MON LIKE
-        ============================================== */
+        ================================================= */
 
         if(
             boutonLikeProfil
@@ -1705,10 +1593,6 @@ async function chargerLikesProfil(){
         }
 
 
-        /* ==============================================
-           CHARGER LES LIKERS
-        ============================================== */
-
         await chargerLikersProfil();
 
     }
@@ -1726,14 +1610,168 @@ async function chargerLikesProfil(){
 
 
 /* =========================================================
+   ANIMATION DU BOUTON LIKE
+========================================================= */
+
+function animerBoutonLikeProfil(){
+
+    if(
+        !boutonLikeProfil
+    ){
+
+        return;
+
+    }
+
+
+    boutonLikeProfil.classList.add(
+        "likeClick"
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            boutonLikeProfil.classList.remove(
+                "likeClick"
+            );
+
+        },
+        300
+    );
+
+}
+
+
+/* =========================================================
+   ANIMATION DES COEURS
+========================================================= */
+
+function lancerAnimationCoeursProfil(){
+
+    document.body.classList.remove(
+        "animationAmour"
+    );
+
+
+    void document.body.offsetWidth;
+
+
+    document.body.classList.add(
+        "animationAmour"
+    );
+
+
+    const nombreCoeurs =
+        35;
+
+
+    for(
+        let i = 0;
+        i < nombreCoeurs;
+        i++
+    ){
+
+        const coeur =
+            document.createElement(
+                "div"
+            );
+
+
+        coeur.className =
+            "coeurProfilAnimation";
+
+
+        coeur.textContent =
+            "❤️";
+
+
+        coeur.style.left =
+            (
+                Math.random() * 100
+            ) +
+            "vw";
+
+
+        coeur.style.top =
+            (
+                45 +
+                Math.random() * 55
+            ) +
+            "vh";
+
+
+        coeur.style.fontSize =
+            (
+                25 +
+                Math.random() * 40
+            ) +
+            "px";
+
+
+        coeur.style.setProperty(
+            "--deplacement",
+            (
+                -150 +
+                Math.random() * 300
+            ) +
+            "px"
+        );
+
+
+        coeur.style.setProperty(
+            "--rotation",
+            (
+                -35 +
+                Math.random() * 70
+            ) +
+            "deg"
+        );
+
+
+        coeur.style.animationDelay =
+            (
+                Math.random() * .5
+            ) +
+            "s";
+
+
+        document.body.appendChild(
+            coeur
+        );
+
+
+        setTimeout(
+            ()=>{
+
+                coeur.remove();
+
+            },
+            2200
+        );
+
+    }
+
+
+    setTimeout(
+        ()=>{
+
+            document.body.classList.remove(
+                "animationAmour"
+            );
+
+        },
+        1200
+    );
+
+}
+
+
+/* =========================================================
    GERER LIKE / UNLIKE
 ========================================================= */
 
 async function gererLikeProfil(){
-
-    /* ==============================================
-       UTILISATEUR NON CONNECTE
-    ============================================== */
 
     if(
         !utilisateurActuel
@@ -1757,10 +1795,6 @@ async function gererLikeProfil(){
 
     }
 
-
-    /* ==============================================
-       EVITER LES CLICS RAPIDES
-    ============================================== */
 
     if(
         boutonLikeProfil.dataset.chargement ===
@@ -1794,9 +1828,9 @@ async function gererLikeProfil(){
             );
 
 
-        /* ==============================================
+        /* =================================================
            UNLIKE
-        ============================================== */
+        ================================================= */
 
         if(
             likeSnap.exists()
@@ -1818,9 +1852,9 @@ async function gererLikeProfil(){
         }
 
 
-        /* ==============================================
+        /* =================================================
            LIKE
-        ============================================== */
+        ================================================= */
 
         else{
 
@@ -1847,21 +1881,12 @@ async function gererLikeProfil(){
                 "♥ J'aime";
 
 
-            /* Animation bouton */
-
             animerBoutonLikeProfil();
-
-
-            /* Grosse animation */
 
             lancerAnimationCoeursProfil();
 
         }
 
-
-        /* ==============================================
-           RECHARGER LES DONNEES
-        ============================================== */
 
         await chargerLikesProfil();
 
@@ -1906,6 +1931,717 @@ if(
 
         }
     );
+
+}
+
+
+/* =========================================================
+   FAVORIS
+========================================================= */
+
+
+/*
+   Structure utilisée :
+
+   users
+      └── UID utilisateur
+           └── favoris
+                ├── UID profil 1
+                ├── UID profil 2
+                └── UID profil 3
+*/
+
+
+/* =========================================================
+   VERIFIER SI LE PROFIL EST EN FAVORI
+========================================================= */
+
+async function verifierFavori(){
+
+    if(
+        !utilisateurActuel ||
+        !profilAfficheId
+    ){
+
+        return false;
+
+    }
+
+
+    try{
+
+        const favoriRef =
+            doc(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris",
+                profilAfficheId
+            );
+
+
+        const favoriSnap =
+            await getDoc(
+                favoriRef
+            );
+
+
+        return favoriSnap.exists();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors de la vérification du favori :",
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   AJOUTER UN PROFIL AUX FAVORIS
+========================================================= */
+
+async function ajouterFavori(){
+
+    if(
+        !utilisateurActuel
+    ){
+
+        alert(
+            "Tu dois être connecté pour ajouter un profil aux favoris ⭐"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !profilAfficheId
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const favoriRef =
+            doc(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris",
+                profilAfficheId
+            );
+
+
+        await setDoc(
+            favoriRef,
+            {
+
+                profilId:
+                    profilAfficheId,
+
+                pseudo:
+                    profilAffiche?.pseudo ||
+                    pseudoRecherche,
+
+                photo:
+                    profilAffiche?.photo ||
+                    "",
+
+                dateAjout:
+                    new Date()
+
+            }
+        );
+
+
+        console.log(
+            "Profil ajouté aux favoris."
+        );
+
+
+        await afficherBoutonFavori();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors de l'ajout du favori :",
+            error
+        );
+
+
+        alert(
+            "Impossible d'ajouter ce profil aux favoris."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RETIRER UN PROFIL DES FAVORIS
+========================================================= */
+
+async function retirerFavori(){
+
+    if(
+        !utilisateurActuel ||
+        !profilAfficheId
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const favoriRef =
+            doc(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris",
+                profilAfficheId
+            );
+
+
+        await deleteDoc(
+            favoriRef
+        );
+
+
+        console.log(
+            "Profil retiré des favoris."
+        );
+
+
+        await afficherBoutonFavori();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors de la suppression du favori :",
+            error
+        );
+
+
+        alert(
+            "Impossible de retirer ce profil des favoris."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOUTON FAVORI
+========================================================= */
+
+async function afficherBoutonFavori(){
+
+    /*
+       Pour l'instant ton HTML ne possède pas encore
+       de bouton ⭐ dédié au profil.
+
+       Cette fonction est donc préparée pour celui-ci.
+    */
+
+    const boutonFavori =
+        document.getElementById(
+            "boutonFavoriProfil"
+        );
+
+
+    if(
+        !boutonFavori
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Impossible d'ajouter son propre profil
+       à ses propres favoris.
+    */
+
+    if(
+        utilisateurActuel &&
+        profilAfficheId ===
+        utilisateurActuel.uid
+    ){
+
+        boutonFavori.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    boutonFavori.style.display =
+        "block";
+
+
+    if(
+        !utilisateurActuel
+    ){
+
+        boutonFavori.textContent =
+            "☆ Ajouter aux favoris";
+
+        boutonFavori.classList.remove(
+            "favoriActif"
+        );
+
+        return;
+
+    }
+
+
+    const estFavori =
+        await verifierFavori();
+
+
+    if(
+        estFavori
+    ){
+
+        boutonFavori.textContent =
+            "⭐ Retirer des favoris";
+
+        boutonFavori.classList.add(
+            "favoriActif"
+        );
+
+    }
+
+    else{
+
+        boutonFavori.textContent =
+            "☆ Ajouter aux favoris";
+
+        boutonFavori.classList.remove(
+            "favoriActif"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLIC BOUTON FAVORI
+========================================================= */
+
+const boutonFavoriProfil =
+    document.getElementById(
+        "boutonFavoriProfil"
+    );
+
+
+if(
+    boutonFavoriProfil
+){
+
+    boutonFavoriProfil.addEventListener(
+        "click",
+        async(event)=>{
+
+            event.stopPropagation();
+
+
+            if(
+                !utilisateurActuel
+            ){
+
+                alert(
+                    "Tu dois être connecté pour ajouter un profil aux favoris ⭐"
+                );
+
+                return;
+
+            }
+
+
+            if(
+                profilAfficheId ===
+                utilisateurActuel.uid
+            ){
+
+                return;
+
+            }
+
+
+            const estFavori =
+                await verifierFavori();
+
+
+            if(
+                estFavori
+            ){
+
+                await retirerFavori();
+
+            }
+
+            else{
+
+                await ajouterFavori();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AFFICHAGE DE LA ZONE « MES FAVORIS »
+========================================================= */
+
+async function gererAffichageFavoris(){
+
+    /*
+       La section doit être complètement invisible
+       lorsque l'on regarde le profil de quelqu'un d'autre.
+    */
+
+    if(
+        !sectionFavoris ||
+        !listeFavoris
+    ){
+
+        return;
+
+    }
+
+
+    sectionFavoris.style.display =
+        "none";
+
+
+    listeFavoris.innerHTML =
+        "";
+
+
+    /*
+       Il faut être connecté.
+    */
+
+    if(
+        !utilisateurActuel
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Il faut regarder SON propre profil.
+    */
+
+    if(
+        profilAfficheId !==
+        utilisateurActuel.uid
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       On affiche maintenant la section.
+    */
+
+    sectionFavoris.style.display =
+        "block";
+
+
+    await chargerMesFavoris();
+
+}
+
+
+/* =========================================================
+   CHARGER MES FAVORIS
+========================================================= */
+
+async function chargerMesFavoris(){
+
+    if(
+        !utilisateurActuel ||
+        !listeFavoris
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const favorisRef =
+            collection(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                favorisRef
+            );
+
+
+        listeFavoris.innerHTML =
+            "";
+
+
+        /*
+           Aucun favori
+        */
+
+        if(
+            snapshot.empty
+        ){
+
+            listeFavoris.innerHTML = `
+
+                <div style="
+                    color:#999;
+                    padding:15px 0;
+                ">
+
+                    Tu n'as encore aucun profil en favori ⭐
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+           Création des cartes
+        */
+
+        for(
+            const favoriDoc
+            of snapshot.docs
+        ){
+
+            const favori =
+                favoriDoc.data();
+
+
+            let data =
+                favori;
+
+
+            /*
+               Si les informations enregistrées
+               dans le favori sont incomplètes,
+               on recharge le vrai profil.
+            */
+
+            if(
+                !data.pseudo ||
+                !data.photo
+            ){
+
+                try{
+
+                    const profilRef =
+                        doc(
+                            db,
+                            "users",
+                            favoriDoc.id
+                        );
+
+
+                    const profilSnap =
+                        await getDoc(
+                            profilRef
+                        );
+
+
+                    if(
+                        profilSnap.exists()
+                    ){
+
+                        data =
+                            profilSnap.data();
+
+                    }
+
+                }
+
+                catch(error){
+
+                    console.error(
+                        "Erreur lors du chargement du favori :",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            /*
+               Carte
+            */
+
+            const carte =
+                document.createElement(
+                    "div"
+                );
+
+
+            carte.className =
+                "carteFavori";
+
+
+            carte.style.cursor =
+                "pointer";
+
+
+            /*
+               Image
+            */
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                data.photo ||
+                "";
+
+
+            image.alt =
+                data.pseudo ||
+                "Profil";
+
+
+            /*
+               Nom
+            */
+
+            const nom =
+                document.createElement(
+                    "div"
+                );
+
+
+            nom.className =
+                "nomFavori";
+
+
+            nom.textContent =
+                data.pseudo ||
+                "Profil";
+
+
+            /*
+               Ajout
+            */
+
+            carte.appendChild(
+                image
+            );
+
+
+            carte.appendChild(
+                nom
+            );
+
+
+            /*
+               Ouverture du profil
+            */
+
+            carte.addEventListener(
+                "click",
+                ()=>{
+
+                    if(
+                        data.pseudo
+                    ){
+
+                        window.location.href =
+                            "profil.html?pseudo=" +
+                            encodeURIComponent(
+                                data.pseudo
+                            );
+
+                    }
+
+                }
+            );
+
+
+            listeFavoris.appendChild(
+                carte
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du chargement des favoris :",
+            error
+        );
+
+
+        listeFavoris.innerHTML = `
+
+            <div style="
+                color:#ff6b6b;
+                padding:15px 0;
+            ">
+
+                Impossible de charger tes favoris.
+
+            </div>
+
+        `;
+
+    }
 
 }
 
@@ -1957,7 +2693,7 @@ if(retourAccueil){
 
 
 /* =========================================================
-   LANCEMENT DU PROFIL
+   LANCEMENT
 ========================================================= */
 
 chargerProfil();
