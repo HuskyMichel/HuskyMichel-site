@@ -11,13 +11,15 @@ import {
     collection,
     getDocs,
     doc,
-    getDoc
+    getDoc,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-/* ===========================
+/* =========================================================
    ELEMENTS HTML
-=========================== */
+========================================================= */
 
 const loginBtn = document.getElementById("loginBtn");
 const profile = document.getElementById("profile");
@@ -27,10 +29,12 @@ const logout = document.getElementById("logout");
 const listeProfils = document.getElementById("listeProfils");
 const recherche = document.querySelector(".search input");
 
+let utilisateurConnecte = null;
 
-/* ===========================
+
+/* =========================================================
    GOOGLE
-=========================== */
+========================================================= */
 
 const provider = new GoogleAuthProvider();
 
@@ -39,9 +43,9 @@ provider.setCustomParameters({
 });
 
 
-/* ===========================
+/* =========================================================
    MENU DU COMPTE
-=========================== */
+========================================================= */
 
 if(avatar){
 
@@ -63,16 +67,20 @@ document.addEventListener("click",(event)=>{
 
     if(profile && !profile.contains(event.target)){
 
-        menu.style.display = "none";
+        if(menu){
+
+            menu.style.display = "none";
+
+        }
 
     }
 
 });
 
 
-/* ===========================
+/* =========================================================
    CONNEXION
-=========================== */
+========================================================= */
 
 if(loginBtn){
 
@@ -80,11 +88,12 @@ if(loginBtn){
 
         try{
 
-            await signInWithPopup(auth,provider);
+            await signInWithPopup(
+                auth,
+                provider
+            );
 
-        }
-
-        catch(error){
+        }catch(error){
 
             console.error(
                 "Erreur lors de la connexion :",
@@ -98,9 +107,9 @@ if(loginBtn){
 }
 
 
-/* ===========================
+/* =========================================================
    DECONNEXION
-=========================== */
+========================================================= */
 
 if(logout){
 
@@ -110,9 +119,7 @@ if(logout){
 
             await signOut(auth);
 
-        }
-
-        catch(error){
+        }catch(error){
 
             console.error(
                 "Erreur lors de la déconnexion :",
@@ -126,21 +133,22 @@ if(logout){
 }
 
 
-/* ===========================
+/* =========================================================
    ETAT DE LA CONNEXION
-=========================== */
+========================================================= */
 
 onAuthStateChanged(auth,async(user)=>{
 
-    /* ===========================
+    utilisateurConnecte = user || null;
+
+
+    /* =====================================================
        UTILISATEUR CONNECTE
-    =========================== */
+    ===================================================== */
 
     if(user){
 
-        /* PHOTO GOOGLE */
-
-        if(user.photoURL){
+        if(user.photoURL && avatar){
 
             avatar.src =
                 user.photoURL.replace(
@@ -151,16 +159,25 @@ onAuthStateChanged(auth,async(user)=>{
         }
 
 
-        /* AFFICHER LE COMPTE */
+        if(loginBtn){
 
-        loginBtn.style.display = "none";
+            loginBtn.style.display =
+                "none";
 
-        profile.style.display = "block";
+        }
 
 
-        /* ===========================
+        if(profile){
+
+            profile.style.display =
+                "block";
+
+        }
+
+
+        /* =================================================
            VERIFIER LE PROFIL FIRESTORE
-        =========================== */
+        ================================================= */
 
         try{
 
@@ -175,8 +192,6 @@ onAuthStateChanged(auth,async(user)=>{
                 await getDoc(profilRef);
 
 
-            /* PROFIL INEXISTANT */
-
             if(!profilSnap.exists()){
 
                 window.location.href =
@@ -186,9 +201,7 @@ onAuthStateChanged(auth,async(user)=>{
 
             }
 
-        }
-
-        catch(error){
+        }catch(error){
 
             console.error(
                 "Erreur lors de la vérification du profil :",
@@ -198,25 +211,32 @@ onAuthStateChanged(auth,async(user)=>{
         }
 
 
-        /* CHARGER LES PROFILS */
-
         chargerProfils();
 
     }
 
 
-    /* ===========================
-       UTILISATEUR NON CONNECTE
-    =========================== */
+    /* =====================================================
+       UTILISATEUR DECONNECTE
+    ===================================================== */
 
     else{
 
-        loginBtn.style.display = "block";
+        if(loginBtn){
 
-        profile.style.display = "none";
+            loginBtn.style.display =
+                "block";
+
+        }
 
 
-        /* LES PROFILS RESTENT VISIBLES */
+        if(profile){
+
+            profile.style.display =
+                "none";
+
+        }
+
 
         chargerProfils();
 
@@ -225,53 +245,254 @@ onAuthStateChanged(auth,async(user)=>{
 });
 
 
-/* ===========================
+/* =========================================================
+   ANIMATION DES COEURS
+========================================================= */
+
+function explosionCoeurs(carte){
+
+    for(let i = 0; i < 12; i++){
+
+        const coeur =
+            document.createElement("span");
+
+        coeur.className =
+            "coeurLike";
+
+        coeur.textContent =
+            ["❤️","💖","💕","💗","💓"][
+                Math.floor(
+                    Math.random() * 5
+                )
+            ];
+
+
+        const x =
+            Math.random() * 90 + 5;
+
+        const y =
+            Math.random() * 70 + 10;
+
+
+        coeur.style.left =
+            x + "%";
+
+        coeur.style.top =
+            y + "%";
+
+
+        coeur.style.setProperty(
+            "--rotation",
+            (Math.random() * 60 - 30) + "deg"
+        );
+
+
+        carte.appendChild(coeur);
+
+
+        setTimeout(()=>{
+
+            coeur.remove();
+
+        },1200);
+
+    }
+
+}
+
+
+/* =========================================================
+   GERER UN LIKE
+========================================================= */
+
+async function gererLike(
+    userId,
+    profilId,
+    bouton,
+    compteur,
+    carte
+){
+
+    /* =====================================================
+       PAS CONNECTE
+    ===================================================== */
+
+    if(!utilisateurConnecte){
+
+        alert(
+            "Tu dois être connecté pour aimer un profil ❤️"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       DOCUMENT DU LIKE
+    ===================================================== */
+
+    const likeRef =
+        doc(
+            db,
+            "users",
+            profilId,
+            "likes",
+            userId
+        );
+
+
+    try{
+
+        const likeSnap =
+            await getDoc(likeRef);
+
+
+        /* =================================================
+           DEJA LIKE
+        ================================================= */
+
+        if(likeSnap.exists()){
+
+            await deleteDoc(likeRef);
+
+            bouton.textContent =
+                "♡ J'aime";
+
+            bouton.classList.remove(
+                "likeActif"
+            );
+
+
+            let nombre =
+                parseInt(
+                    compteur.dataset.nombre || "0"
+                );
+
+
+            nombre =
+                Math.max(
+                    0,
+                    nombre - 1
+                );
+
+
+            compteur.dataset.nombre =
+                nombre;
+
+
+            compteur.textContent =
+                "❤️ " +
+                nombre +
+                " likes";
+
+        }
+
+
+        /* =================================================
+           PAS ENCORE LIKE
+        ================================================= */
+
+        else{
+
+            await setDoc(
+                likeRef,
+                {
+                    uid: userId,
+                    date: Date.now()
+                }
+            );
+
+
+            bouton.textContent =
+                "♥ J'aime";
+
+            bouton.classList.add(
+                "likeActif"
+            );
+
+
+            let nombre =
+                parseInt(
+                    compteur.dataset.nombre || "0"
+                );
+
+
+            nombre++;
+
+
+            compteur.dataset.nombre =
+                nombre;
+
+
+            compteur.textContent =
+                "❤️ " +
+                nombre +
+                " likes";
+
+
+            /* ANIMATION */
+
+            explosionCoeurs(carte);
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Erreur lors du like :",
+            error
+        );
+
+        alert(
+            "Impossible de modifier le like."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    CHARGER LES PROFILS
-=========================== */
+========================================================= */
 
 async function chargerProfils(){
 
-    /* VIDER LA LISTE */
+    if(!listeProfils){
+
+        return;
+
+    }
+
 
     listeProfils.innerHTML = "";
 
 
     try{
 
-        /* ===========================
-           RECUPERER LES UTILISATEURS
-        =========================== */
-
         const snapshot =
             await getDocs(
-                collection(db,"users")
+                collection(
+                    db,
+                    "users"
+                )
             );
 
 
-        /* ===========================
-           PARCOURIR LES PROFILS
-        =========================== */
-
-        snapshot.forEach((profilDoc)=>{
+        for(const profilDoc of snapshot.docs){
 
             const data =
                 profilDoc.data();
 
 
-            /* ===========================
-               CREER LA CARTE
-            =========================== */
-
-            const carte =
-                document.createElement("div");
-
-            carte.className =
-                "carteProfil";
+            const profilId =
+                profilDoc.id;
 
 
-            /* ===========================
+            /* =================================================
                CATEGORIES
-            =========================== */
+            ================================================= */
 
             const categories =
                 Array.isArray(data.categories)
@@ -289,26 +510,20 @@ async function chargerProfils(){
             let categoriesHTML = "";
 
 
-            /* ===========================
-               3 PREMIERES CATEGORIES
-            =========================== */
+            troisCategories.forEach(
+                (categorie)=>{
 
-            troisCategories.forEach((categorie)=>{
+                    categoriesHTML += `
 
-                categoriesHTML += `
+                        <span class="categorieCarte">
+                            🏷️ ${categorie}
+                        </span>
 
-                    <span class="categorieCarte">
-                        🏷️ ${categorie}
-                    </span>
+                    `;
 
-                `;
+                }
+            );
 
-            });
-
-
-            /* ===========================
-               CATEGORIES SUPPLEMENTAIRES
-            =========================== */
 
             if(autresCategories.length > 0){
 
@@ -320,18 +535,19 @@ async function chargerProfils(){
                         +${autresCategories.length}
                     </span>
 
-
                     <div class="categoriesCachees">
 
                         ${
                             autresCategories
-                            .map((categorie)=>`
+                            .map(
+                                (categorie)=>`
 
-                                <span class="categorieCarte">
-                                    🏷️ ${categorie}
-                                </span>
+                                    <span class="categorieCarte">
+                                        🏷️ ${categorie}
+                                    </span>
 
-                            `)
+                                `
+                            )
                             .join("")
                         }
 
@@ -342,9 +558,9 @@ async function chargerProfils(){
             }
 
 
-            /* ===========================
-               RESEAUX SOCIAUX
-            =========================== */
+            /* =================================================
+               RESEAUX
+            ================================================= */
 
             const reseaux =
                 Array.isArray(data.reseaux)
@@ -355,100 +571,77 @@ async function chargerProfils(){
             let reseauxHTML = "";
 
 
-            reseaux.forEach((reseau)=>{
+            reseaux.forEach(
+                (reseau)=>{
 
-                if(!reseau || !reseau.lien){
+                    if(!reseau || !reseau.lien){
 
-                    return;
+                        return;
 
-                }
-
-
-                let emoji = "🌐";
+                    }
 
 
-                if(reseau.type === "YouTube"){
+                    let emoji = "🌐";
 
-                    emoji = "▶️";
 
-                }
+                    if(reseau.type === "YouTube")
+                        emoji = "▶️";
 
-                else if(reseau.type === "Twitch"){
+                    else if(reseau.type === "Twitch")
+                        emoji = "🎮";
 
-                    emoji = "🎮";
+                    else if(reseau.type === "Discord")
+                        emoji = "💬";
 
-                }
+                    else if(reseau.type === "TikTok")
+                        emoji = "🎵";
 
-                else if(reseau.type === "Discord"){
+                    else if(reseau.type === "Instagram")
+                        emoji = "📸";
 
-                    emoji = "💬";
+                    else if(reseau.type === "Snapchat")
+                        emoji = "👻";
 
-                }
+                    else if(reseau.type === "Facebook")
+                        emoji = "🔵";
 
-                else if(reseau.type === "TikTok"){
+                    else if(reseau.type === "Kick")
+                        emoji = "🟢";
 
-                    emoji = "🎵";
+                    else if(reseau.type === "Paypal")
+                        emoji = "💰";
 
-                }
 
-                else if(reseau.type === "Instagram"){
+                    reseauxHTML += `
 
-                    emoji = "📸";
+                        <a
+                            class="reseauCarte"
+                            href="${reseau.lien}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
 
-                }
+                            ${emoji} ${reseau.type}
 
-                else if(reseau.type === "Snapchat"){
+                        </a>
 
-                    emoji = "👻";
-
-                }
-
-                else if(reseau.type === "Facebook"){
-
-                    emoji = "🔵";
-
-                }
-
-                else if(reseau.type === "Kick"){
-
-                    emoji = "🟢";
+                    `;
 
                 }
-
-                else if(reseau.type === "Paypal"){
-
-                    emoji = "💰";
-
-                }
-
-                else if(reseau.type === "Site Web"){
-
-                    emoji = "🌐";
-
-                }
+            );
 
 
-                reseauxHTML += `
+            /* =================================================
+               CREER LA CARTE
+            ================================================= */
 
-                    <a
-                        class="reseauCarte"
-                        href="${reseau.lien}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-
-                        ${emoji} ${reseau.type}
-
-                    </a>
-
-                `;
-
-            });
+            const carte =
+                document.createElement("div");
 
 
-            /* ===========================
-               CONTENU DE LA CARTE
-            =========================== */
+            carte.className =
+                "carteProfil";
+
 
             carte.innerHTML = `
 
@@ -470,7 +663,10 @@ async function chargerProfils(){
 
                     <div class="carteDescription">
 
-                        ${data.descriptionCourte || "Aucune description"}
+                        ${
+                            data.descriptionCourte ||
+                            "Aucune description"
+                        }
 
                     </div>
 
@@ -505,6 +701,16 @@ async function chargerProfils(){
 
 
                     <button
+                        class="boutonLike"
+                        type="button"
+                    >
+
+                        ♡ J'aime
+
+                    </button>
+
+
+                    <button
                         class="boutonVoirProfil"
                         type="button"
                     >
@@ -518,9 +724,119 @@ async function chargerProfils(){
             `;
 
 
-            /* ===========================
-               BOUTON +X
-            =========================== */
+            /* =================================================
+               RECUPERER LES ELEMENTS LIKE
+            ================================================= */
+
+            const boutonLike =
+                carte.querySelector(
+                    ".boutonLike"
+                );
+
+
+            const compteur =
+                carte.querySelector(
+                    ".carteLikes"
+                );
+
+
+            /* =================================================
+               COMPTER LES LIKES
+            ================================================= */
+
+            const likesRef =
+                collection(
+                    db,
+                    "users",
+                    profilId,
+                    "likes"
+                );
+
+
+            const likesSnapshot =
+                await getDocs(
+                    likesRef
+                );
+
+
+            const nombreLikes =
+                likesSnapshot.size;
+
+
+            compteur.dataset.nombre =
+                nombreLikes;
+
+
+            compteur.textContent =
+                "❤️ " +
+                nombreLikes +
+                " likes";
+
+
+            /* =================================================
+               VERIFIER SI L'UTILISATEUR A DEJA LIKE
+            ================================================= */
+
+            if(utilisateurConnecte){
+
+                const monLikeRef =
+                    doc(
+                        db,
+                        "users",
+                        profilId,
+                        "likes",
+                        utilisateurConnecte.uid
+                    );
+
+
+                const monLike =
+                    await getDoc(
+                        monLikeRef
+                    );
+
+
+                if(monLike.exists()){
+
+                    boutonLike.textContent =
+                        "♥ J'aime";
+
+                    boutonLike.classList.add(
+                        "likeActif"
+                    );
+
+                }
+
+            }
+
+
+            /* =================================================
+               CLICK LIKE
+            ================================================= */
+
+            boutonLike.addEventListener(
+                "click",
+                (event)=>{
+
+                    event.stopPropagation();
+
+
+                    gererLike(
+                        utilisateurConnecte
+                            ? utilisateurConnecte.uid
+                            : null,
+                        profilId,
+                        boutonLike,
+                        compteur,
+                        carte
+                    );
+
+                }
+            );
+
+
+            /* =================================================
+               BOUTON + CATEGORIES
+            ================================================= */
 
             const boutonPlus =
                 carte.querySelector(
@@ -534,59 +850,42 @@ async function chargerProfils(){
                     "click",
                     (event)=>{
 
-                        /*
-                           Empêche le clic de
-                           déclencher l'ouverture
-                           du profil
-                        */
-
                         event.stopPropagation();
 
 
-                        const categoriesCachees =
+                        const cache =
                             carte.querySelector(
                                 ".categoriesCachees"
                             );
 
 
-                        if(!categoriesCachees){
+                        if(!cache){
 
                             return;
 
                         }
 
 
-                        /* ===========================
-                           FERMER
-                        =========================== */
-
                         if(
-                            categoriesCachees.style.display
-                            === "flex"
+                            cache.style.display ===
+                            "flex"
                         ){
 
-                            categoriesCachees.style.display =
+                            cache.style.display =
                                 "none";
 
 
                             boutonPlus.textContent =
                                 "+" +
-                                categoriesCachees
-                                .querySelectorAll(
+                                cache.querySelectorAll(
                                     ".categorieCarte"
-                                )
-                                .length;
+                                ).length;
 
                         }
 
-
-                        /* ===========================
-                           OUVRIR
-                        =========================== */
-
                         else{
 
-                            categoriesCachees.style.display =
+                            cache.style.display =
                                 "flex";
 
 
@@ -601,34 +900,33 @@ async function chargerProfils(){
             }
 
 
-            /* ===========================
+            /* =================================================
                RESEAUX
-               EMPECHE LE CLIC PROFIL
-            =========================== */
+            ================================================= */
 
-            const liensReseaux =
-                carte.querySelectorAll(
+            carte
+                .querySelectorAll(
                     ".reseauCarte"
-                );
+                )
+                .forEach(
+                    (lien)=>{
 
+                        lien.addEventListener(
+                            "click",
+                            (event)=>{
 
-            liensReseaux.forEach((lien)=>{
+                                event.stopPropagation();
 
-                lien.addEventListener(
-                    "click",
-                    (event)=>{
-
-                        event.stopPropagation();
+                            }
+                        );
 
                     }
                 );
 
-            });
 
-
-            /* ===========================
-               BOUTON VOIR PROFIL
-            =========================== */
+            /* =================================================
+               VOIR PROFIL
+            ================================================= */
 
             const boutonVoirProfil =
                 carte.querySelector(
@@ -636,46 +934,39 @@ async function chargerProfils(){
                 );
 
 
-            if(boutonVoirProfil){
+            boutonVoirProfil.addEventListener(
+                "click",
+                (event)=>{
 
-                boutonVoirProfil.addEventListener(
-                    "click",
-                    (event)=>{
-
-                        event.stopPropagation();
+                    event.stopPropagation();
 
 
-                        window.location.href =
-                            "profil.html?pseudo=" +
-                            encodeURIComponent(
-                                data.pseudo
-                            );
+                    window.location.href =
+                        "profil.html?pseudo=" +
+                        encodeURIComponent(
+                            data.pseudo
+                        );
 
-                    }
-                );
-
-            }
+                }
+            );
 
 
-            /* ===========================
+            /* =================================================
                AJOUTER LA CARTE
-            =========================== */
+            ================================================= */
 
-            listeProfils.appendChild(carte);
+            listeProfils.appendChild(
+                carte
+            );
 
 
-            /* ===========================
-               CLIQUER SUR LA CARTE
-            =========================== */
+            /* =================================================
+               CLIC SUR LA CARTE
+            ================================================= */
 
             carte.addEventListener(
                 "click",
                 (event)=>{
-
-                    /*
-                       Si on clique sur le +X,
-                       on ne quitte pas la page.
-                    */
 
                     if(
                         event.target.closest(
@@ -688,11 +979,6 @@ async function chargerProfils(){
                     }
 
 
-                    /*
-                       Si on clique sur un réseau,
-                       le réseau s'occupe du clic.
-                    */
-
                     if(
                         event.target.closest(
                             ".reseauCarte"
@@ -704,10 +990,16 @@ async function chargerProfils(){
                     }
 
 
-                    /*
-                       Si on clique sur le bouton,
-                       le bouton s'occupe du clic.
-                    */
+                    if(
+                        event.target.closest(
+                            ".boutonLike"
+                        )
+                    ){
+
+                        return;
+
+                    }
+
 
                     if(
                         event.target.closest(
@@ -720,8 +1012,6 @@ async function chargerProfils(){
                     }
 
 
-                    /* OUVERTURE DU PROFIL */
-
                     window.location.href =
                         "profil.html?pseudo=" +
                         encodeURIComponent(
@@ -731,12 +1021,9 @@ async function chargerProfils(){
                 }
             );
 
-        });
+        }
 
-
-    }
-
-    catch(error){
+    }catch(error){
 
         console.error(
             "Erreur lors du chargement des profils :",
@@ -756,12 +1043,15 @@ async function chargerProfils(){
 
 }
 
+
 /* =========================================================
    RECHERCHE DE PROFIL EN DIRECT
 ========================================================= */
 
 const resultatsRecherche =
-    document.getElementById("resultatsRecherche");
+    document.getElementById(
+        "resultatsRecherche"
+    );
 
 
 if(recherche && resultatsRecherche){
@@ -774,13 +1064,10 @@ if(recherche && resultatsRecherche){
                 recherche.value.trim();
 
 
-            /* =========================
-               RECHERCHE VIDE
-            ========================= */
-
             if(texte === ""){
 
-                resultatsRecherche.innerHTML = "";
+                resultatsRecherche.innerHTML =
+                    "";
 
                 resultatsRecherche.style.display =
                     "none";
@@ -794,148 +1081,135 @@ if(recherche && resultatsRecherche){
 
                 const snapshot =
                     await getDocs(
-                        collection(db,"users")
+                        collection(
+                            db,
+                            "users"
+                        )
                     );
 
 
-                resultatsRecherche.innerHTML = "";
+                resultatsRecherche.innerHTML =
+                    "";
 
 
                 const texteRecherche =
                     texte.toLowerCase();
 
 
-                let nombreResultats = 0;
+                let nombreResultats =
+                    0;
 
 
-                snapshot.forEach((profilDoc)=>{
+                snapshot.forEach(
+                    (profilDoc)=>{
 
-                    const data =
-                        profilDoc.data();
-
-
-                    const pseudo =
-                        data.pseudo || "";
+                        const data =
+                            profilDoc.data();
 
 
-                    /* =========================
-                       RECHERCHE DU PSEUDO
-                    ========================= */
-
-                    if(
-                        pseudo
-                            .toLowerCase()
-                            .includes(
-                                texteRecherche
-                            )
-                    ){
-
-                        nombreResultats++;
+                        const pseudo =
+                            data.pseudo || "";
 
 
-                        /* =========================
-                           CREATION DU RESULTAT
-                        ========================= */
+                        if(
+                            pseudo
+                                .toLowerCase()
+                                .includes(
+                                    texteRecherche
+                                )
+                        ){
 
-                        const resultat =
-                            document.createElement("div");
-
-
-                        resultat.className =
-                            "resultatRecherche";
-
-
-                        /* =========================
-                           PSEUDO
-                        ========================= */
-
-                        const nom =
-                            document.createElement("div");
+                            nombreResultats++;
 
 
-                        nom.className =
-                            "resultatRecherchePseudo";
+                            const resultat =
+                                document.createElement(
+                                    "div"
+                                );
 
 
-                        nom.textContent =
-                            pseudo;
+                            resultat.className =
+                                "resultatRecherche";
 
 
-                        /* =========================
-                           PHOTO
-                        ========================= */
-
-                        const image =
-                            document.createElement("img");
+                            const nom =
+                                document.createElement(
+                                    "div"
+                                );
 
 
-                        image.src =
-                            data.photo || "";
+                            nom.className =
+                                "resultatRecherchePseudo";
 
 
-                        image.alt =
-                            pseudo;
+                            nom.textContent =
+                                pseudo;
 
 
-                        /* =========================
-                           ORDRE
-                        ========================= */
-
-                        resultat.appendChild(
-                            nom
-                        );
+                            const image =
+                                document.createElement(
+                                    "img"
+                                );
 
 
-                        resultat.appendChild(
-                            image
-                        );
+                            image.src =
+                                data.photo || "";
 
 
-                        /* =========================
-                           CLIC
-                        ========================= */
-
-                        resultat.addEventListener(
-                            "click",
-                            ()=>{
-
-                                window.location.href =
-                                    "profil.html?pseudo=" +
-                                    encodeURIComponent(
-                                        pseudo
-                                    );
-
-                            }
-                        );
+                            image.alt =
+                                pseudo;
 
 
-                        resultatsRecherche.appendChild(
-                            resultat
-                        );
+                            resultat.appendChild(
+                                nom
+                            );
+
+
+                            resultat.appendChild(
+                                image
+                            );
+
+
+                            resultat.addEventListener(
+                                "click",
+                                ()=>{
+
+                                    window.location.href =
+                                        "profil.html?pseudo=" +
+                                        encodeURIComponent(
+                                            pseudo
+                                        );
+
+                                }
+                            );
+
+
+                            resultatsRecherche.appendChild(
+                                resultat
+                            );
+
+                        }
 
                     }
+                );
 
-                });
-
-
-                /* =========================
-                   AFFICHAGE
-                ========================= */
 
                 if(nombreResultats > 0){
 
                     resultatsRecherche.style.display =
                         "block";
 
-                }else{
+                }
 
-                    resultatsRecherche.innerHTML = "";
+                else{
+
+                    resultatsRecherche.innerHTML =
+                        "";
 
                     resultatsRecherche.style.display =
                         "none";
 
                 }
-
 
             }catch(error){
 
@@ -945,7 +1219,8 @@ if(recherche && resultatsRecherche){
                 );
 
 
-                resultatsRecherche.innerHTML = "";
+                resultatsRecherche.innerHTML =
+                    "";
 
                 resultatsRecherche.style.display =
                     "none";

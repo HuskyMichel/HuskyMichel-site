@@ -737,6 +737,133 @@ main{
 
 }
 
+/* =========================================================
+   BOUTON LIKE
+========================================================= */
+
+.boutonLike{
+
+    width:100%;
+
+    margin-top:12px;
+
+    padding:10px;
+
+    background:#333;
+
+    color:white;
+
+    border:1px solid #444;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    transition:
+        transform .2s,
+        background .2s,
+        color .2s;
+
+}
+
+.boutonLike:hover{
+
+    transform:scale(1.03);
+
+    background:#444;
+
+}
+
+.boutonLike.likeActif{
+
+    background:#3ea6ff;
+
+    color:white;
+
+}
+
+
+/* =========================================================
+   COEURS
+========================================================= */
+
+.carteProfil{
+
+    position:relative;
+
+}
+
+
+.coeurLike{
+
+    position:absolute;
+
+    z-index:50;
+
+    pointer-events:none;
+
+    font-size:22px;
+
+    animation:
+        coeurExplosion 1.2s ease-out forwards;
+
+}
+
+
+@keyframes coeurExplosion{
+
+    0%{
+
+        opacity:1;
+
+        transform:
+            translate(
+                0,
+                0
+            )
+            scale(.5)
+            rotate(0deg);
+
+    }
+
+    50%{
+
+        opacity:1;
+
+        transform:
+            translate(
+                calc((var(--rotation)) * 2),
+                -45px
+            )
+            scale(1.2)
+            rotate(
+                var(--rotation)
+            );
+
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+            translate(
+                calc((var(--rotation)) * 4),
+                -120px
+            )
+            scale(.7)
+            rotate(
+                var(--rotation)
+            );
+
+    }
+
+}
+
 </style>
 
 </head>
