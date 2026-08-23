@@ -515,6 +515,204 @@ main{
 
 }
 
+/* ========================= */
+/* RESEAUX DE LA CARTE */
+/* ========================= */
+
+.carteReseaux{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-top:15px;
+
+}
+
+.reseauCarte{
+
+    display:inline-block;
+
+    padding:7px 11px;
+
+    background:#181818;
+
+    color:#3ea6ff;
+
+    border:1px solid #3ea6ff;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+.reseauCarte:hover{
+
+    background:#3ea6ff;
+
+    color:white;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ========================= */
+/* BOUTON VOIR PROFIL */
+/* ========================= */
+
+.boutonVoirProfil{
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:11px;
+
+    background:#3ea6ff;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.boutonVoirProfil:hover{
+
+    background:#61b8ff;
+
+    transform:translateY(-2px);
+
+}
+
+/* =========================================================
+   RESULTATS DE RECHERCHE
+========================================================= */
+
+.search{
+
+    position:relative;
+
+}
+
+
+#resultatsRecherche{
+
+    position:absolute;
+
+    top:55px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:520px;
+
+    max-width:90%;
+
+    background:#242424;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.5);
+
+    z-index:2000;
+
+    display:none;
+
+}
+
+
+/* =========================
+   RESULTAT
+========================= */
+
+.resultatRecherche{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+
+.resultatRecherche:hover{
+
+    background:#333;
+
+}
+
+
+/* =========================
+   PSEUDO
+========================= */
+
+.resultatRecherchePseudo{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:white;
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+.resultatRecherche img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid white;
+
+    box-shadow:
+
+        0 0 6px white,
+
+        0 0 12px rgba(255,255,255,.6);
+
+}
+
 </style>
 
 </head>
@@ -535,10 +733,15 @@ main{
 
 <div class="search">
 
-<input
-type="text"
-placeholder="🔍 Rechercher un profil..."
->
+    <input
+        id="rechercheProfil"
+        type="text"
+        placeholder="🔍 Rechercher un profil..."
+    >
+
+    <div id="resultatsRecherche"></div>
+
+</div>
 
 </div>
 

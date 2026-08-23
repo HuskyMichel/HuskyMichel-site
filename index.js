@@ -755,3 +755,204 @@ async function chargerProfils(){
     }
 
 }
+
+/* =========================================================
+   RECHERCHE DE PROFIL EN DIRECT
+========================================================= */
+
+const resultatsRecherche =
+    document.getElementById("resultatsRecherche");
+
+
+if(recherche && resultatsRecherche){
+
+    recherche.addEventListener(
+        "input",
+        async()=>{
+
+            const texte =
+                recherche.value.trim();
+
+
+            /* =========================
+               RECHERCHE VIDE
+            ========================= */
+
+            if(texte === ""){
+
+                resultatsRecherche.innerHTML = "";
+
+                resultatsRecherche.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            try{
+
+                const snapshot =
+                    await getDocs(
+                        collection(db,"users")
+                    );
+
+
+                resultatsRecherche.innerHTML = "";
+
+
+                const texteRecherche =
+                    texte.toLowerCase();
+
+
+                let nombreResultats = 0;
+
+
+                snapshot.forEach((profilDoc)=>{
+
+                    const data =
+                        profilDoc.data();
+
+
+                    const pseudo =
+                        data.pseudo || "";
+
+
+                    /* =========================
+                       RECHERCHE DU PSEUDO
+                    ========================= */
+
+                    if(
+                        pseudo
+                            .toLowerCase()
+                            .includes(
+                                texteRecherche
+                            )
+                    ){
+
+                        nombreResultats++;
+
+
+                        /* =========================
+                           CREATION DU RESULTAT
+                        ========================= */
+
+                        const resultat =
+                            document.createElement("div");
+
+
+                        resultat.className =
+                            "resultatRecherche";
+
+
+                        /* =========================
+                           PSEUDO
+                        ========================= */
+
+                        const nom =
+                            document.createElement("div");
+
+
+                        nom.className =
+                            "resultatRecherchePseudo";
+
+
+                        nom.textContent =
+                            pseudo;
+
+
+                        /* =========================
+                           PHOTO
+                        ========================= */
+
+                        const image =
+                            document.createElement("img");
+
+
+                        image.src =
+                            data.photo || "";
+
+
+                        image.alt =
+                            pseudo;
+
+
+                        /* =========================
+                           ORDRE
+                        ========================= */
+
+                        resultat.appendChild(
+                            nom
+                        );
+
+
+                        resultat.appendChild(
+                            image
+                        );
+
+
+                        /* =========================
+                           CLIC
+                        ========================= */
+
+                        resultat.addEventListener(
+                            "click",
+                            ()=>{
+
+                                window.location.href =
+                                    "profil.html?pseudo=" +
+                                    encodeURIComponent(
+                                        pseudo
+                                    );
+
+                            }
+                        );
+
+
+                        resultatsRecherche.appendChild(
+                            resultat
+                        );
+
+                    }
+
+                });
+
+
+                /* =========================
+                   AFFICHAGE
+                ========================= */
+
+                if(nombreResultats > 0){
+
+                    resultatsRecherche.style.display =
+                        "block";
+
+                }else{
+
+                    resultatsRecherche.innerHTML = "";
+
+                    resultatsRecherche.style.display =
+                        "none";
+
+                }
+
+
+            }catch(error){
+
+                console.error(
+                    "Erreur lors de la recherche :",
+                    error
+                );
+
+
+                resultatsRecherche.innerHTML = "";
+
+                resultatsRecherche.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+}
