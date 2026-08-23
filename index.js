@@ -21,26 +21,385 @@ import {
    ELEMENTS HTML
 ========================================================= */
 
-const loginBtn = document.getElementById("loginBtn");
-const profile = document.getElementById("profile");
-const avatar = document.getElementById("avatar");
-const menu = document.getElementById("menu");
-const logout = document.getElementById("logout");
-const listeProfils = document.getElementById("listeProfils");
-const recherche = document.querySelector(".search input");
+const loginBtn =
+    document.getElementById("loginBtn");
 
-let utilisateurConnecte = null;
+const profile =
+    document.getElementById("profile");
+
+const avatar =
+    document.getElementById("avatar");
+
+const menu =
+    document.getElementById("menu");
+
+const logout =
+    document.getElementById("logout");
+
+const listeProfils =
+    document.getElementById("listeProfils");
+
+const recherche =
+    document.querySelector(".search input");
+
+const resultatsRecherche =
+    document.getElementById("resultatsRecherche");
+
+
+/* =========================================================
+   UTILISATEUR ACTUEL
+========================================================= */
+
+let utilisateurActuel = null;
 
 
 /* =========================================================
    GOOGLE
 ========================================================= */
 
-const provider = new GoogleAuthProvider();
+const provider =
+    new GoogleAuthProvider();
 
 provider.setCustomParameters({
     prompt: "select_account"
 });
+
+
+/* =========================================================
+   STYLE DES LIKES
+========================================================= */
+
+const styleLikes =
+    document.createElement("style");
+
+styleLikes.textContent = `
+
+/* =====================================================
+   BOUTON LIKE
+===================================================== */
+
+.boutonLike{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    min-width:145px;
+
+    padding:12px 18px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#333;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .2s ease,
+
+        background .25s ease,
+
+        box-shadow .25s ease;
+
+    overflow:hidden;
+
+}
+
+
+.boutonLike:hover{
+
+    transform:scale(1.06);
+
+    background:#444;
+
+}
+
+
+.boutonLike:active{
+
+    transform:scale(.94);
+
+}
+
+
+/* =====================================================
+   LIKE ACTIF
+===================================================== */
+
+.boutonLike.liked{
+
+    background:linear-gradient(
+        135deg,
+        #ff4f81,
+        #ff1744
+    );
+
+    box-shadow:
+
+        0 0 10px rgba(255,23,68,.5),
+
+        0 0 25px rgba(255,79,129,.35);
+
+}
+
+
+.boutonLike.liked:hover{
+
+    background:linear-gradient(
+        135deg,
+        #ff638f,
+        #ff2850
+    );
+
+}
+
+
+/* =====================================================
+   COEUR PRINCIPAL
+===================================================== */
+
+.coeurLike{
+
+    font-size:25px;
+
+    line-height:1;
+
+    transition:
+
+        transform .2s ease;
+
+}
+
+
+.boutonLike:hover .coeurLike{
+
+    transform:scale(1.2);
+
+}
+
+
+/* =====================================================
+   COMPTEUR
+===================================================== */
+
+.nombreLikes{
+
+    font-size:15px;
+
+}
+
+
+/* =====================================================
+   CONTENEUR DES COEURS
+===================================================== */
+
+.coeursLike{
+
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    z-index:20;
+
+}
+
+
+/* =====================================================
+   PETITS COEURS
+===================================================== */
+
+.coeurAnimation{
+
+    position:absolute;
+
+    bottom:5px;
+
+    left:50%;
+
+    font-size:25px;
+
+    opacity:0;
+
+    animation:
+
+        coeurMonte 1.7s ease-out forwards;
+
+    filter:
+
+        drop-shadow(
+            0 0 5px rgba(255,80,130,.5)
+        );
+
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes coeurMonte{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+            translate(
+                0,
+                10px
+            )
+            scale(.4)
+            rotate(0deg);
+
+    }
+
+    15%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        opacity:0;
+
+        transform:
+            translate(
+                var(--deplacementX),
+                -150px
+            )
+            scale(1.2)
+            rotate(var(--rotation));
+
+    }
+
+}
+
+
+/* =====================================================
+   ANIMATION DU BOUTON
+===================================================== */
+
+.boutonLike.likeAnimation{
+
+    animation:
+
+        boutonLike .45s ease;
+
+}
+
+
+@keyframes boutonLike{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    35%{
+
+        transform:scale(1.18);
+
+    }
+
+    65%{
+
+        transform:scale(.92);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   CARTE
+===================================================== */
+
+.carteProfil{
+
+    position:relative;
+
+}
+
+
+/* =====================================================
+   LIKE SUR CARTE
+===================================================== */
+
+.carteLikes{
+
+    margin-top:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:600px){
+
+    .boutonLike{
+
+        min-width:130px;
+
+        padding:11px 15px;
+
+        font-size:15px;
+
+    }
+
+    .coeurLike{
+
+        font-size:23px;
+
+    }
+
+}
+
+`;
+
+document.head.appendChild(styleLikes);
 
 
 /* =========================================================
@@ -49,33 +408,49 @@ provider.setCustomParameters({
 
 if(avatar){
 
-    avatar.addEventListener("click",(event)=>{
+    avatar.addEventListener(
+        "click",
+        (event)=>{
 
-        event.stopPropagation();
+            event.stopPropagation();
 
-        menu.style.display =
-            menu.style.display === "block"
-            ? "none"
-            : "block";
+            if(!menu){
 
-    });
+                return;
+
+            }
+
+            menu.style.display =
+                menu.style.display === "block"
+                ? "none"
+                : "block";
+
+        }
+    );
 
 }
 
 
-document.addEventListener("click",(event)=>{
+document.addEventListener(
+    "click",
+    (event)=>{
 
-    if(profile && !profile.contains(event.target)){
+        if(
+            profile &&
+            !profile.contains(event.target)
+        ){
 
-        if(menu){
+            if(menu){
 
-            menu.style.display = "none";
+                menu.style.display =
+                    "none";
+
+            }
 
         }
 
     }
-
-});
+);
 
 
 /* =========================================================
@@ -84,25 +459,30 @@ document.addEventListener("click",(event)=>{
 
 if(loginBtn){
 
-    loginBtn.addEventListener("click",async()=>{
+    loginBtn.addEventListener(
+        "click",
+        async()=>{
 
-        try{
+            try{
 
-            await signInWithPopup(
-                auth,
-                provider
-            );
+                await signInWithPopup(
+                    auth,
+                    provider
+                );
 
-        }catch(error){
+            }
 
-            console.error(
-                "Erreur lors de la connexion :",
-                error
-            );
+            catch(error){
+
+                console.error(
+                    "Erreur lors de la connexion :",
+                    error
+                );
+
+            }
 
         }
-
-    });
+    );
 
 }
 
@@ -113,188 +493,307 @@ if(loginBtn){
 
 if(logout){
 
-    logout.addEventListener("click",async()=>{
+    logout.addEventListener(
+        "click",
+        async()=>{
 
-        try{
+            try{
 
-            await signOut(auth);
+                await signOut(auth);
 
-        }catch(error){
+            }
 
-            console.error(
-                "Erreur lors de la déconnexion :",
-                error
-            );
+            catch(error){
+
+                console.error(
+                    "Erreur lors de la déconnexion :",
+                    error
+                );
+
+            }
 
         }
-
-    });
+    );
 
 }
 
 
 /* =========================================================
-   ETAT DE LA CONNEXION
+   CREER LES COEURS
 ========================================================= */
 
-onAuthStateChanged(auth,async(user)=>{
+function lancerAnimationCoeurs(
+    conteneur,
+    nombre = 25
+){
 
-    utilisateurConnecte = user || null;
+    if(!conteneur){
 
-
-    /* =====================================================
-       UTILISATEUR CONNECTE
-    ===================================================== */
-
-    if(user){
-
-        if(user.photoURL && avatar){
-
-            avatar.src =
-                user.photoURL.replace(
-                    "=s96-c",
-                    "=s512-c"
-                );
-
-        }
-
-
-        if(loginBtn){
-
-            loginBtn.style.display =
-                "none";
-
-        }
-
-
-        if(profile){
-
-            profile.style.display =
-                "block";
-
-        }
-
-
-        /* =================================================
-           VERIFIER LE PROFIL FIRESTORE
-        ================================================= */
-
-        try{
-
-            const profilRef =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
-
-            const profilSnap =
-                await getDoc(profilRef);
-
-
-            if(!profilSnap.exists()){
-
-                window.location.href =
-                    "creation-profil.html";
-
-                return;
-
-            }
-
-        }catch(error){
-
-            console.error(
-                "Erreur lors de la vérification du profil :",
-                error
-            );
-
-        }
-
-
-        chargerProfils();
+        return;
 
     }
 
 
-    /* =====================================================
-       UTILISATEUR DECONNECTE
-    ===================================================== */
-
-    else{
-
-        if(loginBtn){
-
-            loginBtn.style.display =
-                "block";
-
-        }
+    const coeurs = [
+        "❤️",
+        "🩷",
+        "💕",
+        "💗",
+        "💖",
+        "💓"
+    ];
 
 
-        if(profile){
-
-            profile.style.display =
-                "none";
-
-        }
-
-
-        chargerProfils();
-
-    }
-
-});
-
-
-/* =========================================================
-   ANIMATION DES COEURS
-========================================================= */
-
-function explosionCoeurs(carte){
-
-    for(let i = 0; i < 12; i++){
+    for(
+        let i = 0;
+        i < nombre;
+        i++
+    ){
 
         const coeur =
             document.createElement("span");
 
+
         coeur.className =
-            "coeurLike";
+            "coeurAnimation";
+
 
         coeur.textContent =
-            ["❤️","💖","💕","💗","💓"][
+            coeurs[
                 Math.floor(
-                    Math.random() * 5
+                    Math.random() *
+                    coeurs.length
                 )
             ];
 
 
-        const x =
-            Math.random() * 90 + 5;
+        const position =
+            Math.random() * 100;
 
-        const y =
-            Math.random() * 70 + 10;
+
+        const deplacement =
+            (
+                Math.random() * 180
+                - 90
+            ) + "px";
+
+
+        const rotation =
+            (
+                Math.random() * 90
+                - 45
+            ) + "deg";
+
+
+        const taille =
+            18 +
+            Math.random() * 20;
+
+
+        const delai =
+            Math.random() * .6;
 
 
         coeur.style.left =
-            x + "%";
+            position + "%";
 
-        coeur.style.top =
-            y + "%";
+
+        coeur.style.fontSize =
+            taille + "px";
+
+
+        coeur.style.setProperty(
+            "--deplacementX",
+            deplacement
+        );
 
 
         coeur.style.setProperty(
             "--rotation",
-            (Math.random() * 60 - 30) + "deg"
+            rotation
         );
 
 
-        carte.appendChild(coeur);
+        coeur.style.animationDelay =
+            delai + "s";
 
 
-        setTimeout(()=>{
+        conteneur.appendChild(
+            coeur
+        );
 
-            coeur.remove();
 
-        },1200);
+        setTimeout(
+            ()=>{
+
+                coeur.remove();
+
+            },
+            2600
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RECUPERER LES LIKES
+========================================================= */
+
+async function recupererLikes(
+    userId
+){
+
+    try{
+
+        const likesRef =
+            collection(
+                db,
+                "users",
+                userId,
+                "likes"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                likesRef
+            );
+
+
+        return snapshot.size;
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur récupération likes :",
+            error
+        );
+
+        return 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERIFIER SI L'UTILISATEUR A LIKE
+========================================================= */
+
+async function utilisateurAime(
+    userId
+){
+
+    if(!utilisateurActuel){
+
+        return false;
+
+    }
+
+
+    try{
+
+        const likeRef =
+            doc(
+                db,
+                "users",
+                userId,
+                "likes",
+                utilisateurActuel.uid
+            );
+
+
+        const likeSnap =
+            await getDoc(
+                likeRef
+            );
+
+
+        return likeSnap.exists();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur vérification like :",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   METTRE A JOUR LE BOUTON LIKE
+========================================================= */
+
+function mettreAJourBoutonLike(
+    bouton,
+    aime,
+    nombre
+){
+
+    if(!bouton){
+
+        return;
+
+    }
+
+
+    if(aime){
+
+        bouton.classList.add(
+            "liked"
+        );
+
+    }else{
+
+        bouton.classList.remove(
+            "liked"
+        );
+
+    }
+
+
+    const coeur =
+        bouton.querySelector(
+            ".coeurLike"
+        );
+
+
+    const compteur =
+        bouton.querySelector(
+            ".nombreLikes"
+        );
+
+
+    if(coeur){
+
+        coeur.textContent =
+            aime
+            ? "❤️"
+            : "♡";
+
+    }
+
+
+    if(compteur){
+
+        compteur.textContent =
+            nombre +
+            (
+                nombre <= 1
+                ? " like"
+                : " likes"
+            );
 
     }
 
@@ -307,20 +806,14 @@ function explosionCoeurs(carte){
 
 async function gererLike(
     userId,
-    profilId,
     bouton,
-    compteur,
-    carte
+    conteneurCoeurs
 ){
 
-    /* =====================================================
-       PAS CONNECTE
-    ===================================================== */
-
-    if(!utilisateurConnecte){
+    if(!utilisateurActuel){
 
         alert(
-            "Tu dois être connecté pour aimer un profil ❤️"
+            "Tu dois être connecté pour liker un profil ❤️"
         );
 
         return;
@@ -328,24 +821,22 @@ async function gererLike(
     }
 
 
-    /* =====================================================
-       DOCUMENT DU LIKE
-    ===================================================== */
-
     const likeRef =
         doc(
             db,
             "users",
-            profilId,
+            userId,
             "likes",
-            userId
+            utilisateurActuel.uid
         );
 
 
     try{
 
         const likeSnap =
-            await getDoc(likeRef);
+            await getDoc(
+                likeRef
+            );
 
 
         /* =================================================
@@ -354,103 +845,230 @@ async function gererLike(
 
         if(likeSnap.exists()){
 
-            await deleteDoc(likeRef);
-
-            bouton.textContent =
-                "♡ J'aime";
-
-            bouton.classList.remove(
-                "likeActif"
+            await deleteDoc(
+                likeRef
             );
 
 
-            let nombre =
-                parseInt(
-                    compteur.dataset.nombre || "0"
+            const nouveauNombre =
+                await recupererLikes(
+                    userId
                 );
 
 
-            nombre =
-                Math.max(
-                    0,
-                    nombre - 1
-                );
+            mettreAJourBoutonLike(
+                bouton,
+                false,
+                nouveauNombre
+            );
 
 
-            compteur.dataset.nombre =
-                nombre;
-
-
-            compteur.textContent =
-                "❤️ " +
-                nombre +
-                " likes";
+            return;
 
         }
 
 
         /* =================================================
-           PAS ENCORE LIKE
+           NOUVEAU LIKE
         ================================================= */
 
-        else{
+        await setDoc(
+            likeRef,
+            {
 
-            await setDoc(
-                likeRef,
-                {
-                    uid: userId,
-                    date: Date.now()
-                }
+                uid:
+                    utilisateurActuel.uid,
+
+                date:
+                    new Date()
+
+            }
+        );
+
+
+        const nouveauNombre =
+            await recupererLikes(
+                userId
             );
 
 
-            bouton.textContent =
-                "♥ J'aime";
-
-            bouton.classList.add(
-                "likeActif"
-            );
-
-
-            let nombre =
-                parseInt(
-                    compteur.dataset.nombre || "0"
-                );
+        mettreAJourBoutonLike(
+            bouton,
+            true,
+            nouveauNombre
+        );
 
 
-            nombre++;
+        /* =================================================
+           ANIMATION
+        ================================================= */
+
+        bouton.classList.remove(
+            "likeAnimation"
+        );
 
 
-            compteur.dataset.nombre =
-                nombre;
+        void bouton.offsetWidth;
 
 
-            compteur.textContent =
-                "❤️ " +
-                nombre +
-                " likes";
+        bouton.classList.add(
+            "likeAnimation"
+        );
 
 
-            /* ANIMATION */
+        lancerAnimationCoeurs(
+            conteneurCoeurs,
+            35
+        );
 
-            explosionCoeurs(carte);
 
-        }
+    }
 
-    }catch(error){
+    catch(error){
 
         console.error(
             "Erreur lors du like :",
             error
         );
 
+
         alert(
-            "Impossible de modifier le like."
+            "Impossible d'enregistrer ton like."
         );
 
     }
 
 }
+
+
+/* =========================================================
+   ETAT DE LA CONNEXION
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    async(user)=>{
+
+        utilisateurActuel =
+            user;
+
+
+        /* =================================================
+           UTILISATEUR CONNECTE
+        ================================================= */
+
+        if(user){
+
+            /* PHOTO GOOGLE */
+
+            if(
+                avatar &&
+                user.photoURL
+            ){
+
+                avatar.src =
+                    user.photoURL.replace(
+                        "=s96-c",
+                        "=s512-c"
+                    );
+
+            }
+
+
+            /* AFFICHER LE COMPTE */
+
+            if(loginBtn){
+
+                loginBtn.style.display =
+                    "none";
+
+            }
+
+
+            if(profile){
+
+                profile.style.display =
+                    "block";
+
+            }
+
+
+            /* =================================================
+               VERIFIER LE PROFIL FIRESTORE
+            ================================================= */
+
+            try{
+
+                const profilRef =
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    );
+
+
+                const profilSnap =
+                    await getDoc(
+                        profilRef
+                    );
+
+
+                if(
+                    !profilSnap.exists()
+                ){
+
+                    window.location.href =
+                        "creation-profil.html";
+
+                    return;
+
+                }
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Erreur lors de la vérification du profil :",
+                    error
+                );
+
+            }
+
+
+            chargerProfils();
+
+        }
+
+
+        /* =================================================
+           UTILISATEUR NON CONNECTE
+        ================================================= */
+
+        else{
+
+            if(loginBtn){
+
+                loginBtn.style.display =
+                    "block";
+
+            }
+
+
+            if(profile){
+
+                profile.style.display =
+                    "none";
+
+            }
+
+
+            chargerProfils();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -466,7 +1084,8 @@ async function chargerProfils(){
     }
 
 
-    listeProfils.innerHTML = "";
+    listeProfils.innerHTML =
+        "";
 
 
     try{
@@ -480,435 +1099,567 @@ async function chargerProfils(){
             );
 
 
-        for(const profilDoc of snapshot.docs){
+        snapshot.forEach(
+            async(profilDoc)=>{
 
-            const data =
-                profilDoc.data();
-
-
-            const profilId =
-                profilDoc.id;
+                const data =
+                    profilDoc.data();
 
 
-            /* =================================================
-               CATEGORIES
-            ================================================= */
-
-            const categories =
-                Array.isArray(data.categories)
-                ? data.categories
-                : [];
+                const userId =
+                    profilDoc.id;
 
 
-            const troisCategories =
-                categories.slice(0,3);
+                /* =================================================
+                   CREER LA CARTE
+                ================================================= */
 
-            const autresCategories =
-                categories.slice(3);
+                const carte =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            let categoriesHTML = "";
+                carte.className =
+                    "carteProfil";
 
 
-            troisCategories.forEach(
-                (categorie)=>{
+                /* =================================================
+                   CATEGORIES
+                ================================================= */
+
+                const categories =
+                    Array.isArray(
+                        data.categories
+                    )
+                    ? data.categories
+                    : [];
+
+
+                const troisCategories =
+                    categories.slice(
+                        0,
+                        3
+                    );
+
+
+                const autresCategories =
+                    categories.slice(
+                        3
+                    );
+
+
+                let categoriesHTML =
+                    "";
+
+
+                troisCategories.forEach(
+                    (categorie)=>{
+
+                        categoriesHTML += `
+
+                            <span
+                                class="categorieCarte"
+                            >
+                                🏷️ ${categorie}
+                            </span>
+
+                        `;
+
+                    }
+                );
+
+
+                if(
+                    autresCategories.length > 0
+                ){
 
                     categoriesHTML += `
 
-                        <span class="categorieCarte">
-                            🏷️ ${categorie}
+                        <span
+                            class="
+                                categorieCarte
+                                categoriePlus
+                            "
+                        >
+                            +${autresCategories.length}
                         </span>
 
-                    `;
 
-                }
-            );
-
-
-            if(autresCategories.length > 0){
-
-                categoriesHTML += `
-
-                    <span
-                        class="categorieCarte categoriePlus"
-                    >
-                        +${autresCategories.length}
-                    </span>
-
-                    <div class="categoriesCachees">
-
-                        ${
-                            autresCategories
-                            .map(
-                                (categorie)=>`
-
-                                    <span class="categorieCarte">
-                                        🏷️ ${categorie}
-                                    </span>
-
-                                `
-                            )
-                            .join("")
-                        }
-
-                    </div>
-
-                `;
-
-            }
-
-
-            /* =================================================
-               RESEAUX
-            ================================================= */
-
-            const reseaux =
-                Array.isArray(data.reseaux)
-                ? data.reseaux
-                : [];
-
-
-            let reseauxHTML = "";
-
-
-            reseaux.forEach(
-                (reseau)=>{
-
-                    if(!reseau || !reseau.lien){
-
-                        return;
-
-                    }
-
-
-                    let emoji = "🌐";
-
-
-                    if(reseau.type === "YouTube")
-                        emoji = "▶️";
-
-                    else if(reseau.type === "Twitch")
-                        emoji = "🎮";
-
-                    else if(reseau.type === "Discord")
-                        emoji = "💬";
-
-                    else if(reseau.type === "TikTok")
-                        emoji = "🎵";
-
-                    else if(reseau.type === "Instagram")
-                        emoji = "📸";
-
-                    else if(reseau.type === "Snapchat")
-                        emoji = "👻";
-
-                    else if(reseau.type === "Facebook")
-                        emoji = "🔵";
-
-                    else if(reseau.type === "Kick")
-                        emoji = "🟢";
-
-                    else if(reseau.type === "Paypal")
-                        emoji = "💰";
-
-
-                    reseauxHTML += `
-
-                        <a
-                            class="reseauCarte"
-                            href="${reseau.lien}"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <div
+                            class="categoriesCachees"
                         >
 
-                            ${emoji} ${reseau.type}
+                            ${
+                                autresCategories
+                                .map(
+                                    (categorie)=>`
 
-                        </a>
+                                        <span
+                                            class="
+                                                categorieCarte
+                                            "
+                                        >
+                                            🏷️ ${categorie}
+                                        </span>
+
+                                    `
+                                )
+                                .join("")
+                            }
+
+                        </div>
 
                     `;
 
                 }
-            );
 
 
-            /* =================================================
-               CREER LA CARTE
-            ================================================= */
+                /* =================================================
+                   RESEAUX
+                ================================================= */
 
-            const carte =
-                document.createElement("div");
+                const reseaux =
+                    Array.isArray(
+                        data.reseaux
+                    )
+                    ? data.reseaux
+                    : [];
 
 
-            carte.className =
-                "carteProfil";
+                let reseauxHTML =
+                    "";
 
 
-            carte.innerHTML = `
+                reseaux.forEach(
+                    (reseau)=>{
 
-                <img
-                    class="cartePhoto"
-                    src="${data.photo || ""}"
-                    alt="Photo de ${data.pseudo || "profil"}"
-                >
-
-
-                <div class="carteContenu">
-
-                    <div class="cartePseudo">
-
-                        ${data.pseudo || "Sans pseudo"}
-
-                    </div>
-
-
-                    <div class="carteDescription">
-
-                        ${
-                            data.descriptionCourte ||
-                            "Aucune description"
-                        }
-
-                    </div>
-
-
-                    <div class="carteCategories">
-
-                        ${categoriesHTML}
-
-                    </div>
-
-
-                    ${
-                        reseauxHTML
-                        ? `
-
-                            <div class="carteReseaux">
-
-                                ${reseauxHTML}
-
-                            </div>
-
-                        `
-                        : ""
-                    }
-
-
-                    <div class="carteLikes">
-
-                        ❤️ 0 likes
-
-                    </div>
-
-
-                    <button
-                        class="boutonLike"
-                        type="button"
-                    >
-
-                        ♡ J'aime
-
-                    </button>
-
-
-                    <button
-                        class="boutonVoirProfil"
-                        type="button"
-                    >
-
-                        👤 Voir profil
-
-                    </button>
-
-                </div>
-
-            `;
-
-
-            /* =================================================
-               RECUPERER LES ELEMENTS LIKE
-            ================================================= */
-
-            const boutonLike =
-                carte.querySelector(
-                    ".boutonLike"
-                );
-
-
-            const compteur =
-                carte.querySelector(
-                    ".carteLikes"
-                );
-
-
-            /* =================================================
-               COMPTER LES LIKES
-            ================================================= */
-
-            const likesRef =
-                collection(
-                    db,
-                    "users",
-                    profilId,
-                    "likes"
-                );
-
-
-            const likesSnapshot =
-                await getDocs(
-                    likesRef
-                );
-
-
-            const nombreLikes =
-                likesSnapshot.size;
-
-
-            compteur.dataset.nombre =
-                nombreLikes;
-
-
-            compteur.textContent =
-                "❤️ " +
-                nombreLikes +
-                " likes";
-
-
-            /* =================================================
-               VERIFIER SI L'UTILISATEUR A DEJA LIKE
-            ================================================= */
-
-            if(utilisateurConnecte){
-
-                const monLikeRef =
-                    doc(
-                        db,
-                        "users",
-                        profilId,
-                        "likes",
-                        utilisateurConnecte.uid
-                    );
-
-
-                const monLike =
-                    await getDoc(
-                        monLikeRef
-                    );
-
-
-                if(monLike.exists()){
-
-                    boutonLike.textContent =
-                        "♥ J'aime";
-
-                    boutonLike.classList.add(
-                        "likeActif"
-                    );
-
-                }
-
-            }
-
-
-            /* =================================================
-               CLICK LIKE
-            ================================================= */
-
-            boutonLike.addEventListener(
-                "click",
-                (event)=>{
-
-                    event.stopPropagation();
-
-
-                    gererLike(
-                        utilisateurConnecte
-                            ? utilisateurConnecte.uid
-                            : null,
-                        profilId,
-                        boutonLike,
-                        compteur,
-                        carte
-                    );
-
-                }
-            );
-
-
-            /* =================================================
-               BOUTON + CATEGORIES
-            ================================================= */
-
-            const boutonPlus =
-                carte.querySelector(
-                    ".categoriePlus"
-                );
-
-
-            if(boutonPlus){
-
-                boutonPlus.addEventListener(
-                    "click",
-                    (event)=>{
-
-                        event.stopPropagation();
-
-
-                        const cache =
-                            carte.querySelector(
-                                ".categoriesCachees"
-                            );
-
-
-                        if(!cache){
+                        if(
+                            !reseau ||
+                            !reseau.lien
+                        ){
 
                             return;
 
                         }
 
 
+                        let emoji =
+                            "🌐";
+
+
                         if(
-                            cache.style.display ===
-                            "flex"
+                            reseau.type
+                            === "YouTube"
                         ){
 
-                            cache.style.display =
-                                "none";
-
-
-                            boutonPlus.textContent =
-                                "+" +
-                                cache.querySelectorAll(
-                                    ".categorieCarte"
-                                ).length;
+                            emoji =
+                                "▶️";
 
                         }
 
-                        else{
+                        else if(
+                            reseau.type
+                            === "Twitch"
+                        ){
 
-                            cache.style.display =
-                                "flex";
-
-
-                            boutonPlus.textContent =
-                                "−";
+                            emoji =
+                                "🎮";
 
                         }
+
+                        else if(
+                            reseau.type
+                            === "Discord"
+                        ){
+
+                            emoji =
+                                "💬";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "TikTok"
+                        ){
+
+                            emoji =
+                                "🎵";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Instagram"
+                        ){
+
+                            emoji =
+                                "📸";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Snapchat"
+                        ){
+
+                            emoji =
+                                "👻";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Facebook"
+                        ){
+
+                            emoji =
+                                "🔵";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Kick"
+                        ){
+
+                            emoji =
+                                "🟢";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Paypal"
+                        ){
+
+                            emoji =
+                                "💰";
+
+                        }
+
+                        else if(
+                            reseau.type
+                            === "Site Web"
+                        ){
+
+                            emoji =
+                                "🌐";
+
+                        }
+
+
+                        reseauxHTML += `
+
+                            <a
+                                class="reseauCarte"
+                                href="${reseau.lien}"
+                                target="_blank"
+                                rel="
+                                    noopener
+                                    noreferrer
+                                "
+                            >
+
+                                ${emoji}
+                                ${reseau.type}
+
+                            </a>
+
+                        `;
 
                     }
                 );
 
-            }
+
+                /* =================================================
+                   CONTENU DE LA CARTE
+                ================================================= */
+
+                carte.innerHTML = `
+
+                    <img
+                        class="cartePhoto"
+                        src="${data.photo || ""}"
+                        alt="
+                            Photo de
+                            ${data.pseudo || "profil"}
+                        "
+                    >
 
 
-            /* =================================================
-               RESEAUX
-            ================================================= */
+                    <div
+                        class="carteContenu"
+                    >
 
-            carte
-                .querySelectorAll(
-                    ".reseauCarte"
-                )
-                .forEach(
+                        <div
+                            class="cartePseudo"
+                        >
+
+                            ${data.pseudo || "Sans pseudo"}
+
+                        </div>
+
+
+                        <div
+                            class="carteDescription"
+                        >
+
+                            ${
+                                data.descriptionCourte
+                                ||
+                                "Aucune description"
+                            }
+
+                        </div>
+
+
+                        <div
+                            class="carteCategories"
+                        >
+
+                            ${categoriesHTML}
+
+                        </div>
+
+
+                        ${
+                            reseauxHTML
+                            ? `
+
+                                <div
+                                    class="carteReseaux"
+                                >
+
+                                    ${reseauxHTML}
+
+                                </div>
+
+                            `
+                            : ""
+                        }
+
+
+                        <!-- =================================
+                             LIKE
+                        ================================== -->
+
+                        <div
+                            class="carteLikes"
+                        >
+
+                            <button
+                                class="boutonLike"
+                                type="button"
+                            >
+
+                                <span
+                                    class="coeurLike"
+                                >
+                                    ♡
+                                </span>
+
+
+                                <span
+                                    class="nombreLikes"
+                                >
+                                    0 likes
+                                </span>
+
+
+                                <div
+                                    class="coeursLike"
+                                ></div>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- =================================
+                             VOIR PROFIL
+                        ================================== -->
+
+                        <button
+                            class="boutonVoirProfil"
+                            type="button"
+                        >
+
+                            👤 Voir profil
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                /* =================================================
+                   ELEMENTS LIKE
+                ================================================= */
+
+                const boutonLike =
+                    carte.querySelector(
+                        ".boutonLike"
+                    );
+
+
+                const coeursLike =
+                    carte.querySelector(
+                        ".coeursLike"
+                    );
+
+
+                /* =================================================
+                   CHARGER LE NOMBRE DE LIKES
+                ================================================= */
+
+                try{
+
+                    const nombreLikes =
+                        await recupererLikes(
+                            userId
+                        );
+
+
+                    const aime =
+                        await utilisateurAime(
+                            userId
+                        );
+
+
+                    mettreAJourBoutonLike(
+                        boutonLike,
+                        aime,
+                        nombreLikes
+                    );
+
+                }
+
+                catch(error){
+
+                    console.error(
+                        "Erreur chargement likes :",
+                        error
+                    );
+
+                }
+
+
+                /* =================================================
+                   CLIC LIKE
+                ================================================= */
+
+                if(boutonLike){
+
+                    boutonLike.addEventListener(
+                        "click",
+                        async(event)=>{
+
+                            event.stopPropagation();
+
+
+                            await gererLike(
+                                userId,
+                                boutonLike,
+                                coeursLike
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   BOUTON +X
+                ================================================= */
+
+                const boutonPlus =
+                    carte.querySelector(
+                        ".categoriePlus"
+                    );
+
+
+                if(boutonPlus){
+
+                    boutonPlus.addEventListener(
+                        "click",
+                        (event)=>{
+
+                            event.stopPropagation();
+
+
+                            const categoriesCachees =
+                                carte.querySelector(
+                                    ".categoriesCachees"
+                                );
+
+
+                            if(
+                                !categoriesCachees
+                            ){
+
+                                return;
+
+                            }
+
+
+                            if(
+                                categoriesCachees
+                                .style
+                                .display
+                                === "flex"
+                            ){
+
+                                categoriesCachees
+                                .style
+                                .display =
+                                    "none";
+
+
+                                boutonPlus
+                                .textContent =
+                                    "+" +
+                                    categoriesCachees
+                                    .querySelectorAll(
+                                        ".categorieCarte"
+                                    )
+                                    .length;
+
+                            }
+
+                            else{
+
+                                categoriesCachees
+                                .style
+                                .display =
+                                    "flex";
+
+
+                                boutonPlus
+                                .textContent =
+                                    "−";
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   RESEAUX
+                ================================================= */
+
+                const liensReseaux =
+                    carte.querySelectorAll(
+                        ".reseauCarte"
+                    );
+
+
+                liensReseaux.forEach(
                     (lien)=>{
 
                         lien.addEventListener(
@@ -924,106 +1675,114 @@ async function chargerProfils(){
                 );
 
 
-            /* =================================================
-               VOIR PROFIL
-            ================================================= */
+                /* =================================================
+                   BOUTON VOIR PROFIL
+                ================================================= */
 
-            const boutonVoirProfil =
-                carte.querySelector(
-                    ".boutonVoirProfil"
+                const boutonVoirProfil =
+                    carte.querySelector(
+                        ".boutonVoirProfil"
+                    );
+
+
+                if(boutonVoirProfil){
+
+                    boutonVoirProfil.addEventListener(
+                        "click",
+                        (event)=>{
+
+                            event.stopPropagation();
+
+
+                            window.location.href =
+                                "profil.html?pseudo=" +
+                                encodeURIComponent(
+                                    data.pseudo
+                                );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   AJOUTER LA CARTE
+                ================================================= */
+
+                listeProfils.appendChild(
+                    carte
                 );
 
 
-            boutonVoirProfil.addEventListener(
-                "click",
-                (event)=>{
+                /* =================================================
+                   CLIC SUR LA CARTE
+                ================================================= */
 
-                    event.stopPropagation();
+                carte.addEventListener(
+                    "click",
+                    (event)=>{
 
+                        if(
+                            event.target.closest(
+                                ".categoriePlus"
+                            )
+                        ){
 
-                    window.location.href =
-                        "profil.html?pseudo=" +
-                        encodeURIComponent(
-                            data.pseudo
-                        );
+                            return;
 
-                }
-            );
-
-
-            /* =================================================
-               AJOUTER LA CARTE
-            ================================================= */
-
-            listeProfils.appendChild(
-                carte
-            );
+                        }
 
 
-            /* =================================================
-               CLIC SUR LA CARTE
-            ================================================= */
+                        if(
+                            event.target.closest(
+                                ".reseauCarte"
+                            )
+                        ){
 
-            carte.addEventListener(
-                "click",
-                (event)=>{
+                            return;
 
-                    if(
-                        event.target.closest(
-                            ".categoriePlus"
-                        )
-                    ){
-
-                        return;
-
-                    }
+                        }
 
 
-                    if(
-                        event.target.closest(
-                            ".reseauCarte"
-                        )
-                    ){
+                        if(
+                            event.target.closest(
+                                ".boutonVoirProfil"
+                            )
+                        ){
 
-                        return;
+                            return;
 
-                    }
+                        }
 
 
-                    if(
-                        event.target.closest(
-                            ".boutonLike"
-                        )
-                    ){
+                        if(
+                            event.target.closest(
+                                ".boutonLike"
+                            )
+                        ){
 
-                        return;
+                            return;
+
+                        }
+
+
+                        window.location.href =
+                            "profil.html?pseudo=" +
+                            encodeURIComponent(
+                                data.pseudo
+                            );
 
                     }
+                );
+
+            }
+        );
 
 
-                    if(
-                        event.target.closest(
-                            ".boutonVoirProfil"
-                        )
-                    ){
+    }
 
-                        return;
-
-                    }
-
-
-                    window.location.href =
-                        "profil.html?pseudo=" +
-                        encodeURIComponent(
-                            data.pseudo
-                        );
-
-                }
-            );
-
-        }
-
-    }catch(error){
+    catch(error){
 
         console.error(
             "Erreur lors du chargement des profils :",
@@ -1034,7 +1793,9 @@ async function chargerProfils(){
         listeProfils.innerHTML = `
 
             <p>
+
                 Impossible de charger les profils.
+
             </p>
 
         `;
@@ -1048,13 +1809,10 @@ async function chargerProfils(){
    RECHERCHE DE PROFIL EN DIRECT
 ========================================================= */
 
-const resultatsRecherche =
-    document.getElementById(
-        "resultatsRecherche"
-    );
-
-
-if(recherche && resultatsRecherche){
+if(
+    recherche &&
+    resultatsRecherche
+){
 
     recherche.addEventListener(
         "input",
@@ -1064,13 +1822,21 @@ if(recherche && resultatsRecherche){
                 recherche.value.trim();
 
 
-            if(texte === ""){
+            /* =================================================
+               RECHERCHE VIDE
+            ================================================= */
+
+            if(
+                texte === ""
+            ){
 
                 resultatsRecherche.innerHTML =
                     "";
 
+
                 resultatsRecherche.style.display =
                     "none";
+
 
                 return;
 
@@ -1113,14 +1879,18 @@ if(recherche && resultatsRecherche){
 
                         if(
                             pseudo
-                                .toLowerCase()
-                                .includes(
-                                    texteRecherche
-                                )
+                            .toLowerCase()
+                            .includes(
+                                texteRecherche
+                            )
                         ){
 
                             nombreResultats++;
 
+
+                            /* =================================================
+                               RESULTAT
+                            ================================================= */
 
                             const resultat =
                                 document.createElement(
@@ -1131,6 +1901,10 @@ if(recherche && resultatsRecherche){
                             resultat.className =
                                 "resultatRecherche";
 
+
+                            /* =================================================
+                               PSEUDO
+                            ================================================= */
 
                             const nom =
                                 document.createElement(
@@ -1146,6 +1920,10 @@ if(recherche && resultatsRecherche){
                                 pseudo;
 
 
+                            /* =================================================
+                               PHOTO
+                            ================================================= */
+
                             const image =
                                 document.createElement(
                                     "img"
@@ -1160,6 +1938,10 @@ if(recherche && resultatsRecherche){
                                 pseudo;
 
 
+                            /* =================================================
+                               ORDRE
+                            ================================================= */
+
                             resultat.appendChild(
                                 nom
                             );
@@ -1169,6 +1951,10 @@ if(recherche && resultatsRecherche){
                                 image
                             );
 
+
+                            /* =================================================
+                               CLIC
+                            ================================================= */
 
                             resultat.addEventListener(
                                 "click",
@@ -1194,7 +1980,13 @@ if(recherche && resultatsRecherche){
                 );
 
 
-                if(nombreResultats > 0){
+                /* =================================================
+                   AFFICHAGE
+                ================================================= */
+
+                if(
+                    nombreResultats > 0
+                ){
 
                     resultatsRecherche.style.display =
                         "block";
@@ -1206,12 +1998,15 @@ if(recherche && resultatsRecherche){
                     resultatsRecherche.innerHTML =
                         "";
 
+
                     resultatsRecherche.style.display =
                         "none";
 
                 }
 
-            }catch(error){
+            }
+
+            catch(error){
 
                 console.error(
                     "Erreur lors de la recherche :",
@@ -1221,6 +2016,7 @@ if(recherche && resultatsRecherche){
 
                 resultatsRecherche.innerHTML =
                     "";
+
 
                 resultatsRecherche.style.display =
                     "none";
