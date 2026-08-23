@@ -99,7 +99,8 @@ document.addEventListener(
 
             if(menu){
 
-                menu.style.display = "none";
+                menu.style.display =
+                    "none";
 
             }
 
@@ -182,7 +183,8 @@ onAuthStateChanged(
     auth,
     async(user)=>{
 
-        utilisateurActuel = user;
+        utilisateurActuel =
+            user;
 
 
         /* =================================================
@@ -230,7 +232,7 @@ onAuthStateChanged(
 
 
             /* =========================
-               VERIFIER LE PROFIL FIRESTORE
+               VERIFIER LE PROFIL
             ========================= */
 
             try{
@@ -303,10 +305,6 @@ onAuthStateChanged(
             }
 
 
-            /* =========================
-               PROFILS TOUJOURS VISIBLES
-            ========================= */
-
             chargerProfils();
 
         }
@@ -328,25 +326,14 @@ function lancerAnimationCoeurs(carte){
     }
 
 
-    /* =====================================================
-       CARTE ROSE / ROUGE
-    ===================================================== */
-
     carte.classList.add(
         "animationLike"
     );
 
 
-    /* =====================================================
-       NOMBRE DE COEURS
-    ===================================================== */
+    const nombreCoeurs =
+        18;
 
-    const nombreCoeurs = 18;
-
-
-    /* =====================================================
-       CREATION DES COEURS
-    ===================================================== */
 
     for(
         let i = 0;
@@ -366,33 +353,36 @@ function lancerAnimationCoeurs(carte){
             "❤️";
 
 
-        /* Position aléatoire */
-
         coeur.style.left =
-            (10 + Math.random() * 80) +
+            (
+                10 +
+                Math.random() * 80
+            ) +
             "%";
 
 
         coeur.style.bottom =
-            (10 + Math.random() * 20) +
+            (
+                10 +
+                Math.random() * 20
+            ) +
             "px";
 
-
-        /* Taille aléatoire */
 
         coeur.style.fontSize =
-            (25 + Math.random() * 25) +
+            (
+                25 +
+                Math.random() * 25
+            ) +
             "px";
 
 
-        /* Délai aléatoire */
-
         coeur.style.animationDelay =
-            (Math.random() * 0.35) +
+            (
+                Math.random() * 0.35
+            ) +
             "s";
 
-
-        /* Petit déplacement horizontal */
 
         coeur.style.setProperty(
             "--deplacement",
@@ -409,8 +399,6 @@ function lancerAnimationCoeurs(carte){
         );
 
 
-        /* Suppression après animation */
-
         setTimeout(
             ()=>{
 
@@ -422,10 +410,6 @@ function lancerAnimationCoeurs(carte){
 
     }
 
-
-    /* =====================================================
-       RETOUR A LA COULEUR NORMALE
-    ===================================================== */
 
     setTimeout(
         ()=>{
@@ -484,10 +468,6 @@ async function gererLike(
     carte
 ){
 
-    /* =====================================================
-       IL FAUT ETRE CONNECTE
-    ===================================================== */
-
     if(!utilisateurActuel){
 
         alert(
@@ -499,12 +479,9 @@ async function gererLike(
     }
 
 
-    /* =====================================================
-       EMPECHER LES CLICS RAPIDES
-    ===================================================== */
-
     if(
-        bouton.dataset.chargement === "true"
+        bouton.dataset.chargement ===
+        "true"
     ){
 
         return;
@@ -517,10 +494,6 @@ async function gererLike(
 
 
     try{
-
-        /* =================================================
-           DOCUMENT DU LIKE
-        ================================================= */
 
         const likeRef =
             doc(
@@ -539,7 +512,7 @@ async function gererLike(
 
 
         /* =================================================
-           DEJA LIKE
+           RETIRER LIKE
         ================================================= */
 
         if(
@@ -562,7 +535,8 @@ async function gererLike(
 
             let nombre =
                 parseInt(
-                    compteur.dataset.likes || "0"
+                    compteur.dataset.likes ||
+                    "0"
                 );
 
 
@@ -590,7 +564,7 @@ async function gererLike(
 
 
         /* =================================================
-           NOUVEAU LIKE
+           AJOUTER LIKE
         ================================================= */
 
         else{
@@ -620,7 +594,8 @@ async function gererLike(
 
             let nombre =
                 parseInt(
-                    compteur.dataset.likes || "0"
+                    compteur.dataset.likes ||
+                    "0"
                 );
 
 
@@ -640,10 +615,6 @@ async function gererLike(
                     : " like"
                 );
 
-
-            /* =================================================
-               ANIMATION
-            ================================================= */
 
             animerBoutonLike(
                 bouton
@@ -724,10 +695,6 @@ async function chargerLikes(
             );
 
 
-        /* =================================================
-           VERIFIER SI L'UTILISATEUR A LIKE
-        ================================================= */
-
         if(utilisateurActuel){
 
             const monLikeRef =
@@ -789,6 +756,263 @@ async function chargerLikes(
 
 
 /* =========================================================
+   FAVORIS
+========================================================= */
+
+async function verifierFavori(
+    profilId,
+    bouton
+){
+
+    if(
+        !utilisateurActuel ||
+        !bouton
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const favoriRef =
+            doc(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris",
+                profilId
+            );
+
+
+        const favoriSnap =
+            await getDoc(
+                favoriRef
+            );
+
+
+        if(
+            favoriSnap.exists()
+        ){
+
+            bouton.classList.add(
+                "favoriActif"
+            );
+
+
+            bouton.textContent =
+                "⭐";
+
+            bouton.title =
+                "Retirer des favoris";
+
+        }
+
+        else{
+
+            bouton.classList.remove(
+                "favoriActif"
+            );
+
+
+            bouton.textContent =
+                "☆";
+
+            bouton.title =
+                "Ajouter aux favoris";
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors de la vérification du favori :",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   AJOUTER / RETIRER UN FAVORI
+========================================================= */
+
+async function gererFavori(
+    profilId,
+    bouton
+){
+
+    if(!utilisateurActuel){
+
+        alert(
+            "Tu dois être connecté pour ajouter un favori ⭐"
+        );
+
+        return;
+
+    }
+
+
+    if(!profilId){
+
+        return;
+
+    }
+
+
+    if(
+        profilId === utilisateurActuel.uid
+    ){
+
+        alert(
+            "Tu ne peux pas ajouter ton propre profil aux favoris."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        bouton.dataset.chargement ===
+        "true"
+    ){
+
+        return;
+
+    }
+
+
+    bouton.dataset.chargement =
+        "true";
+
+
+    try{
+
+        const favoriRef =
+            doc(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                "favoris",
+                profilId
+            );
+
+
+        const favoriSnap =
+            await getDoc(
+                favoriRef
+            );
+
+
+        /* =================================================
+           RETIRER DES FAVORIS
+        ================================================= */
+
+        if(
+            favoriSnap.exists()
+        ){
+
+            await deleteDoc(
+                favoriRef
+            );
+
+
+            bouton.classList.remove(
+                "favoriActif"
+            );
+
+
+            bouton.textContent =
+                "☆";
+
+            bouton.title =
+                "Ajouter aux favoris";
+
+        }
+
+
+        /* =================================================
+           AJOUTER AUX FAVORIS
+        ================================================= */
+
+        else{
+
+            await setDoc(
+                favoriRef,
+                {
+
+                    profilId:
+                        profilId,
+
+                    date:
+                        new Date()
+
+                }
+            );
+
+
+            bouton.classList.add(
+                "favoriActif"
+            );
+
+
+            bouton.textContent =
+                "⭐";
+
+            bouton.title =
+                "Retirer des favoris";
+
+
+            /* Petite animation */
+
+            bouton.classList.add(
+                "favoriClick"
+            );
+
+
+            setTimeout(
+                ()=>{
+
+                    bouton.classList.remove(
+                        "favoriClick"
+                    );
+
+                },
+                300
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors du favori :",
+            error
+        );
+
+
+        alert(
+            "Impossible de modifier les favoris."
+        );
+
+    }
+
+
+    bouton.dataset.chargement =
+        "false";
+
+}
+
+
+/* =========================================================
    CHARGER LES PROFILS
 ========================================================= */
 
@@ -801,18 +1025,11 @@ async function chargerProfils(){
     }
 
 
-    /* =====================================================
-       VIDER LA LISTE
-    ===================================================== */
-
-    listeProfils.innerHTML = "";
+    listeProfils.innerHTML =
+        "";
 
 
     try{
-
-        /* =================================================
-           RECUPERER LES UTILISATEURS
-        ================================================= */
 
         const snapshot =
             await getDocs(
@@ -823,15 +1040,21 @@ async function chargerProfils(){
             );
 
 
-        /* =================================================
-           PARCOURIR LES PROFILS
-        ================================================= */
-
         snapshot.forEach(
             (profilDoc)=>{
 
                 const data =
                     profilDoc.data();
+
+
+                /*
+                   IMPORTANT :
+
+                   profilDoc.id = UID du propriétaire
+                */
+
+                const profilId =
+                    profilDoc.id;
 
 
                 const pseudo =
@@ -840,7 +1063,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   CREER LA CARTE
+                   CARTE
                 ================================================= */
 
                 const carte =
@@ -882,10 +1105,6 @@ async function chargerProfils(){
                     "";
 
 
-                /* =================================================
-                   3 PREMIERES CATEGORIES
-                ================================================= */
-
                 troisCategories.forEach(
                     (categorie)=>{
 
@@ -902,10 +1121,6 @@ async function chargerProfils(){
                     }
                 );
 
-
-                /* =================================================
-                   CATEGORIES SUPPLEMENTAIRES
-                ================================================= */
 
                 if(
                     autresCategories.length > 0
@@ -951,7 +1166,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   RESEAUX SOCIAUX
+                   RESEAUX
                 ================================================= */
 
                 const reseaux =
@@ -1105,7 +1320,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   CONTENU DE LA CARTE
+                   CONTENU CARTE
                 ================================================= */
 
                 carte.innerHTML = `
@@ -1158,34 +1373,53 @@ async function chargerProfils(){
                         }
 
 
-                        <div
-                            class="carteLikes"
-                            data-likes="0"
-                        >
+                        <div class="carteLikes">
 
-                            ❤️ 0 likes
+                            <span
+                                class="carteLikesCompteur"
+                                data-likes="0"
+                            >
+
+                                ❤️ 0 likes
+
+                            </span>
 
                         </div>
 
 
-                        <button
-                            class="boutonLike"
-                            type="button"
-                        >
+                        <div class="actionsCarte">
 
-                            ♡ J'aime
+                            <button
+                                class="boutonLike"
+                                type="button"
+                            >
 
-                        </button>
+                                ♡ J'aime
+
+                            </button>
 
 
-                        <button
-                            class="boutonVoirProfil"
-                            type="button"
-                        >
+                            <button
+                                class="boutonFavori"
+                                type="button"
+                                title="Ajouter aux favoris"
+                            >
 
-                            👤 Voir profil
+                                ☆
 
-                        </button>
+                            </button>
+
+
+                            <button
+                                class="boutonVoirProfil"
+                                type="button"
+                            >
+
+                                👤 Voir profil
+
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -1193,7 +1427,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   ELEMENTS LIKE
+                   ELEMENTS
                 ================================================= */
 
                 const boutonLike =
@@ -1204,12 +1438,18 @@ async function chargerProfils(){
 
                 const compteur =
                     carte.querySelector(
-                        ".carteLikes"
+                        ".carteLikesCompteur"
+                    );
+
+
+                const boutonFavori =
+                    carte.querySelector(
+                        ".boutonFavori"
                     );
 
 
                 /* =================================================
-                   CHARGER LES LIKES
+                   LIKES
                 ================================================= */
 
                 chargerLikes(
@@ -1217,6 +1457,23 @@ async function chargerProfils(){
                     boutonLike,
                     compteur
                 );
+
+
+                /* =================================================
+                   FAVORI
+                ================================================= */
+
+                if(
+                    utilisateurActuel &&
+                    boutonFavori
+                ){
+
+                    verifierFavori(
+                        profilId,
+                        boutonFavori
+                    );
+
+                }
 
 
                 /* =================================================
@@ -1246,7 +1503,31 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   BOUTON +X
+                   BOUTON FAVORI
+                ================================================= */
+
+                if(boutonFavori){
+
+                    boutonFavori.addEventListener(
+                        "click",
+                        (event)=>{
+
+                            event.stopPropagation();
+
+
+                            gererFavori(
+                                profilId,
+                                boutonFavori
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   CATEGORIES +X
                 ================================================= */
 
                 const boutonPlus =
@@ -1342,7 +1623,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   BOUTON VOIR PROFIL
+                   VOIR PROFIL
                 ================================================= */
 
                 const boutonVoirProfil =
@@ -1373,7 +1654,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   AJOUTER LA CARTE
+                   AJOUTER CARTE
                 ================================================= */
 
                 listeProfils.appendChild(
@@ -1382,7 +1663,7 @@ async function chargerProfils(){
 
 
                 /* =================================================
-                   CLIC SUR LA CARTE
+                   CLIC CARTE
                 ================================================= */
 
                 carte.addEventListener(
@@ -1433,6 +1714,17 @@ async function chargerProfils(){
                         }
 
 
+                        if(
+                            event.target.closest(
+                                ".boutonFavori"
+                            )
+                        ){
+
+                            return;
+
+                        }
+
+
                         window.location.href =
                             "profil.html?pseudo=" +
                             encodeURIComponent(
@@ -1444,7 +1736,6 @@ async function chargerProfils(){
 
             }
         );
-
 
     }
 
@@ -1472,7 +1763,7 @@ async function chargerProfils(){
 
 
 /* =========================================================
-   RECHERCHE DE PROFIL EN DIRECT
+   RECHERCHE
 ========================================================= */
 
 if(
@@ -1487,10 +1778,6 @@ if(
             const texte =
                 recherche.value.trim();
 
-
-            /* =================================================
-               RECHERCHE VIDE
-            ================================================= */
 
             if(
                 texte === ""
@@ -1544,10 +1831,6 @@ if(
                             "";
 
 
-                        /* =================================================
-                           RECHERCHE
-                        ================================================= */
-
                         if(
                             pseudo
                                 .toLowerCase()
@@ -1559,10 +1842,6 @@ if(
                             nombreResultats++;
 
 
-                            /* =================================================
-                               RESULTAT
-                            ================================================= */
-
                             const resultat =
                                 document.createElement(
                                     "div"
@@ -1572,10 +1851,6 @@ if(
                             resultat.className =
                                 "resultatRecherche";
 
-
-                            /* =================================================
-                               PSEUDO
-                            ================================================= */
 
                             const nom =
                                 document.createElement(
@@ -1590,10 +1865,6 @@ if(
                             nom.textContent =
                                 pseudo;
 
-
-                            /* =================================================
-                               PHOTO
-                            ================================================= */
 
                             const image =
                                 document.createElement(
@@ -1610,10 +1881,6 @@ if(
                                 pseudo;
 
 
-                            /* =================================================
-                               ORDRE
-                            ================================================= */
-
                             resultat.appendChild(
                                 nom
                             );
@@ -1623,10 +1890,6 @@ if(
                                 image
                             );
 
-
-                            /* =================================================
-                               CLIC
-                            ================================================= */
 
                             resultat.addEventListener(
                                 "click",
@@ -1651,10 +1914,6 @@ if(
                     }
                 );
 
-
-                /* =================================================
-                   AFFICHAGE
-                ================================================= */
 
                 if(
                     nombreResultats > 0
