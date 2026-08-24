@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 
 <meta charset="UTF-8">
@@ -11,69 +12,475 @@
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
 body{
+
     margin:0;
-    font-family:Arial, sans-serif;
-    background:#1f1f1f;
+
+    font-family:Arial,sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #292929 0%,
+            #1f1f1f 45%,
+            #181818 100%
+        );
+
     color:white;
-}
 
-main{
-    max-width:900px;
-    margin:auto;
-    padding:40px;
-}
-
-h1{
-    text-align:center;
-    margin-bottom:40px;
-}
-
-.section{
-
-    background:#2a2a2a;
-
-    padding:25px;
-
-    border-radius:15px;
-
-    margin-bottom:25px;
+    min-height:100vh;
 
 }
 
-.section h2{
 
-    margin-top:0;
+/* =========================================================
+   BARRE DU HAUT
+========================================================= */
 
-}
+#barreCompte{
 
-input,textarea{
+    height:64px;
 
     width:100%;
 
-    box-sizing:border-box;
+    background:rgba(15,15,15,.96);
+
+    border-bottom:1px solid #333;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    padding:0 25px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.35);
+
+}
+
+
+/* =========================================================
+   BOUTON DECONNEXION
+========================================================= */
+
+#deconnexion{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    background:#292929;
+
+    color:white;
+
+    border:1px solid #444;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    transition:
+
+        background .2s ease,
+
+        transform .2s ease,
+
+        border-color .2s ease,
+
+        box-shadow .2s ease;
+
+}
+
+
+#deconnexion:hover{
+
+    background:#383838;
+
+    border-color:#555;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.35);
+
+}
+
+
+#deconnexion:active{
+
+    transform:scale(.96);
+
+}
+
+
+/* =========================================================
+   CONTENU PRINCIPAL
+========================================================= */
+
+main{
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:0 auto;
+
+    padding:45px 30px 80px;
+
+}
+
+
+/* =========================================================
+   TITRE
+========================================================= */
+
+h1{
+
+    text-align:center;
+
+    margin:0 0 40px;
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #3ea6ff
+        );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+
+/* =========================================================
+   SOUS-TITRE EVENTUEL
+========================================================= */
+
+.sousTitre{
+
+    text-align:center;
+
+    color:#999;
+
+    margin-top:-25px;
+
+    margin-bottom:35px;
+
+    font-size:15px;
+
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+
+    background:
+        linear-gradient(
+            145deg,
+            #2c2c2c,
+            #252525
+        );
+
+    border:1px solid #383838;
+
+    padding:27px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.2);
+
+    transition:
+
+        transform .2s ease,
+
+        border-color .2s ease,
+
+        box-shadow .2s ease;
+
+}
+
+
+.section:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#464646;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.28);
+
+}
+
+
+.section h2{
+
+    margin:0 0 20px;
+
+    font-size:21px;
+
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    color:#eee;
+
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+textarea{
+
+    width:100%;
 
     margin-top:10px;
 
     margin-bottom:15px;
 
-    padding:12px;
+    padding:13px 15px;
 
-    border-radius:10px;
+    border-radius:11px;
 
-    border:none;
+    border:1px solid #363636;
+
+    outline:none;
 
     background:#181818;
 
     color:white;
 
+    font-family:Arial,sans-serif;
+
+    font-size:15px;
+
+    transition:
+
+        border-color .2s ease,
+
+        box-shadow .2s ease,
+
+        background .2s ease;
+
 }
+
+
+input:focus,
+textarea:focus{
+
+    background:#151515;
+
+    border-color:#3ea6ff;
+
+    box-shadow:
+        0 0 0 3px rgba(62,166,255,.12);
+
+}
+
+
+input::placeholder,
+textarea::placeholder{
+
+    color:#777;
+
+}
+
 
 textarea{
 
     resize:vertical;
 
+    min-height:120px;
+
+    line-height:1.5;
+
 }
+
+
+/* =========================================================
+   PHOTO DE PROFIL
+========================================================= */
+
+#photo{
+
+    width:140px;
+
+    height:140px;
+
+    border-radius:50%;
+
+    display:block;
+
+    margin:10px auto 5px;
+
+    object-fit:cover;
+
+    border:4px solid white;
+
+    background:#181818;
+
+    box-shadow:
+
+        0 0 8px rgba(255,255,255,.9),
+
+        0 0 20px rgba(255,255,255,.35);
+
+    transition:
+
+        transform .25s ease,
+
+        box-shadow .25s ease;
+
+}
+
+
+#photo:hover{
+
+    transform:scale(1.04);
+
+    box-shadow:
+
+        0 0 10px white,
+
+        0 0 25px rgba(255,255,255,.5);
+
+}
+
+
+/* =========================================================
+   ETAT DU PSEUDO
+========================================================= */
+
+#pseudoEtat{
+
+    min-height:18px;
+
+    margin:0 0 8px;
+
+    font-size:14px;
+
+    color:#aaa;
+
+}
+
+
+/* =========================================================
+   RESEAUX
+========================================================= */
+
+#reseaux{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+#categoriesContainer{
+
+    margin-top:20px;
+
+    padding:5px 0;
+
+}
+
+
+#categoriesSelectionnees{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    min-height:20px;
+
+}
+
+
+/* =========================================================
+   SEPARATEUR
+========================================================= */
+
+hr{
+
+    border:none;
+
+    border-top:1px solid #444;
+
+}
+
+
+/* =========================================================
+   BOUTONS GENERAUX
+========================================================= */
 
 button{
 
@@ -85,41 +492,257 @@ button{
 
     padding:12px 25px;
 
-    border-radius:10px;
+    border-radius:11px;
 
     cursor:pointer;
 
     font-size:16px;
 
+    font-weight:bold;
+
+    transition:
+
+        background .2s ease,
+
+        transform .2s ease,
+
+        box-shadow .2s ease;
+
 }
+
 
 button:hover{
 
     background:#5bb5ff;
 
-}
+    transform:translateY(-2px);
 
-#photo{
-
-    width:120px;
-
-    height:120px;
-
-    border-radius:50%;
-
-    display:block;
-
-    margin:auto;
-
-    object-fit:cover;
-
-    border:4px solid white;
+    box-shadow:
+        0 5px 15px rgba(62,166,255,.25);
 
 }
 
-#categoriesContainer{
 
-    margin-top:20px;
+button:active{
+
+    transform:scale(.97);
+
+}
+
+
+/* =========================================================
+   BOUTON AJOUTER RESEAU
+========================================================= */
+
+#ajouterReseau{
+
+    background:#333;
+
+    border:1px solid #484848;
+
+    font-size:14px;
+
+    padding:10px 17px;
+
+}
+
+
+#ajouterReseau:hover{
+
+    background:#404040;
+
+    border-color:#555;
+
+    box-shadow:none;
+
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+#videoYoutube{
+
+    margin-bottom:0;
+
+}
+
+
+/* =========================================================
+   BOUTON CREATION
+========================================================= */
+
+#saveProfile{
+
+    min-width:220px;
+
+    padding:14px 30px;
+
+    border-radius:14px;
+
+    font-size:17px;
+
+    background:#3ea6ff;
+
+    box-shadow:
+        0 5px 20px rgba(62,166,255,.18);
+
+}
+
+
+#saveProfile:hover{
+
+    background:#61b8ff;
+
+    box-shadow:
+        0 8px 25px rgba(62,166,255,.3);
+
+}
+
+
+/* =========================================================
+   CENTRAGE BOUTON
+========================================================= */
+
+.save-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-top:35px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+    #barreCompte{
+
+        height:58px;
+
+        padding:0 12px;
+
+    }
+
+
+    #deconnexion{
+
+        padding:9px 14px;
+
+        font-size:14px;
+
+    }
+
+
+    main{
+
+        padding:30px 15px 60px;
+
+    }
+
+
+    h1{
+
+        font-size:30px;
+
+        margin-bottom:30px;
+
+    }
+
+
+    .section{
+
+        padding:20px;
+
+        border-radius:15px;
+
+    }
+
+
+    .section h2{
+
+        font-size:19px;
+
+    }
+
+
+    #photo{
+
+        width:120px;
+
+        height:120px;
+
+    }
+
+
+    #saveProfile{
+
+        width:100%;
+
+        max-width:350px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PETITS TELEPHONES
+========================================================= */
+
+@media(max-width:450px){
+
+    #barreCompte{
+
+        padding:0 10px;
+
+    }
+
+
+    #deconnexion{
+
+        font-size:13px;
+
+        padding:8px 12px;
+
+    }
+
+
+    main{
+
+        padding:25px 10px 50px;
+
+    }
+
+
+    h1{
+
+        font-size:27px;
+
+    }
+
+
+    .section{
+
+        padding:17px;
+
+    }
+
+
+    input,
+    textarea{
+
+        font-size:14px;
+
+    }
 
 }
 
@@ -127,13 +750,20 @@ button:hover{
 
 </head>
 
+
 <body>
+
+
+<!-- =======================================================
+     BARRE DU COMPTE
+======================================================= -->
 
 <div id="barreCompte">
 
-    <span id="compteConnecte"></span>
-
-    <button id="deconnexion">
+    <button
+        id="deconnexion"
+        type="button"
+    >
 
         🚪 Déconnexion
 
@@ -141,113 +771,250 @@ button:hover{
 
 </div>
 
+
+<!-- =======================================================
+     CONTENU PRINCIPAL
+======================================================= -->
+
 <main>
 
-<h1>Créer mon profil</h1>
 
-<div class="section">
+    <h1>
 
-<h2>Photo de profil</h2>
+        Créer mon profil
 
-<img id="photo">
-
-</div>
-
-<div class="section">
-
-<p id="pseudoEtat"></p>
-
-<h2>Pseudo</h2>
-
-<input
-id="pseudo"
-type="text"
-placeholder="Votre pseudo">
-
-<p id="pseudoEtat"></p>
-
-</div>
-
-<div class="section">
-
-<h2>Description courte</h2>
-
-<input
-id="descriptionCourte"
-maxlength="50"
-placeholder="50 caractères maximum">
-
-<h2>Description complète</h2>
-
-<textarea
-id="descriptionLongue"
-maxlength="1000"
-rows="8"
-placeholder="Présente-toi..."></textarea>
-
-</div>
-
-<div class="section">
-
-<h2>Réseaux sociaux</h2>
-
-<div id="reseaux"></div>
-
-<button
-type="button"
-id="ajouterReseau">
-
-+ Ajouter un réseau
-
-</button>
-
-</div>
-
-<div class="section">
-
-<label>🎬 Vidéo mise en avant (YouTube)</label>
-
-<input
-    type="url"
-    id="videoYoutube"
-    placeholder="https://www.youtube.com/watch?v=..."
->
-
-</div>
-
-<div class="section">
+    </h1>
 
 
+    <p class="sousTitre">
 
-<h2>Catégories</h2>
+        Personnalise ton profil et présente-toi aux autres.
 
-<h3>Catégories sélectionnées</h3>
+    </p>
 
-<div id="categoriesSelectionnees"></div>
 
-<hr style="margin:20px 0;border:1px solid #444;">
+    <!-- =====================================================
+         PHOTO
+    ====================================================== -->
 
-<div id="categoriesContainer">
+    <div class="section">
 
-Chargement...
+        <h2>
 
-</div>
+            📸 Photo de profil
 
-</div>
+        </h2>
 
-<center>
 
-<button id="saveProfile">
+        <img
+            id="photo"
+            alt="Photo de profil"
+        >
 
-Créer mon profil
+    </div>
 
-</button>
 
-</center>
+    <!-- =====================================================
+         PSEUDO
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>
+
+            👤 Pseudo
+
+        </h2>
+
+
+        <p id="pseudoEtat"></p>
+
+
+        <input
+            id="pseudo"
+            type="text"
+            maxlength="30"
+            placeholder="Votre pseudo"
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    <!-- =====================================================
+         DESCRIPTIONS
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>
+
+            ✨ Présentation
+
+        </h2>
+
+
+        <label for="descriptionCourte">
+
+            Description courte
+
+        </label>
+
+
+        <input
+            id="descriptionCourte"
+            maxlength="50"
+            placeholder="Une courte phrase pour te présenter..."
+        >
+
+
+        <label for="descriptionLongue">
+
+            Description complète
+
+        </label>
+
+
+        <textarea
+            id="descriptionLongue"
+            maxlength="1000"
+            rows="8"
+            placeholder="Présente-toi, parle de tes passions, de ton contenu..."
+        ></textarea>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESEAUX
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>
+
+            🌐 Réseaux sociaux
+
+        </h2>
+
+
+        <div id="reseaux"></div>
+
+
+        <button
+            type="button"
+            id="ajouterReseau"
+        >
+
+            ＋ Ajouter un réseau
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         VIDEO
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>
+
+            🎬 Vidéo mise en avant
+
+        </h2>
+
+
+        <label for="videoYoutube">
+
+            Lien de ta vidéo YouTube
+
+        </label>
+
+
+        <input
+            type="url"
+            id="videoYoutube"
+            placeholder="https://www.youtube.com/watch?v=..."
+        >
+
+    </div>
+
+
+    <!-- =====================================================
+         CATEGORIES
+    ====================================================== -->
+
+    <div class="section">
+
+        <h2>
+
+            🏷️ Catégories
+
+        </h2>
+
+
+        <h3>
+
+            Catégories sélectionnées
+
+        </h3>
+
+
+        <div
+            id="categoriesSelectionnees"
+        ></div>
+
+
+        <hr
+            style="
+                margin:20px 0;
+                border:1px solid #444;
+            "
+        >
+
+
+        <div id="categoriesContainer">
+
+            Chargement...
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ENREGISTREMENT
+    ====================================================== -->
+
+    <div class="save-container">
+
+        <button
+            id="saveProfile"
+            type="button"
+        >
+
+            💾 Créer mon profil
+
+        </button>
+
+    </div>
+
 
 </main>
 
-<script type="module" src="creer-profil.js"></script>
+
+<!-- =======================================================
+     JAVASCRIPT
+======================================================= -->
+
+<script
+    type="module"
+    src="creer-profil.js"
+></script>
+
 
 </body>
+
 </html>
