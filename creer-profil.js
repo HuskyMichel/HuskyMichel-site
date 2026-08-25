@@ -2,7 +2,8 @@ import { auth, db } from "./firebase.js";
 
 import {
     onAuthStateChanged,
-    signOut
+    signOut,
+    deleteUser
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
@@ -12,7 +13,8 @@ import {
     getDocs,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
@@ -79,7 +81,9 @@ const deconnexion =
     document.getElementById("deconnexion");
 
 
-console.log("creer-profil.js chargé");
+console.log(
+    "creer-profil.js chargé"
+);
 
 
 /* =========================================================
@@ -88,11 +92,15 @@ console.log("creer-profil.js chargé");
 
 function afficherPhotoUtilisateur(user){
 
-    if(!photo || !user){
+    if(
+        !photo ||
+        !user
+    ){
 
         return;
 
     }
+
 
     if(user.photoURL){
 
@@ -106,7 +114,546 @@ function afficherPhotoUtilisateur(user){
 
     else{
 
-        photo.removeAttribute("src");
+        photo.removeAttribute(
+            "src"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOUTON SUPPRIMER LE COMPTE
+========================================================= */
+
+function creerBoutonSuppression(){
+
+    /*
+       On évite de créer plusieurs boutons.
+    */
+
+    if(
+        document.getElementById(
+            "supprimerCompte"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
+
+    container.id =
+        "suppressionCompteContainer";
+
+
+    container.style.display =
+        "flex";
+
+
+    container.style.justifyContent =
+        "center";
+
+
+    container.style.marginTop =
+        "20px";
+
+
+    const bouton =
+        document.createElement(
+            "button"
+        );
+
+
+    bouton.type =
+        "button";
+
+
+    bouton.id =
+        "supprimerCompte";
+
+
+    bouton.textContent =
+        "🗑️ Supprimer mon compte";
+
+
+    bouton.style.background =
+        "#3a1717";
+
+
+    bouton.style.color =
+        "#ff6b6b";
+
+
+    bouton.style.border =
+        "1px solid #6b2929";
+
+
+    bouton.style.padding =
+        "13px 22px";
+
+
+    bouton.style.borderRadius =
+        "12px";
+
+
+    bouton.style.cursor =
+        "pointer";
+
+
+    bouton.style.fontSize =
+        "15px";
+
+
+    bouton.style.fontWeight =
+        "bold";
+
+
+    bouton.style.transition =
+        ".2s ease";
+
+
+    bouton.addEventListener(
+        "mouseenter",
+        ()=>{
+
+            bouton.style.background =
+                "#551c1c";
+
+            bouton.style.borderColor =
+                "#ff5252";
+
+            bouton.style.color =
+                "#ff8a8a";
+
+            bouton.style.transform =
+                "translateY(-2px)";
+
+        }
+    );
+
+
+    bouton.addEventListener(
+        "mouseleave",
+        ()=>{
+
+            bouton.style.background =
+                "#3a1717";
+
+            bouton.style.borderColor =
+                "#6b2929";
+
+            bouton.style.color =
+                "#ff6b6b";
+
+            bouton.style.transform =
+                "translateY(0)";
+
+        }
+    );
+
+
+    bouton.addEventListener(
+        "click",
+        supprimerCompte
+    );
+
+
+    container.appendChild(
+        bouton
+    );
+
+
+    /*
+       On place le bouton sous le bouton
+       d'enregistrement.
+    */
+
+    if(
+        saveProfile &&
+        saveProfile.parentElement
+    ){
+
+        saveProfile.parentElement
+            .appendChild(
+                container
+            );
+
+    }
+
+    else{
+
+        document.querySelector("main")
+            ?.appendChild(
+                container
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   SUPPRESSION DES SOUS-COLLECTIONS
+========================================================= */
+
+async function supprimerSousCollection(
+    nomCollection
+){
+
+    if(
+        !utilisateurActuel
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const sousCollectionRef =
+            collection(
+                db,
+                "users",
+                utilisateurActuel.uid,
+                nomCollection
+            );
+
+
+        const snapshot =
+            await getDocs(
+                sousCollectionRef
+            );
+
+
+        const suppressions = [];
+
+
+        snapshot.forEach(
+            documentSnapshot=>{
+
+                suppressions.push(
+                    deleteDoc(
+                        doc(
+                            db,
+                            "users",
+                            utilisateurActuel.uid,
+                            nomCollection,
+                            documentSnapshot.id
+                        )
+                    )
+                );
+
+            }
+        );
+
+
+        await Promise.all(
+            suppressions
+        );
+
+
+        console.log(
+            `Sous-collection ${nomCollection} supprimée.`
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            `Erreur suppression ${nomCollection} :`,
+            error
+        );
+
+
+        throw error;
+
+    }
+
+}
+
+
+/* =========================================================
+   SUPPRIMER LE COMPTE
+========================================================= */
+
+async function supprimerCompte(){
+
+    if(
+        !utilisateurActuel
+    ){
+
+        alert(
+            "Aucun utilisateur connecté."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       PREMIERE VERIFICATION
+    */
+
+    const confirmation =
+        confirm(
+
+            "⚠️ SUPPRESSION DU COMPTE\n\n" +
+
+            "Cette action est définitive.\n\n" +
+
+            "Ton profil, tes informations et " +
+            "les données associées à ton compte " +
+            "seront supprimés.\n\n" +
+
+            "Veux-tu vraiment continuer ?"
+
+        );
+
+
+    if(
+        !confirmation
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       DEUXIEME VERIFICATION
+    */
+
+    const verification =
+        prompt(
+
+            "Dernière vérification.\n\n" +
+
+            "Pour confirmer définitivement la suppression " +
+            "de ton compte, tape exactement :\n\n" +
+
+            "SUPPRIMER"
+
+        );
+
+
+    if(
+        verification !== "SUPPRIMER"
+    ){
+
+        alert(
+            "Suppression annulée.\n\n" +
+            "Le texte de confirmation était incorrect."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       TROISIEME CONFIRMATION
+    */
+
+    const derniereConfirmation =
+        confirm(
+
+            "🚨 DERNIÈRE CONFIRMATION 🚨\n\n" +
+
+            "Ton compte va maintenant être supprimé.\n\n" +
+
+            "Cette action NE POURRA PAS être annulée.\n\n" +
+
+            "Supprimer définitivement ton compte ?"
+
+        );
+
+
+    if(
+        !derniereConfirmation
+    ){
+
+        return;
+
+    }
+
+
+    const bouton =
+        document.getElementById(
+            "supprimerCompte"
+        );
+
+
+    if(bouton){
+
+        bouton.disabled =
+            true;
+
+        bouton.textContent =
+            "⏳ Suppression en cours...";
+
+    }
+
+
+    try{
+
+        console.log(
+            "Début de la suppression du compte..."
+        );
+
+
+        const uid =
+            utilisateurActuel.uid;
+
+
+        /*
+           =================================================
+           1. SUPPRIMER LES SOUS-COLLECTIONS CONNUES
+           =================================================
+        */
+
+        await supprimerSousCollection(
+            "likes"
+        );
+
+
+        await supprimerSousCollection(
+            "favoris"
+        );
+
+
+        /*
+           =================================================
+           2. SUPPRIMER LE DOCUMENT DU PROFIL
+           =================================================
+        */
+
+        const profilRef =
+            doc(
+                db,
+                "users",
+                uid
+            );
+
+
+        await deleteDoc(
+            profilRef
+        );
+
+
+        console.log(
+            "Document users supprimé."
+        );
+
+
+        /*
+           =================================================
+           3. SUPPRIMER LE COMPTE FIREBASE AUTH
+           =================================================
+        */
+
+        await deleteUser(
+            utilisateurActuel
+        );
+
+
+        console.log(
+            "Compte Firebase Authentication supprimé."
+        );
+
+
+        /*
+           =================================================
+           4. REDIRECTION
+           =================================================
+        */
+
+        alert(
+            "✅ Ton compte a été supprimé avec succès."
+        );
+
+
+        /*
+           On redirige vers la page principale.
+        */
+
+        window.location.href =
+            "index.html";
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur suppression compte :",
+            error
+        );
+
+
+        /*
+           Cas particulier :
+           Firebase demande une authentification récente.
+        */
+
+        if(
+            error.code ===
+            "auth/requires-recent-login"
+        ){
+
+            alert(
+
+                "🔐 Pour des raisons de sécurité, " +
+                "Firebase demande une reconnexion récente " +
+                "avant de pouvoir supprimer ton compte.\n\n" +
+
+                "Ton compte n'a pas été supprimé.\n\n" +
+
+                "Reconnecte-toi puis réessaie."
+
+            );
+
+        }
+
+        else{
+
+            alert(
+
+                "❌ Impossible de supprimer complètement " +
+                "ton compte.\n\n" +
+
+                "Aucune nouvelle tentative automatique " +
+                "n'a été effectuée.\n\n" +
+
+                "Erreur : " +
+                (
+                    error.message ||
+                    "Erreur inconnue"
+                )
+
+            );
+
+        }
+
+
+        if(bouton){
+
+            bouton.disabled =
+                false;
+
+            bouton.textContent =
+                "🗑️ Supprimer mon compte";
+
+        }
 
     }
 
@@ -125,7 +672,10 @@ if(deconnexion){
 
             try{
 
-                await signOut(auth);
+                await signOut(
+                    auth
+                );
+
 
                 window.location.href =
                     "index.html";
@@ -138,6 +688,7 @@ if(deconnexion){
                     "Erreur déconnexion :",
                     error
                 );
+
 
                 alert(
                     "Impossible de se déconnecter."
@@ -159,7 +710,9 @@ onAuthStateChanged(
     auth,
     async(user)=>{
 
-        utilisateurActuel = user;
+        utilisateurActuel =
+            user;
+
 
         if(!user){
 
@@ -167,8 +720,10 @@ onAuthStateChanged(
                 "Tu dois être connecté pour créer ton profil."
             );
 
+
             window.location.href =
                 "index.html";
+
 
             return;
 
@@ -181,10 +736,13 @@ onAuthStateChanged(
         );
 
 
-        afficherPhotoUtilisateur(user);
+        afficherPhotoUtilisateur(
+            user
+        );
 
 
         await chargerProfilExistant();
+
 
         await chargerCategories();
 
@@ -198,11 +756,14 @@ onAuthStateChanged(
 
 async function chargerProfilExistant(){
 
-    if(!utilisateurActuel){
+    if(
+        !utilisateurActuel
+    ){
 
         return;
 
     }
+
 
     try{
 
@@ -213,66 +774,114 @@ async function chargerProfilExistant(){
                 utilisateurActuel.uid
             );
 
+
         const profilSnap =
-            await getDoc(profilRef);
+            await getDoc(
+                profilRef
+            );
 
 
-        if(profilSnap.exists()){
+        if(
+            profilSnap.exists()
+        ){
 
-            profilExiste = true;
+            profilExiste =
+                true;
+
 
             const data =
                 profilSnap.data();
 
 
+            /* =========================
+               PSEUDO
+            ========================= */
+
             if(pseudo){
 
                 pseudo.value =
-                    data.pseudo || "";
+                    data.pseudo ||
+                    "";
 
             }
 
+
+            /* =========================
+               DESCRIPTION COURTE
+            ========================= */
 
             if(descriptionCourte){
 
                 descriptionCourte.value =
-                    data.descriptionCourte || "";
+                    data.descriptionCourte ||
+                    "";
 
             }
 
+
+            /* =========================
+               DESCRIPTION LONGUE
+            ========================= */
 
             if(descriptionLongue){
 
                 descriptionLongue.value =
-                    data.descriptionLongue || "";
+                    data.descriptionLongue ||
+                    "";
 
             }
 
+
+            /* =========================
+               VIDEO
+            ========================= */
 
             if(videoYoutube){
 
                 videoYoutube.value =
-                    data.videoYoutube || "";
+                    data.videoYoutube ||
+                    "";
 
             }
 
 
-            if(Array.isArray(data.categories)){
+            /* =========================
+               CATEGORIES
+            ========================= */
+
+            if(
+                Array.isArray(
+                    data.categories
+                )
+            ){
 
                 categoriesSelectionnees =
-                    [...data.categories];
+                    [
+                        ...data.categories
+                    ];
 
             }
 
 
-            if(Array.isArray(data.reseaux)){
+            /* =========================
+               RESEAUX
+            ========================= */
+
+            if(
+                Array.isArray(
+                    data.reseaux
+                )
+            ){
 
                 data.reseaux.forEach(
                     reseau=>{
 
                         ajouterBlocReseau(
-                            reseau.type || "",
-                            reseau.lien || ""
+                            reseau.type ||
+                            "",
+
+                            reseau.lien ||
+                            ""
                         );
 
                     }
@@ -281,6 +890,10 @@ async function chargerProfilExistant(){
             }
 
 
+            /* =========================
+               BOUTON ENREGISTRER
+            ========================= */
+
             if(saveProfile){
 
                 saveProfile.textContent =
@@ -288,11 +901,20 @@ async function chargerProfilExistant(){
 
             }
 
+
+            /*
+               Le profil existe :
+               on affiche le bouton supprimer.
+            */
+
+            creerBoutonSuppression();
+
         }
 
         else{
 
-            profilExiste = false;
+            profilExiste =
+                false;
 
         }
 
@@ -314,7 +936,7 @@ async function chargerProfilExistant(){
 
 
 /* =========================================================
-   NORMALISER LE NOM DU GROUPE
+   NORMALISER LE GROUPE
 ========================================================= */
 
 function normaliserGroupe(nom){
@@ -325,12 +947,16 @@ function normaliserGroupe(nom){
 
     }
 
+
     const valeur =
         nom
             .toString()
             .trim()
             .toLowerCase()
-            .replace(/[\s-]+/g,"_");
+            .replace(
+                /[\s-]+/g,
+                "_"
+            );
 
 
     if(
@@ -453,11 +1079,6 @@ async function chargerCategories(){
                     categorieDoc.data();
 
 
-                /*
-                   On cherche d'abord le groupe
-                   dans plusieurs champs possibles.
-                */
-
                 const groupe =
                     normaliserGroupe(
                         data.groupe ||
@@ -474,12 +1095,11 @@ async function chargerCategories(){
                 }
 
 
-                /*
-                   Les catégories peuvent être
-                   dans "liste".
-                */
-
-                if(Array.isArray(data.liste)){
+                if(
+                    Array.isArray(
+                        data.liste
+                    )
+                ){
 
                     data.liste.forEach(
                         categorie=>{
@@ -495,12 +1115,11 @@ async function chargerCategories(){
                 }
 
 
-                /*
-                   On accepte également
-                   "categories".
-                */
-
-                if(Array.isArray(data.categories)){
+                if(
+                    Array.isArray(
+                        data.categories
+                    )
+                ){
 
                     data.categories.forEach(
                         categorie=>{
@@ -552,7 +1171,7 @@ async function chargerCategories(){
 
 
 /* =========================================================
-   AJOUTER UNE CATEGORIE
+   AJOUTER CATEGORIE
 ========================================================= */
 
 function ajouterCategorieAuGroupe(
@@ -567,14 +1186,21 @@ function ajouterCategorieAuGroupe(
     }
 
 
-    if(typeof categorie === "string"){
+    if(
+        typeof categorie ===
+        "string"
+    ){
 
         categoriesParGroupe[groupe].push({
 
-            id: categorie,
-            nom: categorie
+            id:
+                categorie,
+
+            nom:
+                categorie
 
         });
+
 
         return;
 
@@ -582,7 +1208,8 @@ function ajouterCategorieAuGroupe(
 
 
     if(
-        typeof categorie === "object"
+        typeof categorie ===
+        "object"
     ){
 
         const id =
@@ -601,8 +1228,12 @@ function ajouterCategorieAuGroupe(
 
             categoriesParGroupe[groupe].push({
 
-                id: id,
-                nom: nom || id
+                id:
+                    id,
+
+                nom:
+                    nom ||
+                    id
 
             });
 
@@ -619,43 +1250,45 @@ function ajouterCategorieAuGroupe(
 
 function supprimerDoublonsCategories(){
 
-    Object.keys(categoriesParGroupe)
-        .forEach(
-            groupe=>{
+    Object.keys(
+        categoriesParGroupe
+    )
+    .forEach(
+        groupe=>{
 
-                const dejaVu =
-                    new Set();
-
-
-                categoriesParGroupe[groupe] =
-                    categoriesParGroupe[groupe]
-                        .filter(
-                            categorie=>{
-
-                                if(
-                                    !categorie.id ||
-                                    dejaVu.has(
-                                        categorie.id
-                                    )
-                                ){
-
-                                    return false;
-
-                                }
+            const dejaVu =
+                new Set();
 
 
-                                dejaVu.add(
+            categoriesParGroupe[groupe] =
+                categoriesParGroupe[groupe]
+                    .filter(
+                        categorie=>{
+
+                            if(
+                                !categorie.id ||
+                                dejaVu.has(
                                     categorie.id
-                                );
+                                )
+                            ){
 
-
-                                return true;
+                                return false;
 
                             }
-                        );
 
-            }
-        );
+
+                            dejaVu.add(
+                                categorie.id
+                            );
+
+
+                            return true;
+
+                        }
+                    );
+
+        }
+    );
 
 }
 
@@ -666,46 +1299,67 @@ function supprimerDoublonsCategories(){
 
 function afficherToutesLesCategories(){
 
-    if(!categoriesContainer){
+    if(
+        !categoriesContainer
+    ){
 
         return;
 
     }
 
 
-    categoriesContainer.innerHTML = "";
+    categoriesContainer.innerHTML =
+        "";
 
 
     const groupes = [
 
         {
-            id: "Contenu",
-            titre: "🎬 Contenu"
+            id:
+                "Contenu",
+
+            titre:
+                "🎬 Contenu"
         },
 
         {
-            id: "creation",
-            titre: "🎨 Création"
+            id:
+                "creation",
+
+            titre:
+                "🎨 Création"
         },
 
         {
-            id: "jeux_video",
-            titre: "🎮 Jeux vidéo"
+            id:
+                "jeux_video",
+
+            titre:
+                "🎮 Jeux vidéo"
         },
 
         {
-            id: "musique",
-            titre: "🎵 Musique"
+            id:
+                "musique",
+
+            titre:
+                "🎵 Musique"
         },
 
         {
-            id: "sport",
-            titre: "⚽ Sport"
+            id:
+                "sport",
+
+            titre:
+                "⚽ Sport"
         },
 
         {
-            id: "technologie",
-            titre: "💻 Technologie"
+            id:
+                "technologie",
+
+            titre:
+                "💻 Technologie"
         }
 
     ];
@@ -715,66 +1369,92 @@ function afficherToutesLesCategories(){
         groupe=>{
 
             const bloc =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             bloc.className =
                 "categorie-groupe";
 
 
             const titre =
-                document.createElement("h3");
+                document.createElement(
+                    "h3"
+                );
+
 
             titre.className =
                 "categorie-groupe-titre";
+
 
             titre.textContent =
                 groupe.titre;
 
 
-            /* =========================
-               BARRE DE RECHERCHE
-            ========================= */
+            /* ==========================================
+               RECHERCHE PROPRE A CE GROUPE
+            ========================================== */
 
             const recherche =
-                document.createElement("input");
+                document.createElement(
+                    "input"
+                );
+
 
             recherche.type =
                 "search";
 
+
             recherche.className =
                 "recherche-categorie";
 
+
             recherche.placeholder =
                 "🔎 Rechercher une catégorie...";
+
 
             recherche.autocomplete =
                 "off";
 
 
-            /* =========================
+            /* ==========================================
                LISTE
-            ========================= */
+            ========================================== */
 
             const liste =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             liste.className =
                 "categories-liste";
 
 
-            bloc.appendChild(titre);
-
-            bloc.appendChild(recherche);
-
-            bloc.appendChild(liste);
-
-            categoriesContainer.appendChild(bloc);
+            bloc.appendChild(
+                titre
+            );
 
 
-            /*
-               Fonction d'affichage propre
-               à CE groupe.
-            */
+            bloc.appendChild(
+                recherche
+            );
+
+
+            bloc.appendChild(
+                liste
+            );
+
+
+            categoriesContainer.appendChild(
+                bloc
+            );
+
+
+            /* ==========================================
+               AFFICHER LE GROUPE
+            ========================================== */
 
             function afficherGroupe(){
 
@@ -784,13 +1464,15 @@ function afficherToutesLesCategories(){
                         .toLowerCase();
 
 
-                liste.innerHTML = "";
+                liste.innerHTML =
+                    "";
 
 
                 const categories =
                     categoriesParGroupe[
                         groupe.id
-                    ] || [];
+                    ] ||
+                    [];
 
 
                 const resultats =
@@ -807,20 +1489,33 @@ function afficherToutesLesCategories(){
                     );
 
 
-                if(resultats.length === 0){
+                if(
+                    resultats.length ===
+                    0
+                ){
 
                     const aucun =
-                        document.createElement("p");
+                        document.createElement(
+                            "p"
+                        );
+
 
                     aucun.className =
                         "categories-aucun-resultat";
 
+
                     aucun.textContent =
                         rechercheValeur
+
                         ? "Aucune catégorie trouvée."
+
                         : "Aucune catégorie disponible.";
 
-                    liste.appendChild(aucun);
+
+                    liste.appendChild(
+                        aucun
+                    );
+
 
                     return;
 
@@ -831,7 +1526,9 @@ function afficherToutesLesCategories(){
                     categorie=>{
 
                         const bouton =
-                            document.createElement("button");
+                            document.createElement(
+                                "button"
+                            );
 
 
                         bouton.type =
@@ -909,7 +1606,9 @@ function basculerCategorie(
 
     if(
         categoriesSelectionnees
-            .includes(valeur)
+            .includes(
+                valeur
+            )
     ){
 
         categoriesSelectionnees =
@@ -940,7 +1639,9 @@ function basculerCategorie(
 
 function afficherCategoriesSelectionnees(){
 
-    if(!categoriesSelectionneesContainer){
+    if(
+        !categoriesSelectionneesContainer
+    ){
 
         return;
 
@@ -952,7 +1653,8 @@ function afficherCategoriesSelectionnees(){
 
 
     if(
-        categoriesSelectionnees.length === 0
+        categoriesSelectionnees.length ===
+        0
     ){
 
         categoriesSelectionneesContainer.innerHTML = `
@@ -966,6 +1668,7 @@ function afficherCategoriesSelectionnees(){
 
         `;
 
+
         return;
 
     }
@@ -975,7 +1678,9 @@ function afficherCategoriesSelectionnees(){
         categorie=>{
 
             const tag =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             tag.className =
@@ -983,7 +1688,8 @@ function afficherCategoriesSelectionnees(){
 
 
             tag.textContent =
-                "🏷️ " + categorie;
+                "🏷️ " +
+                categorie;
 
 
             tag.title =
@@ -1019,12 +1725,16 @@ function afficherCategoriesSelectionnees(){
    RESEAUX
 ========================================================= */
 
-if(ajouterReseau){
+if(
+    ajouterReseau
+){
 
     ajouterReseau.addEventListener(
         "click",
         ()=>{
+
             ajouterBlocReseau();
+
         }
     );
 
@@ -1036,7 +1746,9 @@ function ajouterBlocReseau(
     lienValeur = ""
 ){
 
-    if(!reseaux){
+    if(
+        !reseaux
+    ){
 
         return;
 
@@ -1044,7 +1756,9 @@ function ajouterBlocReseau(
 
 
     const bloc =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     bloc.className =
@@ -1052,48 +1766,62 @@ function ajouterBlocReseau(
 
 
     const type =
-        document.createElement("input");
+        document.createElement(
+            "input"
+        );
 
 
     type.type =
         "text";
 
+
     type.placeholder =
         "Réseau";
 
+
     type.value =
         typeValeur;
+
 
     type.style.flex =
         "0 0 30%";
 
 
     const lien =
-        document.createElement("input");
+        document.createElement(
+            "input"
+        );
 
 
     lien.type =
         "url";
 
+
     lien.placeholder =
         "https://...";
 
+
     lien.value =
         lienValeur;
+
 
     lien.style.flex =
         "1";
 
 
     const supprimer =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
 
     supprimer.type =
         "button";
 
+
     supprimer.textContent =
         "✕";
+
 
     supprimer.title =
         "Supprimer ce réseau";
@@ -1102,19 +1830,31 @@ function ajouterBlocReseau(
     supprimer.addEventListener(
         "click",
         ()=>{
+
             bloc.remove();
+
         }
     );
 
 
-    bloc.appendChild(type);
-
-    bloc.appendChild(lien);
-
-    bloc.appendChild(supprimer);
+    bloc.appendChild(
+        type
+    );
 
 
-    reseaux.appendChild(bloc);
+    bloc.appendChild(
+        lien
+    );
+
+
+    bloc.appendChild(
+        supprimer
+    );
+
+
+    reseaux.appendChild(
+        bloc
+    );
 
 }
 
@@ -1125,26 +1865,36 @@ function ajouterBlocReseau(
 
 function recupererReseaux(){
 
-    if(!reseaux){
+    if(
+        !reseaux
+    ){
 
         return [];
 
     }
 
 
-    const resultat = [];
+    const resultat =
+        [];
 
 
     reseaux
-        .querySelectorAll(".blocReseau")
+        .querySelectorAll(
+            ".blocReseau"
+        )
         .forEach(
             bloc=>{
 
                 const inputs =
-                    bloc.querySelectorAll("input");
+                    bloc.querySelectorAll(
+                        "input"
+                    );
 
 
-                if(inputs.length < 2){
+                if(
+                    inputs.length <
+                    2
+                ){
 
                     return;
 
@@ -1152,19 +1902,29 @@ function recupererReseaux(){
 
 
                 const type =
-                    inputs[0].value.trim();
+                    inputs[0]
+                        .value
+                        .trim();
 
 
                 const lien =
-                    inputs[1].value.trim();
+                    inputs[1]
+                        .value
+                        .trim();
 
 
-                if(type || lien){
+                if(
+                    type ||
+                    lien
+                ){
 
                     resultat.push({
 
-                        type: type,
-                        lien: lien
+                        type:
+                            type,
+
+                        lien:
+                            lien
 
                     });
 
@@ -1183,24 +1943,31 @@ function recupererReseaux(){
    VERIFICATION PSEUDO
 ========================================================= */
 
-if(pseudo){
+if(
+    pseudo
+){
 
     pseudo.addEventListener(
         "input",
         async()=>{
 
             const valeur =
-                pseudo.value.trim();
+                pseudo.value
+                    .trim();
 
 
-            if(!pseudoEtat){
+            if(
+                !pseudoEtat
+            ){
 
                 return;
 
             }
 
 
-            if(!valeur){
+            if(
+                !valeur
+            ){
 
                 pseudoEtat.textContent =
                     "";
@@ -1210,13 +1977,18 @@ if(pseudo){
             }
 
 
-            if(valeur.length < 3){
+            if(
+                valeur.length <
+                3
+            ){
 
                 pseudoEtat.textContent =
                     "⚠️ Le pseudo doit contenir au moins 3 caractères.";
 
+
                 pseudoEtat.style.color =
                     "#ffb347";
+
 
                 return;
 
@@ -1227,7 +1999,11 @@ if(pseudo){
 
                 const q =
                     query(
-                        collection(db,"users"),
+                        collection(
+                            db,
+                            "users"
+                        ),
+
                         where(
                             "pseudo",
                             "==",
@@ -1237,21 +2013,26 @@ if(pseudo){
 
 
                 const snapshot =
-                    await getDocs(q);
+                    await getDocs(
+                        q
+                    );
 
 
-                let utilise = false;
+                let utilise =
+                    false;
 
 
                 snapshot.forEach(
                     profilDoc=>{
 
                         if(
+                            !utilisateurActuel ||
                             profilDoc.id !==
                             utilisateurActuel.uid
                         ){
 
-                            utilise = true;
+                            utilise =
+                                true;
 
                         }
 
@@ -1259,10 +2040,13 @@ if(pseudo){
                 );
 
 
-                if(utilise){
+                if(
+                    utilise
+                ){
 
                     pseudoEtat.textContent =
                         "❌ Ce pseudo est déjà utilisé.";
+
 
                     pseudoEtat.style.color =
                         "#ff5252";
@@ -1273,6 +2057,7 @@ if(pseudo){
 
                     pseudoEtat.textContent =
                         "✅ Ce pseudo est disponible.";
+
 
                     pseudoEtat.style.color =
                         "#4caf50";
@@ -1300,9 +2085,13 @@ if(pseudo){
    YOUTUBE
 ========================================================= */
 
-function verifierYoutube(url){
+function verifierYoutube(
+    url
+){
 
-    if(!url){
+    if(
+        !url
+    ){
 
         return true;
 
@@ -1310,28 +2099,38 @@ function verifierYoutube(url){
 
 
     return (
-        url.includes("youtube.com") ||
-        url.includes("youtu.be")
+        url.includes(
+            "youtube.com"
+        ) ||
+
+        url.includes(
+            "youtu.be"
+        )
     );
 
 }
 
 
 /* =========================================================
-   ENREGISTRER
+   ENREGISTRER LE PROFIL
 ========================================================= */
 
-if(saveProfile){
+if(
+    saveProfile
+){
 
     saveProfile.addEventListener(
         "click",
         async()=>{
 
-            if(!utilisateurActuel){
+            if(
+                !utilisateurActuel
+            ){
 
                 alert(
                     "Tu dois être connecté."
                 );
+
 
                 return;
 
@@ -1344,26 +2143,35 @@ if(saveProfile){
                     : "";
 
 
-            if(!pseudoValeur){
+            if(
+                !pseudoValeur
+            ){
 
                 alert(
                     "Veuillez choisir un pseudo."
                 );
 
+
                 pseudo?.focus();
+
 
                 return;
 
             }
 
 
-            if(pseudoValeur.length < 3){
+            if(
+                pseudoValeur.length <
+                3
+            ){
 
                 alert(
                     "Le pseudo doit contenir au moins 3 caractères."
                 );
 
+
                 pseudo?.focus();
+
 
                 return;
 
@@ -1388,28 +2196,38 @@ if(saveProfile){
                     : "";
 
 
-            if(!verifierYoutube(video)){
+            if(
+                !verifierYoutube(
+                    video
+                )
+            ){
 
                 alert(
                     "Veuillez entrer un lien YouTube valide."
                 );
 
+
                 videoYoutube?.focus();
+
 
                 return;
 
             }
 
 
-            /* =================================================
+            /* ==========================================
                VERIFIER PSEUDO
-            ================================================= */
+            ========================================== */
 
             try{
 
                 const q =
                     query(
-                        collection(db,"users"),
+                        collection(
+                            db,
+                            "users"
+                        ),
+
                         where(
                             "pseudo",
                             "==",
@@ -1419,10 +2237,13 @@ if(saveProfile){
 
 
                 const snapshot =
-                    await getDocs(q);
+                    await getDocs(
+                        q
+                    );
 
 
-                let dejaUtilise = false;
+                let dejaUtilise =
+                    false;
 
 
                 snapshot.forEach(
@@ -1433,7 +2254,8 @@ if(saveProfile){
                             utilisateurActuel.uid
                         ){
 
-                            dejaUtilise = true;
+                            dejaUtilise =
+                                true;
 
                         }
 
@@ -1441,11 +2263,14 @@ if(saveProfile){
                 );
 
 
-                if(dejaUtilise){
+                if(
+                    dejaUtilise
+                ){
 
                     alert(
                         "Ce pseudo est déjà utilisé."
                     );
+
 
                     return;
 
@@ -1455,20 +2280,24 @@ if(saveProfile){
 
             catch(error){
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
 
                 alert(
                     "Impossible de vérifier le pseudo."
                 );
+
 
                 return;
 
             }
 
 
-            /* =================================================
+            /* ==========================================
                DONNEES
-            ================================================= */
+            ========================================== */
 
             const donneesProfil = {
 
@@ -1479,10 +2308,12 @@ if(saveProfile){
                     pseudoValeur,
 
                 email:
-                    utilisateurActuel.email || "",
+                    utilisateurActuel.email ||
+                    "",
 
                 photo:
-                    utilisateurActuel.photoURL || "",
+                    utilisateurActuel.photoURL ||
+                    "",
 
                 descriptionCourte:
                     courte,
@@ -1497,7 +2328,9 @@ if(saveProfile){
                     video,
 
                 categories:
-                    [...categoriesSelectionnees],
+                    [
+                        ...categoriesSelectionnees
+                    ],
 
                 dateCreation:
                     new Date()
@@ -1505,9 +2338,9 @@ if(saveProfile){
             };
 
 
-            /* =================================================
+            /* ==========================================
                SAUVEGARDE
-            ================================================= */
+            ========================================== */
 
             try{
 
@@ -1531,7 +2364,8 @@ if(saveProfile){
                     profilRef,
                     donneesProfil,
                     {
-                        merge:true
+                        merge:
+                            true
                     }
                 );
 
@@ -1574,7 +2408,9 @@ if(saveProfile){
 
                 saveProfile.textContent =
                     profilExiste
+
                     ? "💾 Enregistrer les modifications"
+
                     : "💾 Créer mon profil";
 
             }
