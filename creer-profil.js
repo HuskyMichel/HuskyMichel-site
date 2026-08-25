@@ -65,26 +65,16 @@ const categoriesSelectionneesContainer =
         "categoriesSelectionnees"
     );
 
-const saveProfile =
-    document.getElementById("saveProfile");
-
-const deconnexion =
-    document.getElementById("deconnexion");
-
-
-/* =========================================================
-   BARRES DE RECHERCHE
-========================================================= */
-
 const rechercheCategories =
     document.getElementById(
         "rechercheCategories"
     );
 
-const rechercheReseaux =
-    document.getElementById(
-        "rechercheReseaux"
-    );
+const saveProfile =
+    document.getElementById("saveProfile");
+
+const deconnexion =
+    document.getElementById("deconnexion");
 
 
 /* =========================================================
@@ -97,7 +87,7 @@ console.log(
 
 
 /* =========================================================
-   AFFICHER LA PHOTO
+   PHOTO UTILISATEUR
 ========================================================= */
 
 function afficherPhotoUtilisateur(user){
@@ -112,9 +102,7 @@ function afficherPhotoUtilisateur(user){
     }
 
 
-    if(
-        user.photoURL
-    ){
+    if(user.photoURL){
 
         photo.src =
             user.photoURL.replace(
@@ -126,9 +114,7 @@ function afficherPhotoUtilisateur(user){
 
     else{
 
-        photo.removeAttribute(
-            "src"
-        );
+        photo.removeAttribute("src");
 
     }
 
@@ -147,10 +133,7 @@ if(deconnexion){
 
             try{
 
-                await signOut(
-                    auth
-                );
-
+                await signOut(auth);
 
                 window.location.href =
                     "index.html";
@@ -188,26 +171,27 @@ onAuthStateChanged(
             user;
 
 
+        /* ==============================================
+           NON CONNECTE
+        ============================================== */
+
         if(!user){
-
-            console.log(
-                "Aucun utilisateur connecté."
-            );
-
 
             alert(
                 "Tu dois être connecté pour créer ton profil."
             );
 
-
             window.location.href =
                 "index.html";
-
 
             return;
 
         }
 
+
+        /* ==============================================
+           CONNECTE
+        ============================================== */
 
         console.log(
             "Utilisateur connecté :",
@@ -215,9 +199,7 @@ onAuthStateChanged(
         );
 
 
-        afficherPhotoUtilisateur(
-            user
-        );
+        afficherPhotoUtilisateur(user);
 
 
         await chargerProfilExistant();
@@ -229,7 +211,7 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   CHARGER LE PROFIL EXISTANT
+   CHARGER PROFIL EXISTANT
 ========================================================= */
 
 async function chargerProfilExistant(){
@@ -252,16 +234,12 @@ async function chargerProfilExistant(){
 
 
         const profilSnap =
-            await getDoc(
-                profilRef
-            );
+            await getDoc(profilRef);
 
 
         if(profilSnap.exists()){
 
-            profilExiste =
-                true;
-
+            profilExiste = true;
 
             const data =
                 profilSnap.data();
@@ -274,34 +252,27 @@ async function chargerProfilExistant(){
             if(pseudo){
 
                 pseudo.value =
-                    data.pseudo ||
-                    "";
+                    data.pseudo || "";
 
             }
 
 
             /* =========================
-               DESCRIPTION COURTE
+               DESCRIPTIONS
             ========================= */
 
             if(descriptionCourte){
 
                 descriptionCourte.value =
-                    data.descriptionCourte ||
-                    "";
+                    data.descriptionCourte || "";
 
             }
 
 
-            /* =========================
-               DESCRIPTION LONGUE
-            ========================= */
-
             if(descriptionLongue){
 
                 descriptionLongue.value =
-                    data.descriptionLongue ||
-                    "";
+                    data.descriptionLongue || "";
 
             }
 
@@ -313,8 +284,7 @@ async function chargerProfilExistant(){
             if(videoYoutube){
 
                 videoYoutube.value =
-                    data.videoYoutube ||
-                    "";
+                    data.videoYoutube || "";
 
             }
 
@@ -324,9 +294,7 @@ async function chargerProfilExistant(){
             ========================= */
 
             if(
-                Array.isArray(
-                    data.categories
-                )
+                Array.isArray(data.categories)
             ){
 
                 categoriesSelectionnees =
@@ -340,19 +308,15 @@ async function chargerProfilExistant(){
             ========================= */
 
             if(
-                Array.isArray(
-                    data.reseaux
-                )
+                Array.isArray(data.reseaux)
             ){
 
                 data.reseaux.forEach(
-                    (reseau)=>{
+                    reseau=>{
 
                         ajouterBlocReseau(
-                            reseau.type ||
-                            "",
-                            reseau.lien ||
-                            ""
+                            reseau.type || "",
+                            reseau.lien || ""
                         );
 
                     }
@@ -375,9 +339,7 @@ async function chargerProfilExistant(){
 
         else{
 
-            profilExiste =
-                false;
-
+            profilExiste = false;
 
             if(saveProfile){
 
@@ -419,7 +381,7 @@ async function chargerCategories(){
 
         categoriesContainer.innerHTML = `
 
-            <p class="message-recherche">
+            <p class="messageCategories">
                 Chargement des catégories...
             </p>
 
@@ -435,38 +397,38 @@ async function chargerCategories(){
             );
 
 
-        categoriesDisponibles =
-            [];
+        categoriesDisponibles = [];
 
+
+        /* ==============================================
+           LECTURE DES CATEGORIES
+        ============================================== */
 
         snapshot.forEach(
-            (categorieDoc)=>{
+            categorieDoc=>{
 
                 const data =
                     categorieDoc.data();
 
 
                 /*
-                    Structure :
+                   Format :
 
-                    categories/
-                        document
-                            liste: [
-                                "Gaming",
-                                "Minecraft",
-                                ...
-                            ]
+                   categories/
+                       document
+                           liste: [
+                               "Gaming",
+                               "Minecraft"
+                           ]
                 */
 
 
                 if(
-                    Array.isArray(
-                        data.liste
-                    )
+                    Array.isArray(data.liste)
                 ){
 
                     data.liste.forEach(
-                        (categorie)=>{
+                        categorie=>{
 
                             if(
                                 typeof categorie ===
@@ -491,31 +453,19 @@ async function chargerCategories(){
                                 "object"
                             ){
 
-                                const id =
-                                    categorie.id ||
-                                    categorie.nom ||
-                                    categorie.name;
+                                categoriesDisponibles.push({
 
+                                    id:
+                                        categorie.id ||
+                                        categorie.nom ||
+                                        categorie.name,
 
-                                const nom =
-                                    categorie.nom ||
-                                    categorie.name ||
-                                    categorie.id;
+                                    nom:
+                                        categorie.nom ||
+                                        categorie.name ||
+                                        categorie.id
 
-
-                                if(id){
-
-                                    categoriesDisponibles.push({
-
-                                        id:
-                                            id,
-
-                                        nom:
-                                            nom
-
-                                    });
-
-                                }
+                                });
 
                             }
 
@@ -528,22 +478,22 @@ async function chargerCategories(){
         );
 
 
-        /* =====================================================
+        /* ==============================================
            SUPPRIMER DOUBLONS
-        ===================================================== */
+        ============================================== */
 
         const uniques = [];
 
-        const dejaPresente =
+        const dejaPresentes =
             new Set();
 
 
         categoriesDisponibles.forEach(
-            (categorie)=>{
+            categorie=>{
 
                 if(
                     !categorie.id ||
-                    dejaPresente.has(
+                    dejaPresentes.has(
                         categorie.id
                     )
                 ){
@@ -553,14 +503,12 @@ async function chargerCategories(){
                 }
 
 
-                dejaPresente.add(
+                dejaPresentes.add(
                     categorie.id
                 );
 
 
-                uniques.push(
-                    categorie
-                );
+                uniques.push(categorie);
 
             }
         );
@@ -586,8 +534,8 @@ async function chargerCategories(){
 
         categoriesContainer.innerHTML = `
 
-            <p class="message-recherche">
-                ❌ Impossible de charger les catégories.
+            <p class="messageCategories">
+                Impossible de charger les catégories.
             </p>
 
         `;
@@ -598,12 +546,30 @@ async function chargerCategories(){
 
 
 /* =========================================================
+   RECHERCHE DES CATEGORIES
+   IMPORTANT :
+   CETTE RECHERCHE NE CONCERNE QUE LES CATEGORIES
+========================================================= */
+
+if(rechercheCategories){
+
+    rechercheCategories.addEventListener(
+        "input",
+        ()=>{
+
+            afficherCategories();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    AFFICHER LES CATEGORIES
 ========================================================= */
 
-function afficherCategories(
-    recherche = ""
-){
+function afficherCategories(){
 
     if(!categoriesContainer){
 
@@ -612,19 +578,28 @@ function afficherCategories(
     }
 
 
-    categoriesContainer.innerHTML =
-        "";
+    categoriesContainer.innerHTML = "";
 
 
-    const rechercheNormalisee =
-        recherche
-            .trim()
-            .toLowerCase();
+    /* ==============================================
+       RECUPERER LA RECHERCHE
+    ============================================== */
 
+    const recherche =
+        rechercheCategories
+            ? rechercheCategories.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    /* ==============================================
+       FILTRER
+    ============================================== */
 
     const categoriesFiltrees =
         categoriesDisponibles.filter(
-            (categorie)=>{
+            categorie=>{
 
                 const nom =
                     String(
@@ -635,12 +610,16 @@ function afficherCategories(
 
 
                 return nom.includes(
-                    rechercheNormalisee
+                    recherche
                 );
 
             }
         );
 
+
+    /* ==============================================
+       AUCUN RESULTAT
+    ============================================== */
 
     if(
         categoriesFiltrees.length === 0
@@ -648,8 +627,14 @@ function afficherCategories(
 
         categoriesContainer.innerHTML = `
 
-            <div class="message-recherche">
-                🔎 Aucune catégorie trouvée.
+            <div class="messageCategories">
+
+                ${
+                    recherche
+                    ? "🔎 Aucune catégorie trouvée."
+                    : "Aucune catégorie disponible."
+                }
+
             </div>
 
         `;
@@ -659,13 +644,15 @@ function afficherCategories(
     }
 
 
+    /* ==============================================
+       CREER LES BOUTONS
+    ============================================== */
+
     categoriesFiltrees.forEach(
-        (categorie)=>{
+        categorie=>{
 
             const bouton =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
 
             bouton.type =
@@ -686,6 +673,10 @@ function afficherCategories(
                 categorie.nom;
 
 
+            /* ==========================================
+               CATEGORIE SELECTIONNEE
+            ========================================== */
+
             if(
                 categoriesSelectionnees.includes(
                     valeur
@@ -698,6 +689,10 @@ function afficherCategories(
 
             }
 
+
+            /* ==========================================
+               CLIC
+            ========================================== */
 
             bouton.addEventListener(
                 "click",
@@ -726,12 +721,7 @@ function afficherCategories(
                     }
 
 
-                    afficherCategories(
-                        rechercheCategories
-                            ? rechercheCategories.value
-                            : ""
-                    );
-
+                    afficherCategories();
 
                     afficherCategoriesSelectionnees();
 
@@ -750,14 +740,12 @@ function afficherCategories(
 
 
 /* =========================================================
-   CATEGORIES SELECTIONNEES
+   AFFICHER CATEGORIES SELECTIONNEES
 ========================================================= */
 
 function afficherCategoriesSelectionnees(){
 
-    if(
-        !categoriesSelectionneesContainer
-    ){
+    if(!categoriesSelectionneesContainer){
 
         return;
 
@@ -789,21 +777,54 @@ function afficherCategoriesSelectionnees(){
 
 
     categoriesSelectionnees.forEach(
-        (categorie)=>{
+        categorie=>{
 
             const tag =
-                document.createElement(
-                    "div"
-                );
-
-
-            tag.className =
-                "categorie-selectionnee";
+                document.createElement("div");
 
 
             tag.textContent =
-                "🏷️ " +
-                categorie;
+                "🏷️ " + categorie;
+
+
+            tag.style.display =
+                "inline-flex";
+
+
+            tag.style.alignItems =
+                "center";
+
+
+            tag.style.gap =
+                "6px";
+
+
+            tag.style.padding =
+                "8px 12px";
+
+
+            tag.style.borderRadius =
+                "20px";
+
+
+            tag.style.background =
+                "#3ea6ff";
+
+
+            tag.style.color =
+                "white";
+
+
+            tag.style.fontSize =
+                "14px";
+
+
+            tag.style.fontWeight =
+                "bold";
+
+
+            tag.style.cursor =
+                "pointer";
 
 
             tag.title =
@@ -821,12 +842,7 @@ function afficherCategoriesSelectionnees(){
                         );
 
 
-                    afficherCategories(
-                        rechercheCategories
-                            ? rechercheCategories.value
-                            : ""
-                    );
-
+                    afficherCategories();
 
                     afficherCategoriesSelectionnees();
 
@@ -845,27 +861,7 @@ function afficherCategoriesSelectionnees(){
 
 
 /* =========================================================
-   RECHERCHE CATEGORIES
-========================================================= */
-
-if(rechercheCategories){
-
-    rechercheCategories.addEventListener(
-        "input",
-        ()=>{
-
-            afficherCategories(
-                rechercheCategories.value
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RESEAUX SOCIAUX
+   AJOUTER UN RESEAU
 ========================================================= */
 
 if(ajouterReseau){
@@ -883,7 +879,7 @@ if(ajouterReseau){
 
 
 /* =========================================================
-   AJOUTER UN RESEAU
+   CREER UN BLOC RESEAU
 ========================================================= */
 
 function ajouterBlocReseau(
@@ -899,23 +895,19 @@ function ajouterBlocReseau(
 
 
     const bloc =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     bloc.className =
         "blocReseau";
 
 
-    /* =====================================================
+    /* ==============================================
        TYPE
-    ===================================================== */
+    ============================================== */
 
     const type =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
 
     type.type =
@@ -930,18 +922,12 @@ function ajouterBlocReseau(
         typeValeur;
 
 
-    type.className =
-        "reseau-type";
-
-
-    /* =====================================================
+    /* ==============================================
        LIEN
-    ===================================================== */
+    ============================================== */
 
     const lien =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
 
     lien.type =
@@ -956,18 +942,12 @@ function ajouterBlocReseau(
         lienValeur;
 
 
-    lien.className =
-        "reseau-lien";
-
-
-    /* =====================================================
+    /* ==============================================
        SUPPRIMER
-    ===================================================== */
+    ============================================== */
 
     const supprimer =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
 
     supprimer.type =
@@ -992,337 +972,143 @@ function ajouterBlocReseau(
     );
 
 
-    bloc.appendChild(
-        type
-    );
+    bloc.appendChild(type);
+
+    bloc.appendChild(lien);
+
+    bloc.appendChild(supprimer);
 
 
-    bloc.appendChild(
-        lien
-    );
-
-
-    bloc.appendChild(
-        supprimer
-    );
-
-
-    reseaux.appendChild(
-        bloc
-    );
+    reseaux.appendChild(bloc);
 
 }
 
 
 /* =========================================================
-   RECHERCHE RESEAUX
+   VERIFICATION PSEUDO
 ========================================================= */
 
-if(rechercheReseaux){
+if(pseudo){
 
-    rechercheReseaux.addEventListener(
+    pseudo.addEventListener(
         "input",
-        ()=>{
+        async()=>{
 
-            const recherche =
-                rechercheReseaux.value
-                    .trim()
-                    .toLowerCase();
+            const valeur =
+                pseudo.value.trim();
 
 
-            const blocs =
-                reseaux
-                    ? reseaux.querySelectorAll(
-                        ".blocReseau"
-                    )
-                    : [];
+            if(!pseudoEtat){
+
+                return;
+
+            }
 
 
-            blocs.forEach(
-                (bloc)=>{
+            if(valeur === ""){
 
-                    const texte =
-                        bloc.textContent
-                            .toLowerCase();
+                pseudoEtat.textContent =
+                    "";
+
+                return;
+
+            }
 
 
-                    if(
-                        recherche === "" ||
-                        texte.includes(
-                            recherche
+            if(valeur.length < 3){
+
+                pseudoEtat.textContent =
+                    "⚠️ Le pseudo doit contenir au moins 3 caractères.";
+
+                pseudoEtat.style.color =
+                    "#ffb347";
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               VERIFIER FIRESTORE
+            ========================================== */
+
+            try{
+
+                const q =
+                    query(
+                        collection(
+                            db,
+                            "users"
+                        ),
+                        where(
+                            "pseudo",
+                            "==",
+                            valeur
                         )
-                    ){
-
-                        bloc.style.display =
-                            "flex";
-
-                    }
-
-                    else{
-
-                        bloc.style.display =
-                            "none";
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   BARRES DE RECHERCHE GENERALES
-========================================================= */
-
-const recherchesGenerales =
-    document.querySelectorAll(
-        ".recherche-section[data-search-section]"
-    );
-
-
-recherchesGenerales.forEach(
-    (barre)=>{
-
-        barre.addEventListener(
-            "input",
-            ()=>{
-
-                const valeur =
-                    barre.value
-                        .trim()
-                        .toLowerCase();
-
-
-                const section =
-                    barre.closest(
-                        ".section"
                     );
 
 
-                if(!section){
-
-                    return;
-
-                }
+                const snapshot =
+                    await getDocs(q);
 
 
-                /*
-                   On ne cache jamais la barre
-                   de recherche elle-même.
-                */
-
-                const elements =
-                    section.querySelectorAll(
-                        "label, input:not(.recherche-section), textarea, img, p"
-                    );
+                let utiliseParQuelquun =
+                    false;
 
 
-                elements.forEach(
-                    (element)=>{
-
-                        /*
-                           Pour les sections de formulaire,
-                           la recherche sert surtout à
-                           rechercher du texte déjà présent.
-                           On évite donc de cacher les
-                           champs principaux.
-                        */
+                snapshot.forEach(
+                    profilDoc=>{
 
                         if(
-                            element.id === "pseudoEtat"
+                            profilDoc.id !==
+                            utilisateurActuel?.uid
                         ){
 
-                            return;
+                            utiliseParQuelquun =
+                                true;
 
                         }
 
                     }
                 );
 
+
+                if(utiliseParQuelquun){
+
+                    pseudoEtat.textContent =
+                        "❌ Ce pseudo est déjà utilisé.";
+
+                    pseudoEtat.style.color =
+                        "#ff5252";
+
+                }
+
+                else{
+
+                    pseudoEtat.textContent =
+                        "✅ Ce pseudo est disponible.";
+
+                    pseudoEtat.style.color =
+                        "#4caf50";
+
+                }
+
             }
-        );
 
-    }
-);
+            catch(error){
 
-
-/* =========================================================
-   VERIFICATION DU PSEUDO
-========================================================= */
-
-if(pseudo){
-
-    let verificationPseudoTimer =
-        null;
-
-
-    pseudo.addEventListener(
-        "input",
-        ()=>{
-
-            clearTimeout(
-                verificationPseudoTimer
-            );
-
-
-            verificationPseudoTimer =
-                setTimeout(
-                    verifierDisponibilitePseudo,
-                    400
+                console.error(
+                    "Erreur lors de la vérification du pseudo :",
+                    error
                 );
+
+                pseudoEtat.textContent =
+                    "";
+
+            }
 
         }
     );
-
-}
-
-
-async function verifierDisponibilitePseudo(){
-
-    if(!pseudo || !pseudoEtat){
-
-        return;
-
-    }
-
-
-    const valeur =
-        pseudo.value.trim();
-
-
-    if(valeur === ""){
-
-        pseudoEtat.textContent =
-            "";
-
-        return;
-
-    }
-
-
-    if(valeur.length < 3){
-
-        pseudoEtat.textContent =
-            "⚠️ Le pseudo doit contenir au moins 3 caractères.";
-
-        pseudoEtat.style.color =
-            "#ffb347";
-
-        return;
-
-    }
-
-
-    if(
-        profilExiste &&
-        utilisateurActuel
-    ){
-
-        try{
-
-            const profilRef =
-                doc(
-                    db,
-                    "users",
-                    utilisateurActuel.uid
-                );
-
-
-            const profilSnap =
-                await getDoc(
-                    profilRef
-                );
-
-
-            if(
-                profilSnap.exists() &&
-                profilSnap.data().pseudo ===
-                    valeur
-            ){
-
-                pseudoEtat.textContent =
-                    "✅ Ton pseudo actuel";
-
-                pseudoEtat.style.color =
-                    "#4caf50";
-
-                return;
-
-            }
-
-        }
-
-        catch(error){
-
-            console.error(
-                error
-            );
-
-        }
-
-    }
-
-
-    try{
-
-        const q =
-            query(
-                collection(
-                    db,
-                    "users"
-                ),
-                where(
-                    "pseudo",
-                    "==",
-                    valeur
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(
-                q
-            );
-
-
-        if(snapshot.empty){
-
-            pseudoEtat.textContent =
-                "✅ Ce pseudo est disponible.";
-
-            pseudoEtat.style.color =
-                "#4caf50";
-
-        }
-
-        else{
-
-            pseudoEtat.textContent =
-                "❌ Ce pseudo est déjà utilisé.";
-
-            pseudoEtat.style.color =
-                "#ff5252";
-
-        }
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Erreur lors de la vérification du pseudo :",
-            error
-        );
-
-
-        pseudoEtat.textContent =
-            "";
-
-    }
 
 }
 
@@ -1340,8 +1126,7 @@ function recupererReseaux(){
     }
 
 
-    const resultat =
-        [];
+    const resultat = [];
 
 
     const blocs =
@@ -1351,7 +1136,7 @@ function recupererReseaux(){
 
 
     blocs.forEach(
-        (bloc)=>{
+        bloc=>{
 
             const inputs =
                 bloc.querySelectorAll(
@@ -1374,10 +1159,7 @@ function recupererReseaux(){
                 inputs[1].value.trim();
 
 
-            if(
-                type ||
-                lien
-            ){
+            if(type || lien){
 
                 resultat.push({
 
@@ -1422,7 +1204,7 @@ function verifierYoutube(url){
 
 
 /* =========================================================
-   ENREGISTRER LE PROFIL
+   SAUVEGARDER LE PROFIL
 ========================================================= */
 
 if(saveProfile){
@@ -1430,6 +1212,10 @@ if(saveProfile){
     saveProfile.addEventListener(
         "click",
         async()=>{
+
+            /* ==========================================
+               UTILISATEUR
+            ========================================== */
 
             if(!utilisateurActuel){
 
@@ -1441,6 +1227,10 @@ if(saveProfile){
 
             }
 
+
+            /* ==========================================
+               PSEUDO
+            ========================================== */
 
             const pseudoValeur =
                 pseudo
@@ -1454,13 +1244,7 @@ if(saveProfile){
                     "Veuillez choisir un pseudo."
                 );
 
-
-                if(pseudo){
-
-                    pseudo.focus();
-
-                }
-
+                pseudo?.focus();
 
                 return;
 
@@ -1473,18 +1257,16 @@ if(saveProfile){
                     "Le pseudo doit contenir au moins 3 caractères."
                 );
 
-
-                if(pseudo){
-
-                    pseudo.focus();
-
-                }
-
+                pseudo?.focus();
 
                 return;
 
             }
 
+
+            /* ==========================================
+               DESCRIPTIONS
+            ========================================== */
 
             const courte =
                 descriptionCourte
@@ -1498,6 +1280,10 @@ if(saveProfile){
                     : "";
 
 
+            /* ==========================================
+               VIDEO
+            ========================================== */
+
             const video =
                 videoYoutube
                     ? videoYoutube.value.trim()
@@ -1505,31 +1291,23 @@ if(saveProfile){
 
 
             if(
-                !verifierYoutube(
-                    video
-                )
+                !verifierYoutube(video)
             ){
 
                 alert(
                     "Veuillez entrer un lien YouTube valide."
                 );
 
-
-                if(videoYoutube){
-
-                    videoYoutube.focus();
-
-                }
-
+                videoYoutube?.focus();
 
                 return;
 
             }
 
 
-            /* =================================================
-               VERIFIER LE PSEUDO
-            ================================================= */
+            /* ==========================================
+               VERIFIER PSEUDO
+            ========================================== */
 
             try{
 
@@ -1548,9 +1326,7 @@ if(saveProfile){
 
 
                 const snapshot =
-                    await getDocs(
-                        q
-                    );
+                    await getDocs(q);
 
 
                 let pseudoDejaUtilise =
@@ -1558,7 +1334,7 @@ if(saveProfile){
 
 
                 snapshot.forEach(
-                    (profilDoc)=>{
+                    profilDoc=>{
 
                         if(
                             profilDoc.id !==
@@ -1592,12 +1368,7 @@ if(saveProfile){
                     }
 
 
-                    if(pseudo){
-
-                        pseudo.focus();
-
-                    }
-
+                    pseudo?.focus();
 
                     return;
 
@@ -1617,23 +1388,22 @@ if(saveProfile){
                     "Impossible de vérifier le pseudo."
                 );
 
-
                 return;
 
             }
 
 
-            /* =================================================
+            /* ==========================================
                RESEAUX
-            ================================================= */
+            ========================================== */
 
             const listeReseaux =
                 recupererReseaux();
 
 
-            /* =================================================
+            /* ==========================================
                DONNEES
-            ================================================= */
+            ========================================== */
 
             const donneesProfil = {
 
@@ -1644,12 +1414,10 @@ if(saveProfile){
                     pseudoValeur,
 
                 email:
-                    utilisateurActuel.email ||
-                    "",
+                    utilisateurActuel.email || "",
 
                 photo:
-                    utilisateurActuel.photoURL ||
-                    "",
+                    utilisateurActuel.photoURL || "",
 
                 descriptionCourte:
                     courte,
@@ -1672,9 +1440,9 @@ if(saveProfile){
             };
 
 
-            /* =================================================
-               SAUVEGARDE
-            ================================================= */
+            /* ==========================================
+               SAUVEGARDE FIRESTORE
+            ========================================== */
 
             try{
 
@@ -1693,11 +1461,6 @@ if(saveProfile){
                         utilisateurActuel.uid
                     );
 
-
-                /*
-                   merge:true conserve les autres
-                   données du document.
-                */
 
                 await setDoc(
                     profilRef,
@@ -1735,7 +1498,7 @@ if(saveProfile){
             catch(error){
 
                 console.error(
-                    "Erreur lors de la création du profil :",
+                    "Erreur lors de la sauvegarde :",
                     error
                 );
 

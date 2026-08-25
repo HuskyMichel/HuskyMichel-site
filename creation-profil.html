@@ -53,7 +53,6 @@ body{
 #barreCompte{
 
     width:100%;
-
     height:64px;
 
     background:rgba(15,15,15,.97);
@@ -61,15 +60,12 @@ body{
     border-bottom:1px solid #333;
 
     display:flex;
-
     align-items:center;
-
     justify-content:flex-end;
 
     padding:0 25px;
 
     position:sticky;
-
     top:0;
 
     z-index:1000;
@@ -87,9 +83,7 @@ body{
 #deconnexion{
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
     gap:8px;
@@ -107,7 +101,6 @@ body{
     cursor:pointer;
 
     font-size:15px;
-
     font-weight:bold;
 
     transition:.2s ease;
@@ -154,7 +147,7 @@ main{
 
 
 /* =========================================================
-   TITRE PRINCIPAL
+   TITRE
 ========================================================= */
 
 h1{
@@ -175,7 +168,6 @@ h1{
         );
 
     -webkit-background-clip:text;
-
     -webkit-text-fill-color:transparent;
 
 }
@@ -240,7 +232,7 @@ h1{
 
 .section h2{
 
-    margin-bottom:14px;
+    margin-bottom:20px;
 
     font-size:21px;
 
@@ -248,55 +240,16 @@ h1{
 
 
 /* =========================================================
-   BARRES DE RECHERCHE DES SECTIONS
+   SOUS-TITRES
 ========================================================= */
 
-.recherche-section{
+.section h3{
 
-    width:100%;
+    font-size:16px;
 
-    margin:0 0 20px;
+    margin-bottom:12px;
 
-    padding:11px 15px;
-
-    background:#181818;
-
-    color:white;
-
-    border:1px solid #3a3a3a;
-
-    border-radius:10px;
-
-    outline:none;
-
-    font-size:14px;
-
-    transition:
-
-        border-color .2s ease,
-
-        box-shadow .2s ease,
-
-        background .2s ease;
-
-}
-
-
-.recherche-section::placeholder{
-
-    color:#707070;
-
-}
-
-
-.recherche-section:focus{
-
-    background:#151515;
-
-    border-color:#3ea6ff;
-
-    box-shadow:
-        0 0 0 3px rgba(62,166,255,.12);
+    color:#ddd;
 
 }
 
@@ -365,8 +318,7 @@ textarea:focus{
     border-color:#3ea6ff;
 
     box-shadow:
-        0 0 0 3px
-        rgba(62,166,255,.12);
+        0 0 0 3px rgba(62,166,255,.12);
 
 }
 
@@ -397,7 +349,6 @@ textarea{
 #photo{
 
     width:145px;
-
     height:145px;
 
     display:block;
@@ -413,11 +364,8 @@ textarea{
     border:5px solid #1f1f1f;
 
     box-shadow:
-
         0 0 8px white,
-
         0 0 20px rgba(255,255,255,.7),
-
         0 0 40px rgba(255,255,255,.2);
 
     transition:
@@ -432,11 +380,8 @@ textarea{
     transform:scale(1.05);
 
     box-shadow:
-
         0 0 10px white,
-
         0 0 25px rgba(255,255,255,.8),
-
         0 0 45px rgba(255,255,255,.3);
 
 }
@@ -477,7 +422,7 @@ textarea{
 
 
 /* =========================================================
-   BOUTONS
+   BOUTONS GENERAUX
 ========================================================= */
 
 button{
@@ -513,8 +458,7 @@ button:hover{
     transform:translateY(-2px);
 
     box-shadow:
-        0 5px 18px
-        rgba(62,166,255,.25);
+        0 5px 18px rgba(62,166,255,.25);
 
 }
 
@@ -522,6 +466,17 @@ button:hover{
 button:active{
 
     transform:scale(.97);
+
+}
+
+
+button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
 
 }
 
@@ -574,6 +529,55 @@ button:active{
 
 
 /* =========================================================
+   RECHERCHE DES CATEGORIES
+========================================================= */
+
+#rechercheCategories{
+
+    width:100%;
+
+    margin-top:5px;
+    margin-bottom:18px;
+
+    padding:13px 16px;
+
+    background:#181818;
+
+    border:1px solid #3b3b3b;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+#rechercheCategories:focus{
+
+    border-color:#3ea6ff;
+
+    box-shadow:
+        0 0 0 3px rgba(62,166,255,.12);
+
+}
+
+
+#rechercheCategories::placeholder{
+
+    color:#777;
+
+}
+
+
+/* =========================================================
    CONTAINER CATEGORIES
 ========================================================= */
 
@@ -585,7 +589,7 @@ button:active{
 
     gap:9px;
 
-    margin-top:20px;
+    margin-top:10px;
 
 }
 
@@ -626,8 +630,7 @@ button:active{
     color:white;
 
     box-shadow:
-        0 0 12px
-        rgba(62,166,255,.15);
+        0 0 12px rgba(62,166,255,.15);
 
 }
 
@@ -646,37 +649,26 @@ button:active{
     color:white !important;
 
     box-shadow:
-        0 0 12px
-        rgba(62,166,255,.3) !important;
+        0 0 12px rgba(62,166,255,.3) !important;
 
 }
 
 
 /* =========================================================
-   TAGS SELECTIONNES
+   AUCUNE CATEGORIE
 ========================================================= */
 
-.categorie-selectionnee{
+.messageCategories{
 
-    display:inline-flex;
+    width:100%;
 
-    align-items:center;
+    text-align:center;
 
-    gap:6px;
+    padding:15px;
 
-    padding:8px 12px;
-
-    border-radius:20px;
-
-    background:#3ea6ff;
-
-    color:white;
+    color:#777;
 
     font-size:14px;
-
-    font-weight:bold;
-
-    cursor:pointer;
 
 }
 
@@ -701,53 +693,6 @@ hr{
 #videoYoutube{
 
     margin-bottom:0;
-
-}
-
-
-/* =========================================================
-   BOUTON SAUVEGARDE
-========================================================= */
-
-.save-container{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    margin-top:35px;
-
-}
-
-
-#saveProfile{
-
-    min-width:240px;
-
-    padding:15px 30px;
-
-    border-radius:14px;
-
-    font-size:17px;
-
-    background:#3ea6ff;
-
-    box-shadow:
-        0 5px 20px
-        rgba(62,166,255,.18);
-
-}
-
-
-#saveProfile:hover{
-
-    background:#61b8ff;
-
-    box-shadow:
-        0 8px 28px
-        rgba(62,166,255,.3);
 
 }
 
@@ -782,6 +727,20 @@ hr{
 }
 
 
+.blocReseau input:first-child{
+
+    flex:0 0 30%;
+
+}
+
+
+.blocReseau input:nth-child(2){
+
+    flex:1;
+
+}
+
+
 .blocReseau button{
 
     flex-shrink:0;
@@ -807,20 +766,46 @@ hr{
 
 
 /* =========================================================
-   MESSAGE RECHERCHE VIDE
+   BOUTON SAUVEGARDE
 ========================================================= */
 
-.message-recherche{
+.save-container{
 
-    width:100%;
+    display:flex;
 
-    padding:15px;
+    justify-content:center;
 
-    text-align:center;
+    align-items:center;
 
-    color:#777;
+    margin-top:35px;
 
-    font-size:14px;
+}
+
+
+#saveProfile{
+
+    min-width:240px;
+
+    padding:15px 30px;
+
+    border-radius:14px;
+
+    font-size:17px;
+
+    background:#3ea6ff;
+
+    box-shadow:
+        0 5px 20px rgba(62,166,255,.18);
+
+}
+
+
+#saveProfile:hover{
+
+    background:#61b8ff;
+
+    box-shadow:
+        0 8px 28px rgba(62,166,255,.3);
 
 }
 
@@ -882,7 +867,6 @@ hr{
     #photo{
 
         width:120px;
-
         height:120px;
 
     }
@@ -915,7 +899,7 @@ hr{
 
     .blocReseau input{
 
-        width:100%;
+        width:100% !important;
 
     }
 
@@ -1015,13 +999,15 @@ hr{
         id="deconnexion"
         type="button"
     >
-
         🚪 Déconnexion
-
     </button>
 
 </div>
 
+
+<!-- =======================================================
+     CONTENU
+======================================================= -->
 
 <main>
 
@@ -1046,13 +1032,6 @@ hr{
             📸 Photo de profil
         </h2>
 
-        <input
-            type="search"
-            class="recherche-section"
-            placeholder="🔎 Rechercher dans cette section..."
-            data-search-section="photo"
-            autocomplete="off"
-        >
 
         <img
             id="photo"
@@ -1072,15 +1051,9 @@ hr{
             👤 Pseudo
         </h2>
 
-        <input
-            type="search"
-            class="recherche-section"
-            placeholder="🔎 Rechercher un pseudo..."
-            data-search-section="pseudo"
-            autocomplete="off"
-        >
 
         <p id="pseudoEtat"></p>
+
 
         <input
             id="pseudo"
@@ -1103,17 +1076,11 @@ hr{
             ✨ Présentation
         </h2>
 
-        <input
-            type="search"
-            class="recherche-section"
-            placeholder="🔎 Rechercher dans ta présentation..."
-            data-search-section="presentation"
-            autocomplete="off"
-        >
 
         <label for="descriptionCourte">
             Description courte
         </label>
+
 
         <input
             id="descriptionCourte"
@@ -1121,9 +1088,11 @@ hr{
             placeholder="Une courte phrase pour te présenter..."
         >
 
+
         <label for="descriptionLongue">
             Description complète
         </label>
+
 
         <textarea
             id="descriptionLongue"
@@ -1145,15 +1114,9 @@ hr{
             🌐 Réseaux sociaux
         </h2>
 
-        <input
-            type="search"
-            id="rechercheReseaux"
-            class="recherche-section"
-            placeholder="🔎 Rechercher un réseau..."
-            autocomplete="off"
-        >
 
         <div id="reseaux"></div>
+
 
         <button
             type="button"
@@ -1175,17 +1138,11 @@ hr{
             🎬 Vidéo mise en avant
         </h2>
 
-        <input
-            type="search"
-            class="recherche-section"
-            placeholder="🔎 Rechercher une vidéo..."
-            data-search-section="video"
-            autocomplete="off"
-        >
 
         <label for="videoYoutube">
             Lien de ta vidéo YouTube
         </label>
+
 
         <input
             type="url"
@@ -1206,37 +1163,38 @@ hr{
             🏷️ Catégories
         </h2>
 
-        <input
-            type="search"
-            id="rechercheCategories"
-            class="recherche-section"
-            placeholder="🔎 Rechercher une catégorie..."
-            autocomplete="off"
-        >
 
-        <h3 style="
-            font-size:16px;
-            margin-bottom:12px;
-            color:#ddd;
-        ">
+        <h3>
             Catégories sélectionnées
         </h3>
+
 
         <div
             id="categoriesSelectionnees"
         ></div>
 
+
         <hr
             style="margin:20px 0;"
         >
 
-        <h3 style="
-            font-size:16px;
-            margin-bottom:8px;
-            color:#aaa;
-        ">
+
+        <h3>
             Choisir tes catégories
         </h3>
+
+
+        <!-- =================================================
+             SEULE BARRE DE RECHERCHE DU SITE
+        ================================================== -->
+
+        <input
+            type="search"
+            id="rechercheCategories"
+            placeholder="🔎 Rechercher une catégorie..."
+            autocomplete="off"
+        >
+
 
         <div id="categoriesContainer">
 
