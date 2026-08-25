@@ -91,7 +91,7 @@ let reseauxListe = [];
 
 onAuthStateChanged(
     auth,
-    async(user) => {
+    async (user) => {
 
         utilisateurActuel = user;
 
@@ -100,7 +100,7 @@ onAuthStateChanged(
            PAS CONNECTÉ
         ============================================== */
 
-        if(!user){
+        if (!user) {
 
             alert(
                 "Tu dois être connecté pour créer ou modifier ton profil."
@@ -132,18 +132,14 @@ onAuthStateChanged(
    AFFICHER LE COMPTE
 ========================================================= */
 
-function afficherCompte(user){
+function afficherCompte(user) {
 
-    if(!compteConnecte){
+    if (!compteConnecte) {
 
         return;
 
     }
 
-
-    /*
-       On affiche le nom Google.
-    */
 
     compteConnecte.textContent =
         user.displayName ||
@@ -157,13 +153,13 @@ function afficherCompte(user){
    DECONNEXION
 ========================================================= */
 
-if(deconnexion){
+if (deconnexion) {
 
     deconnexion.addEventListener(
         "click",
-        async() => {
+        async () => {
 
-            try{
+            try {
 
                 await signOut(auth);
 
@@ -172,7 +168,7 @@ if(deconnexion){
 
             }
 
-            catch(error){
+            catch (error) {
 
                 console.error(
                     "Erreur lors de la déconnexion :",
@@ -195,9 +191,9 @@ if(deconnexion){
    CHARGER LE PROFIL EXISTANT
 ========================================================= */
 
-async function chargerProfil(user){
+async function chargerProfil(user) {
 
-    try{
+    try {
 
         const profilRef =
             doc(
@@ -217,12 +213,13 @@ async function chargerProfil(user){
            AUCUN PROFIL
         ============================================== */
 
-        if(!profilSnap.exists()){
+        if (!profilSnap.exists()) {
 
             profilExiste =
                 false;
 
-            if(saveProfile){
+
+            if (saveProfile) {
 
                 saveProfile.textContent =
                     "Créer mon profil";
@@ -230,11 +227,14 @@ async function chargerProfil(user){
             }
 
 
-            /*
-               Photo Google par défaut.
-            */
+            /* =========================================
+               PHOTO GOOGLE
+            ========================================= */
 
-            if(photo && user.photoURL){
+            if (
+                photo &&
+                user.photoURL
+            ) {
 
                 photo.src =
                     user.photoURL.replace(
@@ -244,6 +244,18 @@ async function chargerProfil(user){
 
             }
 
+
+            /*
+               On initialise les valeurs.
+            */
+
+            categoriesChoisies = [];
+
+            reseauxListe = [];
+
+            afficherReseaux();
+
+            afficherCategoriesSelectionnees();
 
             return;
 
@@ -262,7 +274,7 @@ async function chargerProfil(user){
             profilSnap.data();
 
 
-        if(saveProfile){
+        if (saveProfile) {
 
             saveProfile.textContent =
                 "Enregistrer les modifications";
@@ -274,16 +286,16 @@ async function chargerProfil(user){
            PHOTO
         ============================================== */
 
-        if(photo){
+        if (photo) {
 
-            if(data.photo){
+            if (data.photo) {
 
                 photo.src =
                     data.photo;
 
             }
 
-            else if(user.photoURL){
+            else if (user.photoURL) {
 
                 photo.src =
                     user.photoURL.replace(
@@ -300,7 +312,7 @@ async function chargerProfil(user){
            PSEUDO
         ============================================== */
 
-        if(pseudo){
+        if (pseudo) {
 
             pseudo.value =
                 data.pseudo ||
@@ -313,7 +325,7 @@ async function chargerProfil(user){
            DESCRIPTION COURTE
         ============================================== */
 
-        if(descriptionCourte){
+        if (descriptionCourte) {
 
             descriptionCourte.value =
                 data.descriptionCourte ||
@@ -326,7 +338,7 @@ async function chargerProfil(user){
            DESCRIPTION LONGUE
         ============================================== */
 
-        if(descriptionLongue){
+        if (descriptionLongue) {
 
             descriptionLongue.value =
                 data.descriptionLongue ||
@@ -339,7 +351,7 @@ async function chargerProfil(user){
            VIDEO YOUTUBE
         ============================================== */
 
-        if(videoYoutube){
+        if (videoYoutube) {
 
             videoYoutube.value =
                 data.videoYoutube ||
@@ -354,8 +366,8 @@ async function chargerProfil(user){
 
         reseauxListe =
             Array.isArray(data.reseaux)
-            ? data.reseaux
-            : [];
+                ? [...data.reseaux]
+                : [];
 
 
         afficherReseaux();
@@ -367,15 +379,15 @@ async function chargerProfil(user){
 
         categoriesChoisies =
             Array.isArray(data.categories)
-            ? [...data.categories]
-            : [];
+                ? [...data.categories]
+                : [];
 
 
         afficherCategoriesSelectionnees();
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Erreur lors du chargement du profil :",
@@ -395,9 +407,9 @@ async function chargerProfil(user){
    RESEAUX SOCIAUX
 ========================================================= */
 
-function afficherReseaux(){
+function afficherReseaux() {
 
-    if(!reseaux){
+    if (!reseaux) {
 
         return;
 
@@ -408,11 +420,11 @@ function afficherReseaux(){
         "";
 
 
-    /*
-       Aucun réseau
-    */
+    /* ==============================================
+       AUCUN RESEAU
+    ============================================== */
 
-    if(reseauxListe.length === 0){
+    if (reseauxListe.length === 0) {
 
         ajouterChampReseau();
 
@@ -421,13 +433,16 @@ function afficherReseaux(){
     }
 
 
+    /* ==============================================
+       AFFICHER LES RESEAUX
+    ============================================== */
+
     reseauxListe.forEach(
-        (reseau, index) => {
+        (reseau) => {
 
             ajouterChampReseau(
                 reseau.type || "",
-                reseau.lien || "",
-                index
+                reseau.lien || ""
             );
 
         }
@@ -442,11 +457,10 @@ function afficherReseaux(){
 
 function ajouterChampReseau(
     type = "",
-    lien = "",
-    index = null
-){
+    lien = ""
+) {
 
-    if(!reseaux){
+    if (!reseaux) {
 
         return;
 
@@ -498,6 +512,7 @@ function ajouterChampReseau(
     inputType.className =
         "reseauType";
 
+
     inputType.style.flex =
         "0 0 180px";
 
@@ -524,12 +539,13 @@ function ajouterChampReseau(
     inputLien.className =
         "reseauLien";
 
+
     inputLien.style.flex =
         "1";
 
 
     /* ==============================================
-       SUPPRIMER
+       BOUTON SUPPRIMER
     ============================================== */
 
     const boutonSupprimer =
@@ -565,15 +581,17 @@ function ajouterChampReseau(
     );
 
 
+    /* ==============================================
+       AJOUT AU DOM
+    ============================================== */
+
     bloc.appendChild(
         inputType
     );
 
-
     bloc.appendChild(
         inputLien
     );
-
 
     bloc.appendChild(
         boutonSupprimer
@@ -591,7 +609,7 @@ function ajouterChampReseau(
    BOUTON AJOUTER RESEAU
 ========================================================= */
 
-if(ajouterReseau){
+if (ajouterReseau) {
 
     ajouterReseau.addEventListener(
         "click",
@@ -609,13 +627,13 @@ if(ajouterReseau){
    RECUPERER LES RESEAUX
 ========================================================= */
 
-function recupererReseaux(){
+function recupererReseaux() {
 
     const liste =
         [];
 
 
-    if(!reseaux){
+    if (!reseaux) {
 
         return liste;
 
@@ -643,7 +661,10 @@ function recupererReseaux(){
                 );
 
 
-            if(!inputType || !inputLien){
+            if (
+                !inputType ||
+                !inputLien
+            ) {
 
                 return;
 
@@ -659,13 +680,13 @@ function recupererReseaux(){
 
 
             /*
-               On ignore les lignes complètement vides.
+               On ignore une ligne complètement vide.
             */
 
-            if(
+            if (
                 type === "" &&
                 lien === ""
-            ){
+            ) {
 
                 return;
 
@@ -692,22 +713,28 @@ function recupererReseaux(){
 
 
 /* =========================================================
-   CHARGER LES CATEGORIES
+   CHARGER LES CATEGORIES FIRESTORE
 ========================================================= */
 
-async function chargerCategories(){
+async function chargerCategories() {
 
-    if(!categoriesContainer){
+    if (!categoriesContainer) {
 
         return;
 
     }
 
 
-    try{
+    try {
 
-        categoriesContainer.innerHTML =
-            "Chargement...";
+        categoriesContainer.innerHTML = `
+            <p style="
+                color:#aaa;
+                margin:0;
+            ">
+                Chargement des catégories...
+            </p>
+        `;
 
 
         const snapshot =
@@ -731,9 +758,8 @@ async function chargerCategories(){
 
 
                 /*
-                   On accepte plusieurs structures
-                   possibles pour rester compatible
-                   avec tes catégories existantes.
+                   Compatibilité avec différentes
+                   structures de documents.
                 */
 
                 const nom =
@@ -743,7 +769,12 @@ async function chargerCategories(){
                     categorieDoc.id;
 
 
-                if(nom){
+                if (
+                    nom &&
+                    !categoriesDisponibles.includes(
+                        nom
+                    )
+                ) {
 
                     categoriesDisponibles.push(
                         nom
@@ -755,25 +786,21 @@ async function chargerCategories(){
         );
 
 
-        /*
-           Si aucune catégorie n'est trouvée
-        */
+        /* ==============================================
+           AUCUNE CATEGORIE
+        ============================================== */
 
-        if(
+        if (
             categoriesDisponibles.length === 0
-        ){
+        ) {
 
             categoriesContainer.innerHTML = `
-
                 <p style="
                     color:#aaa;
                     margin:0;
                 ">
-
                     Aucune catégorie disponible.
-
                 </p>
-
             `;
 
             afficherCategoriesSelectionnees();
@@ -783,13 +810,17 @@ async function chargerCategories(){
         }
 
 
+        /* ==============================================
+           AFFICHER
+        ============================================== */
+
         afficherCategoriesDisponibles();
 
         afficherCategoriesSelectionnees();
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Erreur lors du chargement des catégories :",
@@ -798,15 +829,12 @@ async function chargerCategories(){
 
 
         categoriesContainer.innerHTML = `
-
             <p style="
                 color:#ff6b6b;
+                margin:0;
             ">
-
                 Impossible de charger les catégories.
-
             </p>
-
         `;
 
     }
@@ -818,9 +846,9 @@ async function chargerCategories(){
    AFFICHER LES CATEGORIES DISPONIBLES
 ========================================================= */
 
-function afficherCategoriesDisponibles(){
+function afficherCategoriesDisponibles() {
 
-    if(!categoriesContainer){
+    if (!categoriesContainer) {
 
         return;
 
@@ -849,41 +877,75 @@ function afficherCategoriesDisponibles(){
                 categorie;
 
 
+            bouton.className =
+                "categorieBouton";
+
+
+            /* =========================================
+               ETAT SELECTION
+            ========================================= */
+
+            if (
+                categoriesChoisies.includes(
+                    categorie
+                )
+            ) {
+
+                bouton.classList.add(
+                    "selectionnee"
+                );
+
+            }
+
+
+            /* =========================================
+               STYLE
+            ========================================= */
+
             bouton.style.margin =
                 "5px";
-
 
             bouton.style.padding =
                 "9px 14px";
 
-
             bouton.style.borderRadius =
                 "20px";
-
 
             bouton.style.border =
                 "none";
 
-
             bouton.style.cursor =
                 "pointer";
-
-
-            bouton.style.background =
-                categoriesChoisies.includes(
-                    categorie
-                )
-                ? "#3ea6ff"
-                : "#181818";
-
 
             bouton.style.color =
                 "white";
 
-
             bouton.style.transition =
                 ".2s";
 
+
+            if (
+                categoriesChoisies.includes(
+                    categorie
+                )
+            ) {
+
+                bouton.style.background =
+                    "#3ea6ff";
+
+            }
+
+            else {
+
+                bouton.style.background =
+                    "#181818";
+
+            }
+
+
+            /* =========================================
+               CLIC
+            ========================================= */
 
             bouton.addEventListener(
                 "click",
@@ -911,7 +973,9 @@ function afficherCategoriesDisponibles(){
    GERER UNE CATEGORIE
 ========================================================= */
 
-function gererCategorie(categorie){
+function gererCategorie(
+    categorie
+) {
 
     const index =
         categoriesChoisies.indexOf(
@@ -919,12 +983,11 @@ function gererCategorie(categorie){
         );
 
 
-    /*
-       Déjà sélectionnée
-       → on la retire
-    */
+    /* ==============================================
+       RETIRER
+    ============================================== */
 
-    if(index !== -1){
+    if (index !== -1) {
 
         categoriesChoisies.splice(
             index,
@@ -933,12 +996,12 @@ function gererCategorie(categorie){
 
     }
 
-    /*
-       Pas encore sélectionnée
-       → on l'ajoute
-    */
 
-    else{
+    /* ==============================================
+       AJOUTER
+    ============================================== */
+
+    else {
 
         categoriesChoisies.push(
             categorie
@@ -946,6 +1009,11 @@ function gererCategorie(categorie){
 
     }
 
+
+    /*
+       On actualise immédiatement
+       les deux parties.
+    */
 
     afficherCategoriesDisponibles();
 
@@ -958,9 +1026,9 @@ function gererCategorie(categorie){
    AFFICHER LES CATEGORIES SELECTIONNEES
 ========================================================= */
 
-function afficherCategoriesSelectionnees(){
+function afficherCategoriesSelectionnees() {
 
-    if(!categoriesSelectionnees){
+    if (!categoriesSelectionnees) {
 
         return;
 
@@ -971,26 +1039,30 @@ function afficherCategoriesSelectionnees(){
         "";
 
 
-    if(
+    /* ==============================================
+       AUCUNE CATEGORIE
+    ============================================== */
+
+    if (
         categoriesChoisies.length === 0
-    ){
+    ) {
 
         categoriesSelectionnees.innerHTML = `
-
             <span style="
                 color:#888;
             ">
-
                 Aucune catégorie sélectionnée.
-
             </span>
-
         `;
 
         return;
 
     }
 
+
+    /* ==============================================
+       AFFICHER LES TAGS
+    ============================================== */
 
     categoriesChoisies.forEach(
         (categorie) => {
@@ -1001,6 +1073,10 @@ function afficherCategoriesSelectionnees(){
                 );
 
 
+            tag.className =
+                "tag";
+
+
             tag.textContent =
                 "🏷️ " +
                 categorie;
@@ -1009,38 +1085,29 @@ function afficherCategoriesSelectionnees(){
             tag.style.display =
                 "inline-flex";
 
-
             tag.style.alignItems =
                 "center";
-
 
             tag.style.gap =
                 "5px";
 
-
             tag.style.padding =
                 "8px 13px";
-
 
             tag.style.margin =
                 "4px";
 
-
             tag.style.borderRadius =
                 "20px";
-
 
             tag.style.background =
                 "#3ea6ff";
 
-
             tag.style.color =
                 "white";
 
-
             tag.style.fontWeight =
                 "bold";
-
 
             tag.style.cursor =
                 "pointer";
@@ -1076,7 +1143,7 @@ function afficherCategoriesSelectionnees(){
    VERIFICATION DU PSEUDO
 ========================================================= */
 
-if(pseudo){
+if (pseudo) {
 
     pseudo.addEventListener(
         "input",
@@ -1090,9 +1157,13 @@ if(pseudo){
 }
 
 
-async function verifierPseudo(){
+/* =========================================================
+   VERIFIER PSEUDO
+========================================================= */
 
-    if(!pseudo){
+async function verifierPseudo() {
+
+    if (!pseudo) {
 
         return false;
 
@@ -1103,9 +1174,13 @@ async function verifierPseudo(){
         pseudo.value.trim();
 
 
-    if(valeur === ""){
+    /* ==============================================
+       VIDE
+    ============================================== */
 
-        if(pseudoEtat){
+    if (valeur === "") {
+
+        if (pseudoEtat) {
 
             pseudoEtat.textContent =
                 "";
@@ -1117,15 +1192,15 @@ async function verifierPseudo(){
     }
 
 
-    /*
-       Longueur
-    */
+    /* ==============================================
+       LONGUEUR
+    ============================================== */
 
-    if(
+    if (
         valeur.length < 3
-    ){
+    ) {
 
-        if(pseudoEtat){
+        if (pseudoEtat) {
 
             pseudoEtat.textContent =
                 "❌ Le pseudo doit contenir au moins 3 caractères.";
@@ -1140,21 +1215,21 @@ async function verifierPseudo(){
     }
 
 
-    /*
-       Caractères autorisés
-    */
+    /* ==============================================
+       CARACTERES AUTORISES
+    ============================================== */
 
     const pseudoValide =
         /^[a-zA-Z0-9À-ÿ _-]+$/;
 
 
-    if(
+    if (
         !pseudoValide.test(
             valeur
         )
-    ){
+    ) {
 
-        if(pseudoEtat){
+        if (pseudoEtat) {
 
             pseudoEtat.textContent =
                 "❌ Le pseudo contient des caractères non autorisés.";
@@ -1169,7 +1244,11 @@ async function verifierPseudo(){
     }
 
 
-    try{
+    /* ==============================================
+       VERIFICATION FIRESTORE
+    ============================================== */
+
+    try {
 
         const q =
             query(
@@ -1186,7 +1265,9 @@ async function verifierPseudo(){
 
 
         const snapshot =
-            await getDocs(q);
+            await getDocs(
+                q
+            );
 
 
         let pseudoPris =
@@ -1198,15 +1279,14 @@ async function verifierPseudo(){
 
                 /*
                    Lors d'une modification,
-                   son propre profil ne doit pas
-                   être considéré comme un doublon.
+                   son propre profil est autorisé.
                 */
 
-                if(
+                if (
                     !utilisateurActuel ||
                     profilDoc.id !==
                     utilisateurActuel.uid
-                ){
+                ) {
 
                     pseudoPris =
                         true;
@@ -1217,9 +1297,13 @@ async function verifierPseudo(){
         );
 
 
-        if(pseudoPris){
+        /* =========================================
+           PSEUDO DEJA UTILISE
+        ========================================= */
 
-            if(pseudoEtat){
+        if (pseudoPris) {
+
+            if (pseudoEtat) {
 
                 pseudoEtat.textContent =
                     "❌ Ce pseudo est déjà utilisé.";
@@ -1234,7 +1318,11 @@ async function verifierPseudo(){
         }
 
 
-        if(pseudoEtat){
+        /* =========================================
+           PSEUDO DISPONIBLE
+        ========================================= */
+
+        if (pseudoEtat) {
 
             pseudoEtat.textContent =
                 "✅ Ce pseudo est disponible.";
@@ -1249,12 +1337,23 @@ async function verifierPseudo(){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Erreur lors de la vérification du pseudo :",
             error
         );
+
+
+        if (pseudoEtat) {
+
+            pseudoEtat.textContent =
+                "⚠️ Impossible de vérifier le pseudo.";
+
+            pseudoEtat.style.color =
+                "#ffaa00";
+
+        }
 
 
         return false;
@@ -1268,9 +1367,11 @@ async function verifierPseudo(){
    NETTOYER URL YOUTUBE
 ========================================================= */
 
-function nettoyerUrlYoutube(url){
+function nettoyerUrlYoutube(
+    url
+) {
 
-    if(!url){
+    if (!url) {
 
         return "";
 
@@ -1286,9 +1387,11 @@ function nettoyerUrlYoutube(url){
    VERIFIER VIDEO YOUTUBE
 ========================================================= */
 
-function verifierVideoYoutube(url){
+function verifierVideoYoutube(
+    url
+) {
 
-    if(!url){
+    if (!url) {
 
         return true;
 
@@ -1298,6 +1401,14 @@ function verifierVideoYoutube(url){
     const texte =
         url.trim();
 
+
+    /*
+       Formats acceptés :
+       youtube.com
+       www.youtube.com
+       m.youtube.com
+       youtu.be
+    */
 
     return (
         texte.includes(
@@ -1315,11 +1426,11 @@ function verifierVideoYoutube(url){
    ENREGISTRER LE PROFIL
 ========================================================= */
 
-if(saveProfile){
+if (saveProfile) {
 
     saveProfile.addEventListener(
         "click",
-        async() => {
+        async () => {
 
             await enregistrerProfil();
 
@@ -1330,16 +1441,16 @@ if(saveProfile){
 
 
 /* =========================================================
-   ENREGISTREMENT
+   ENREGISTREMENT FIRESTORE
 ========================================================= */
 
-async function enregistrerProfil(){
+async function enregistrerProfil() {
 
     /* ==============================================
-       VERIFICATION UTILISATEUR
+       UTILISATEUR
     ============================================== */
 
-    if(!utilisateurActuel){
+    if (!utilisateurActuel) {
 
         alert(
             "Tu dois être connecté."
@@ -1351,10 +1462,10 @@ async function enregistrerProfil(){
 
 
     /* ==============================================
-       VERIFICATION PSEUDO
+       PSEUDO
     ============================================== */
 
-    if(!pseudo){
+    if (!pseudo) {
 
         return;
 
@@ -1365,7 +1476,9 @@ async function enregistrerProfil(){
         pseudo.value.trim();
 
 
-    if(pseudoValeur === ""){
+    if (
+        pseudoValeur === ""
+    ) {
 
         alert(
             "Veuillez entrer un pseudo."
@@ -1378,11 +1491,15 @@ async function enregistrerProfil(){
     }
 
 
+    /* ==============================================
+       VERIFICATION PSEUDO
+    ============================================== */
+
     const pseudoValide =
         await verifierPseudo();
 
 
-    if(!pseudoValide){
+    if (!pseudoValide) {
 
         alert(
             "Veuillez choisir un pseudo valide et disponible."
@@ -1401,18 +1518,18 @@ async function enregistrerProfil(){
 
     const video =
         videoYoutube
-        ? nettoyerUrlYoutube(
-            videoYoutube.value
-        )
-        : "";
+            ? nettoyerUrlYoutube(
+                videoYoutube.value
+            )
+            : "";
 
 
-    if(
+    if (
         video &&
         !verifierVideoYoutube(
             video
         )
-    ){
+    ) {
 
         alert(
             "Veuillez entrer une URL YouTube valide."
@@ -1441,7 +1558,7 @@ async function enregistrerProfil(){
         "";
 
 
-    if(photo){
+    if (photo) {
 
         photoProfil =
             photo.src ||
@@ -1451,14 +1568,14 @@ async function enregistrerProfil(){
 
 
     /*
-       Si aucune photo n'est présente,
-       on utilise la photo Google.
+       Si aucune photo n'est disponible,
+       on prend celle de Google.
     */
 
-    if(
+    if (
         !photoProfil &&
         utilisateurActuel.photoURL
-    ){
+    ) {
 
         photoProfil =
             utilisateurActuel.photoURL.replace(
@@ -1486,13 +1603,13 @@ async function enregistrerProfil(){
 
         descriptionCourte:
             descriptionCourte
-            ? descriptionCourte.value.trim()
-            : "",
+                ? descriptionCourte.value.trim()
+                : "",
 
         descriptionLongue:
             descriptionLongue
-            ? descriptionLongue.value.trim()
-            : "",
+                ? descriptionLongue.value.trim()
+                : "",
 
         reseaux:
             listeReseaux,
@@ -1509,12 +1626,11 @@ async function enregistrerProfil(){
     };
 
 
-    /*
-       Si le profil n'existait pas,
-       on ajoute également la date de création.
-    */
+    /* ==============================================
+       DATE DE CREATION
+    ============================================== */
 
-    if(!profilExiste){
+    if (!profilExiste) {
 
         donneesProfil.dateCreation =
             new Date();
@@ -1523,26 +1639,31 @@ async function enregistrerProfil(){
 
 
     /* ==============================================
-       BOUTON CHARGEMENT
+       BOUTON
     ============================================== */
 
     const texteOriginal =
-        saveProfile.textContent;
+        saveProfile
+            ? saveProfile.textContent
+            : "";
 
 
-    saveProfile.disabled =
-        true;
+    if (saveProfile) {
 
+        saveProfile.disabled =
+            true;
 
-    saveProfile.textContent =
-        "Enregistrement...";
+        saveProfile.textContent =
+            "Enregistrement...";
+
+    }
 
 
     /* ==============================================
        FIRESTORE
     ============================================== */
 
-    try{
+    try {
 
         const profilRef =
             doc(
@@ -1556,7 +1677,7 @@ async function enregistrerProfil(){
             profilRef,
             donneesProfil,
             {
-                merge:true
+                merge: true
             }
         );
 
@@ -1565,17 +1686,24 @@ async function enregistrerProfil(){
             true;
 
 
-        saveProfile.textContent =
-            "✓ Profil enregistré";
+        /* =========================================
+           SUCCES
+        ========================================= */
+
+        if (saveProfile) {
+
+            saveProfile.textContent =
+                "✓ Profil enregistré";
+
+            saveProfile.style.background =
+                "#4caf50";
+
+        }
 
 
-        saveProfile.style.background =
-            "#4caf50";
-
-
-        /*
-           Petit délai avant redirection
-        */
+        /* =========================================
+           REDIRECTION
+        ========================================= */
 
         setTimeout(
             () => {
@@ -1592,7 +1720,7 @@ async function enregistrerProfil(){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Erreur lors de l'enregistrement :",
@@ -1605,16 +1733,18 @@ async function enregistrerProfil(){
         );
 
 
-        saveProfile.disabled =
-            false;
+        if (saveProfile) {
 
+            saveProfile.disabled =
+                false;
 
-        saveProfile.textContent =
-            texteOriginal;
+            saveProfile.textContent =
+                texteOriginal;
 
+            saveProfile.style.background =
+                "";
 
-        saveProfile.style.background =
-            "";
+        }
 
     }
 
@@ -1622,17 +1752,18 @@ async function enregistrerProfil(){
 
 
 /* =========================================================
-   PHOTO GOOGLE
+   GESTION DE LA PHOTO GOOGLE
 ========================================================= */
 
-if(photo){
+if (photo) {
 
     photo.addEventListener(
         "error",
         () => {
 
             /*
-               On évite une image cassée.
+               Si l'image Google ne fonctionne pas,
+               on cache l'image cassée.
             */
 
             photo.style.display =
@@ -1645,9 +1776,9 @@ if(photo){
 
 
 /* =========================================================
-   INITIALISATION
+   FIN
 ========================================================= */
 
 console.log(
-    "creer-profil.js chargé."
+    "creer-profil.js chargé correctement."
 );
