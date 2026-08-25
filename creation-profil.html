@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
@@ -40,7 +41,6 @@ body{
         );
 
     color:white;
-
     min-height:100vh;
 
 }
@@ -101,7 +101,6 @@ body{
     cursor:pointer;
 
     font-size:15px;
-
     font-weight:bold;
 
     transition:.2s ease;
@@ -112,7 +111,6 @@ body{
 #deconnexion:hover{
 
     background:#3a3a3a;
-
     border-color:#555;
 
     transform:translateY(-2px);
@@ -137,7 +135,6 @@ body{
 main{
 
     width:100%;
-
     max-width:900px;
 
     margin:auto;
@@ -271,7 +268,6 @@ textarea{
     padding:13px 15px;
 
     margin-top:8px;
-
     margin-bottom:16px;
 
     border-radius:11px;
@@ -392,7 +388,6 @@ textarea{
 #reseaux{
 
     display:flex;
-
     flex-direction:column;
 
     gap:12px;
@@ -405,7 +400,6 @@ textarea{
 .blocReseau{
 
     display:flex;
-
     align-items:center;
 
     gap:10px;
@@ -528,7 +522,6 @@ button:active{
 #categoriesSelectionnees{
 
     display:flex;
-
     flex-wrap:wrap;
 
     gap:9px;
@@ -543,7 +536,6 @@ button:active{
 .categorie-selectionnee{
 
     display:inline-flex;
-
     align-items:center;
 
     gap:6px;
@@ -557,7 +549,6 @@ button:active{
     color:white;
 
     font-size:14px;
-
     font-weight:bold;
 
     cursor:pointer;
@@ -577,13 +568,12 @@ button:active{
 
 
 /* =========================================================
-   GROUPES DE CATEGORIES
+   GROUPES
 ========================================================= */
 
 .categories-groupes{
 
     display:flex;
-
     flex-direction:column;
 
     gap:25px;
@@ -616,7 +606,7 @@ button:active{
 
 
 /* =========================================================
-   RECHERCHE CATEGORIE
+   RECHERCHE
 ========================================================= */
 
 .recherche-categorie{
@@ -649,13 +639,12 @@ button:active{
 
 
 /* =========================================================
-   BOUTONS CATEGORIES
+   CATEGORIES
 ========================================================= */
 
 .categories-liste{
 
     display:flex;
-
     flex-wrap:wrap;
 
     gap:9px;
@@ -678,7 +667,6 @@ button:active{
     color:#ddd;
 
     font-size:14px;
-
     font-weight:bold;
 
     box-shadow:none;
@@ -744,11 +732,14 @@ hr{
 
     display:flex;
 
-    justify-content:center;
+    flex-direction:column;
 
+    justify-content:center;
     align-items:center;
 
     margin-top:35px;
+
+    gap:15px;
 
 }
 
@@ -769,6 +760,70 @@ hr{
 
 
 /* =========================================================
+   SUPPRESSION COMPTE
+========================================================= */
+
+#suppressionCompteContainer{
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    width:100%;
+
+}
+
+
+#supprimerCompte{
+
+    background:#3a1717;
+
+    color:#ff6b6b;
+
+    border:1px solid #6b2929;
+
+    padding:13px 22px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    box-shadow:none;
+
+}
+
+
+#supprimerCompte:hover{
+
+    background:#551c1c;
+
+    border-color:#ff5252;
+
+    color:#ff8a8a;
+
+    box-shadow:
+        0 5px 18px rgba(255,40,40,.15);
+
+}
+
+
+#supprimerCompte:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -777,7 +832,6 @@ hr{
     #barreCompte{
 
         height:58px;
-
         padding:0 12px;
 
     }
@@ -800,7 +854,6 @@ hr{
     .section{
 
         padding:20px;
-
         border-radius:15px;
 
     }
@@ -817,7 +870,6 @@ hr{
     .blocReseau{
 
         flex-direction:column;
-
         align-items:stretch;
 
     }
@@ -840,7 +892,14 @@ hr{
     #saveProfile{
 
         width:100%;
+        max-width:350px;
 
+    }
+
+
+    #supprimerCompte{
+
+        width:100%;
         max-width:350px;
 
     }
@@ -883,219 +942,233 @@ hr{
 
 </head>
 
-
 <body>
-
 
 <div id="barreCompte">
 
-    <button
-        id="deconnexion"
-        type="button"
+```
+<button
+    id="deconnexion"
+    type="button"
+>
+    🚪 Déconnexion
+</button>
+```
+
+</div>
+
+<main>
+
+```
+<h1>
+    Créer mon profil
+</h1>
+
+
+<p class="sousTitre">
+    Personnalise ton profil et présente-toi aux autres.
+</p>
+
+
+<!-- =====================================================
+     PHOTO
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        📸 Photo de profil
+    </h2>
+
+    <img
+        id="photo"
+        alt="Photo de profil"
     >
 
-        🚪 Déconnexion
+</div>
 
+
+<!-- =====================================================
+     PSEUDO
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        👤 Pseudo
+    </h2>
+
+    <p id="pseudoEtat"></p>
+
+    <input
+        id="pseudo"
+        type="text"
+        maxlength="30"
+        placeholder="Votre pseudo"
+        autocomplete="off"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     PRESENTATION
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        ✨ Présentation
+    </h2>
+
+    <label for="descriptionCourte">
+        Description courte
+    </label>
+
+    <input
+        id="descriptionCourte"
+        maxlength="50"
+        placeholder="Une courte phrase pour te présenter..."
+    >
+
+    <label for="descriptionLongue">
+        Description complète
+    </label>
+
+    <textarea
+        id="descriptionLongue"
+        maxlength="1000"
+        rows="8"
+        placeholder="Présente-toi, parle de tes passions, de ton contenu..."
+    ></textarea>
+
+</div>
+
+
+<!-- =====================================================
+     RESEAUX
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        🌐 Réseaux sociaux
+    </h2>
+
+    <div id="reseaux"></div>
+
+    <button
+        type="button"
+        id="ajouterReseau"
+    >
+        ＋ Ajouter un réseau
     </button>
 
 </div>
 
 
-<main>
+<!-- =====================================================
+     VIDEO
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        🎬 Vidéo mise en avant
+    </h2>
+
+    <label for="videoYoutube">
+        Lien de ta vidéo YouTube
+    </label>
+
+    <input
+        type="url"
+        id="videoYoutube"
+        placeholder="https://www.youtube.com/watch?v=..."
+    >
+
+</div>
 
 
-    <h1>
-        Créer mon profil
-    </h1>
+<!-- =====================================================
+     CATEGORIES
+====================================================== -->
+
+<div class="section">
+
+    <h2>
+        🏷️ Catégories
+    </h2>
 
 
-    <p class="sousTitre">
-        Personnalise ton profil et présente-toi aux autres.
-    </p>
+    <h3 style="
+        font-size:16px;
+        margin-bottom:12px;
+        color:#ddd;
+    ">
+        Catégories sélectionnées
+    </h3>
 
 
-    <!-- =====================================================
-         PHOTO
-    ====================================================== -->
-
-    <div class="section">
-
-        <h2>
-            📸 Photo de profil
-        </h2>
-
-        <img
-            id="photo"
-            alt="Photo de profil"
-        >
-
-    </div>
+    <div id="categoriesSelectionnees"></div>
 
 
-    <!-- =====================================================
-         PSEUDO
-    ====================================================== -->
-
-    <div class="section">
-
-        <h2>
-            👤 Pseudo
-        </h2>
-
-        <p id="pseudoEtat"></p>
-
-        <input
-            id="pseudo"
-            type="text"
-            maxlength="30"
-            placeholder="Votre pseudo"
-            autocomplete="off"
-        >
-
-    </div>
+    <hr style="margin:20px 0;">
 
 
-    <!-- =====================================================
-         PRESENTATION
-    ====================================================== -->
+    <div
+        id="categoriesContainer"
+        class="categories-groupes"
+    >
 
-    <div class="section">
-
-        <h2>
-            ✨ Présentation
-        </h2>
-
-        <label for="descriptionCourte">
-            Description courte
-        </label>
-
-        <input
-            id="descriptionCourte"
-            maxlength="50"
-            placeholder="Une courte phrase pour te présenter..."
-        >
-
-        <label for="descriptionLongue">
-            Description complète
-        </label>
-
-        <textarea
-            id="descriptionLongue"
-            maxlength="1000"
-            rows="8"
-            placeholder="Présente-toi, parle de tes passions, de ton contenu..."
-        ></textarea>
+        Chargement des catégories...
 
     </div>
 
+</div>
 
-    <!-- =====================================================
-         RESEAUX
-    ====================================================== -->
 
-    <div class="section">
+<!-- =====================================================
+     BOUTONS
+====================================================== -->
 
-        <h2>
-            🌐 Réseaux sociaux
-        </h2>
+<div class="save-container">
 
-        <div id="reseaux"></div>
+    <button
+        id="saveProfile"
+        type="button"
+    >
+        💾 Créer mon profil
+    </button>
+
+
+    <!--
+        Le bouton existe directement dans le HTML.
+        Le JavaScript décide simplement s'il doit être affiché.
+    -->
+
+    <div
+        id="suppressionCompteContainer"
+    >
 
         <button
+            id="supprimerCompte"
             type="button"
-            id="ajouterReseau"
         >
-            ＋ Ajouter un réseau
+            🗑️ Supprimer mon compte
         </button>
 
     </div>
 
-
-    <!-- =====================================================
-         VIDEO
-    ====================================================== -->
-
-    <div class="section">
-
-        <h2>
-            🎬 Vidéo mise en avant
-        </h2>
-
-        <label for="videoYoutube">
-            Lien de ta vidéo YouTube
-        </label>
-
-        <input
-            type="url"
-            id="videoYoutube"
-            placeholder="https://www.youtube.com/watch?v=..."
-        >
-
-    </div>
-
-
-    <!-- =====================================================
-         CATEGORIES
-    ====================================================== -->
-
-    <div class="section">
-
-        <h2>
-            🏷️ Catégories
-        </h2>
-
-
-        <h3 style="
-            font-size:16px;
-            margin-bottom:12px;
-            color:#ddd;
-        ">
-            Catégories sélectionnées
-        </h3>
-
-
-        <div id="categoriesSelectionnees"></div>
-
-
-        <hr style="margin:20px 0;">
-
-
-        <div
-            id="categoriesContainer"
-            class="categories-groupes"
-        >
-
-            Chargement des catégories...
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         SAUVEGARDE
-    ====================================================== -->
-
-    <div class="save-container">
-
-        <button
-            id="saveProfile"
-            type="button"
-        >
-            💾 Créer mon profil
-        </button>
-
-    </div>
-
+</div>
+```
 
 </main>
-
 
 <script
     type="module"
     src="creer-profil.js"
 ></script>
-
 
 </body>
 
