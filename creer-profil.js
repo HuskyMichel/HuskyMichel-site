@@ -22,7 +22,16 @@ import {
 
 let utilisateurActuel = null;
 
-let categoriesDisponibles = [];
+let categoriesParGroupe = {
+
+    Contenu: [],
+    creation: [],
+    jeux_video: [],
+    musique: [],
+    sport: [],
+    technologie: []
+
+};
 
 let categoriesSelectionnees = [];
 
@@ -61,14 +70,7 @@ const categoriesContainer =
     document.getElementById("categoriesContainer");
 
 const categoriesSelectionneesContainer =
-    document.getElementById(
-        "categoriesSelectionnees"
-    );
-
-const rechercheCategories =
-    document.getElementById(
-        "rechercheCategories"
-    );
+    document.getElementById("categoriesSelectionnees");
 
 const saveProfile =
     document.getElementById("saveProfile");
@@ -77,13 +79,7 @@ const deconnexion =
     document.getElementById("deconnexion");
 
 
-/* =========================================================
-   INITIALISATION
-========================================================= */
-
-console.log(
-    "creer-profil.js chargé"
-);
+console.log("creer-profil.js chargé");
 
 
 /* =========================================================
@@ -92,15 +88,11 @@ console.log(
 
 function afficherPhotoUtilisateur(user){
 
-    if(
-        !photo ||
-        !user
-    ){
+    if(!photo || !user){
 
         return;
 
     }
-
 
     if(user.photoURL){
 
@@ -143,7 +135,7 @@ if(deconnexion){
             catch(error){
 
                 console.error(
-                    "Erreur lors de la déconnexion :",
+                    "Erreur déconnexion :",
                     error
                 );
 
@@ -160,20 +152,14 @@ if(deconnexion){
 
 
 /* =========================================================
-   ETAT DE CONNEXION
+   AUTHENTIFICATION
 ========================================================= */
 
 onAuthStateChanged(
     auth,
     async(user)=>{
 
-        utilisateurActuel =
-            user;
-
-
-        /* ==============================================
-           NON CONNECTE
-        ============================================== */
+        utilisateurActuel = user;
 
         if(!user){
 
@@ -188,10 +174,6 @@ onAuthStateChanged(
 
         }
 
-
-        /* ==============================================
-           CONNECTE
-        ============================================== */
 
         console.log(
             "Utilisateur connecté :",
@@ -222,7 +204,6 @@ async function chargerProfilExistant(){
 
     }
 
-
     try{
 
         const profilRef =
@@ -231,7 +212,6 @@ async function chargerProfilExistant(){
                 "users",
                 utilisateurActuel.uid
             );
-
 
         const profilSnap =
             await getDoc(profilRef);
@@ -245,10 +225,6 @@ async function chargerProfilExistant(){
                 profilSnap.data();
 
 
-            /* =========================
-               PSEUDO
-            ========================= */
-
             if(pseudo){
 
                 pseudo.value =
@@ -256,10 +232,6 @@ async function chargerProfilExistant(){
 
             }
 
-
-            /* =========================
-               DESCRIPTIONS
-            ========================= */
 
             if(descriptionCourte){
 
@@ -277,10 +249,6 @@ async function chargerProfilExistant(){
             }
 
 
-            /* =========================
-               VIDEO
-            ========================= */
-
             if(videoYoutube){
 
                 videoYoutube.value =
@@ -289,13 +257,7 @@ async function chargerProfilExistant(){
             }
 
 
-            /* =========================
-               CATEGORIES
-            ========================= */
-
-            if(
-                Array.isArray(data.categories)
-            ){
+            if(Array.isArray(data.categories)){
 
                 categoriesSelectionnees =
                     [...data.categories];
@@ -303,13 +265,7 @@ async function chargerProfilExistant(){
             }
 
 
-            /* =========================
-               RESEAUX
-            ========================= */
-
-            if(
-                Array.isArray(data.reseaux)
-            ){
+            if(Array.isArray(data.reseaux)){
 
                 data.reseaux.forEach(
                     reseau=>{
@@ -332,30 +288,23 @@ async function chargerProfilExistant(){
 
             }
 
-
-            afficherCategoriesSelectionnees();
-
         }
 
         else{
 
             profilExiste = false;
 
-            if(saveProfile){
-
-                saveProfile.textContent =
-                    "💾 Créer mon profil";
-
-            }
-
         }
+
+
+        afficherCategoriesSelectionnees();
 
     }
 
     catch(error){
 
         console.error(
-            "Erreur lors du chargement du profil :",
+            "Erreur chargement profil :",
             error
         );
 
@@ -365,7 +314,91 @@ async function chargerProfilExistant(){
 
 
 /* =========================================================
-   CHARGER LES CATEGORIES FIRESTORE
+   NORMALISER LE NOM DU GROUPE
+========================================================= */
+
+function normaliserGroupe(nom){
+
+    if(!nom){
+
+        return null;
+
+    }
+
+    const valeur =
+        nom
+            .toString()
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g,"_");
+
+
+    if(
+        valeur === "contenu"
+    ){
+
+        return "Contenu";
+
+    }
+
+
+    if(
+        valeur === "creation" ||
+        valeur === "création"
+    ){
+
+        return "creation";
+
+    }
+
+
+    if(
+        valeur === "jeux_video" ||
+        valeur === "jeux_videos" ||
+        valeur === "jeux vidéo" ||
+        valeur === "jeux vidéos"
+    ){
+
+        return "jeux_video";
+
+    }
+
+
+    if(
+        valeur === "musique"
+    ){
+
+        return "musique";
+
+    }
+
+
+    if(
+        valeur === "sport"
+    ){
+
+        return "sport";
+
+    }
+
+
+    if(
+        valeur === "technologie" ||
+        valeur === "tech"
+    ){
+
+        return "technologie";
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   CHARGER LES CATEGORIES
 ========================================================= */
 
 async function chargerCategories(){
@@ -377,16 +410,20 @@ async function chargerCategories(){
     }
 
 
+    categoriesContainer.innerHTML = `
+
+        <p style="
+            color:#888;
+            text-align:center;
+            padding:15px;
+        ">
+            Chargement des catégories...
+        </p>
+
+    `;
+
+
     try{
-
-        categoriesContainer.innerHTML = `
-
-            <p class="messageCategories">
-                Chargement des catégories...
-            </p>
-
-        `;
-
 
         const snapshot =
             await getDocs(
@@ -397,12 +434,17 @@ async function chargerCategories(){
             );
 
 
-        categoriesDisponibles = [];
+        categoriesParGroupe = {
 
+            Contenu: [],
+            creation: [],
+            jeux_video: [],
+            musique: [],
+            sport: [],
+            technologie: []
 
-        /* ==============================================
-           LECTURE DES CATEGORIES
-        ============================================== */
+        };
+
 
         snapshot.forEach(
             categorieDoc=>{
@@ -412,62 +454,61 @@ async function chargerCategories(){
 
 
                 /*
-                   Format :
-
-                   categories/
-                       document
-                           liste: [
-                               "Gaming",
-                               "Minecraft"
-                           ]
+                   On cherche d'abord le groupe
+                   dans plusieurs champs possibles.
                 */
 
+                const groupe =
+                    normaliserGroupe(
+                        data.groupe ||
+                        data.categorie ||
+                        data.type ||
+                        categorieDoc.id
+                    );
 
-                if(
-                    Array.isArray(data.liste)
-                ){
+
+                if(!groupe){
+
+                    return;
+
+                }
+
+
+                /*
+                   Les catégories peuvent être
+                   dans "liste".
+                */
+
+                if(Array.isArray(data.liste)){
 
                     data.liste.forEach(
                         categorie=>{
 
-                            if(
-                                typeof categorie ===
-                                "string"
-                            ){
+                            ajouterCategorieAuGroupe(
+                                groupe,
+                                categorie
+                            );
 
-                                categoriesDisponibles.push({
+                        }
+                    );
 
-                                    id:
-                                        categorie,
+                }
 
-                                    nom:
-                                        categorie
 
-                                });
+                /*
+                   On accepte également
+                   "categories".
+                */
 
-                            }
+                if(Array.isArray(data.categories)){
 
-                            else if(
-                                categorie &&
-                                typeof categorie ===
-                                "object"
-                            ){
+                    data.categories.forEach(
+                        categorie=>{
 
-                                categoriesDisponibles.push({
-
-                                    id:
-                                        categorie.id ||
-                                        categorie.nom ||
-                                        categorie.name,
-
-                                    nom:
-                                        categorie.nom ||
-                                        categorie.name ||
-                                        categorie.id
-
-                                });
-
-                            }
+                            ajouterCategorieAuGroupe(
+                                groupe,
+                                categorie
+                            );
 
                         }
                     );
@@ -478,63 +519,28 @@ async function chargerCategories(){
         );
 
 
-        /* ==============================================
-           SUPPRIMER DOUBLONS
-        ============================================== */
-
-        const uniques = [];
-
-        const dejaPresentes =
-            new Set();
+        supprimerDoublonsCategories();
 
 
-        categoriesDisponibles.forEach(
-            categorie=>{
-
-                if(
-                    !categorie.id ||
-                    dejaPresentes.has(
-                        categorie.id
-                    )
-                ){
-
-                    return;
-
-                }
-
-
-                dejaPresentes.add(
-                    categorie.id
-                );
-
-
-                uniques.push(categorie);
-
-            }
-        );
-
-
-        categoriesDisponibles =
-            uniques;
-
-
-        afficherCategories();
-
-        afficherCategoriesSelectionnees();
+        afficherToutesLesCategories();
 
     }
 
     catch(error){
 
         console.error(
-            "Erreur lors du chargement des catégories :",
+            "Erreur chargement catégories :",
             error
         );
 
 
         categoriesContainer.innerHTML = `
 
-            <p class="messageCategories">
+            <p style="
+                color:#ff6b6b;
+                text-align:center;
+                padding:15px;
+            ">
                 Impossible de charger les catégories.
             </p>
 
@@ -546,30 +552,119 @@ async function chargerCategories(){
 
 
 /* =========================================================
-   RECHERCHE DES CATEGORIES
-   IMPORTANT :
-   CETTE RECHERCHE NE CONCERNE QUE LES CATEGORIES
+   AJOUTER UNE CATEGORIE
 ========================================================= */
 
-if(rechercheCategories){
+function ajouterCategorieAuGroupe(
+    groupe,
+    categorie
+){
 
-    rechercheCategories.addEventListener(
-        "input",
-        ()=>{
+    if(!categorie){
 
-            afficherCategories();
+        return;
+
+    }
+
+
+    if(typeof categorie === "string"){
+
+        categoriesParGroupe[groupe].push({
+
+            id: categorie,
+            nom: categorie
+
+        });
+
+        return;
+
+    }
+
+
+    if(
+        typeof categorie === "object"
+    ){
+
+        const id =
+            categorie.id ||
+            categorie.nom ||
+            categorie.name;
+
+
+        const nom =
+            categorie.nom ||
+            categorie.name ||
+            categorie.id;
+
+
+        if(id){
+
+            categoriesParGroupe[groupe].push({
+
+                id: id,
+                nom: nom || id
+
+            });
 
         }
-    );
+
+    }
 
 }
 
 
 /* =========================================================
-   AFFICHER LES CATEGORIES
+   SUPPRIMER DOUBLONS
 ========================================================= */
 
-function afficherCategories(){
+function supprimerDoublonsCategories(){
+
+    Object.keys(categoriesParGroupe)
+        .forEach(
+            groupe=>{
+
+                const dejaVu =
+                    new Set();
+
+
+                categoriesParGroupe[groupe] =
+                    categoriesParGroupe[groupe]
+                        .filter(
+                            categorie=>{
+
+                                if(
+                                    !categorie.id ||
+                                    dejaVu.has(
+                                        categorie.id
+                                    )
+                                ){
+
+                                    return false;
+
+                                }
+
+
+                                dejaVu.add(
+                                    categorie.id
+                                );
+
+
+                                return true;
+
+                            }
+                        );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   AFFICHER TOUTES LES CATEGORIES
+========================================================= */
+
+function afficherToutesLesCategories(){
 
     if(!categoriesContainer){
 
@@ -581,160 +676,260 @@ function afficherCategories(){
     categoriesContainer.innerHTML = "";
 
 
-    /* ==============================================
-       RECUPERER LA RECHERCHE
-    ============================================== */
+    const groupes = [
 
-    const recherche =
-        rechercheCategories
-            ? rechercheCategories.value
-                .trim()
-                .toLowerCase()
-            : "";
+        {
+            id: "Contenu",
+            titre: "🎬 Contenu"
+        },
+
+        {
+            id: "creation",
+            titre: "🎨 Création"
+        },
+
+        {
+            id: "jeux_video",
+            titre: "🎮 Jeux vidéo"
+        },
+
+        {
+            id: "musique",
+            titre: "🎵 Musique"
+        },
+
+        {
+            id: "sport",
+            titre: "⚽ Sport"
+        },
+
+        {
+            id: "technologie",
+            titre: "💻 Technologie"
+        }
+
+    ];
 
 
-    /* ==============================================
-       FILTRER
-    ============================================== */
+    groupes.forEach(
+        groupe=>{
 
-    const categoriesFiltrees =
-        categoriesDisponibles.filter(
-            categorie=>{
+            const bloc =
+                document.createElement("div");
 
-                const nom =
-                    String(
-                        categorie.nom ||
-                        categorie.id ||
-                        ""
-                    ).toLowerCase();
+            bloc.className =
+                "categorie-groupe";
 
 
-                return nom.includes(
-                    recherche
+            const titre =
+                document.createElement("h3");
+
+            titre.className =
+                "categorie-groupe-titre";
+
+            titre.textContent =
+                groupe.titre;
+
+
+            /* =========================
+               BARRE DE RECHERCHE
+            ========================= */
+
+            const recherche =
+                document.createElement("input");
+
+            recherche.type =
+                "search";
+
+            recherche.className =
+                "recherche-categorie";
+
+            recherche.placeholder =
+                "🔎 Rechercher une catégorie...";
+
+            recherche.autocomplete =
+                "off";
+
+
+            /* =========================
+               LISTE
+            ========================= */
+
+            const liste =
+                document.createElement("div");
+
+            liste.className =
+                "categories-liste";
+
+
+            bloc.appendChild(titre);
+
+            bloc.appendChild(recherche);
+
+            bloc.appendChild(liste);
+
+            categoriesContainer.appendChild(bloc);
+
+
+            /*
+               Fonction d'affichage propre
+               à CE groupe.
+            */
+
+            function afficherGroupe(){
+
+                const rechercheValeur =
+                    recherche.value
+                        .trim()
+                        .toLowerCase();
+
+
+                liste.innerHTML = "";
+
+
+                const categories =
+                    categoriesParGroupe[
+                        groupe.id
+                    ] || [];
+
+
+                const resultats =
+                    categories.filter(
+                        categorie=>{
+
+                            return categorie.nom
+                                .toLowerCase()
+                                .includes(
+                                    rechercheValeur
+                                );
+
+                        }
+                    );
+
+
+                if(resultats.length === 0){
+
+                    const aucun =
+                        document.createElement("p");
+
+                    aucun.className =
+                        "categories-aucun-resultat";
+
+                    aucun.textContent =
+                        rechercheValeur
+                        ? "Aucune catégorie trouvée."
+                        : "Aucune catégorie disponible.";
+
+                    liste.appendChild(aucun);
+
+                    return;
+
+                }
+
+
+                resultats.forEach(
+                    categorie=>{
+
+                        const bouton =
+                            document.createElement("button");
+
+
+                        bouton.type =
+                            "button";
+
+
+                        bouton.className =
+                            "categorie";
+
+
+                        bouton.textContent =
+                            categorie.nom;
+
+
+                        if(
+                            categoriesSelectionnees
+                                .includes(
+                                    categorie.id
+                                )
+                        ){
+
+                            bouton.classList.add(
+                                "selectionnee"
+                            );
+
+                        }
+
+
+                        bouton.addEventListener(
+                            "click",
+                            ()=>{
+
+                                basculerCategorie(
+                                    categorie.id
+                                );
+
+
+                                afficherGroupe();
+
+                            }
+                        );
+
+
+                        liste.appendChild(
+                            bouton
+                        );
+
+                    }
                 );
 
             }
-        );
 
 
-    /* ==============================================
-       AUCUN RESULTAT
-    ============================================== */
+            recherche.addEventListener(
+                "input",
+                afficherGroupe
+            );
+
+
+            afficherGroupe();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SELECTIONNER / DESELECTIONNER
+========================================================= */
+
+function basculerCategorie(
+    valeur
+){
 
     if(
-        categoriesFiltrees.length === 0
+        categoriesSelectionnees
+            .includes(valeur)
     ){
 
-        categoriesContainer.innerHTML = `
+        categoriesSelectionnees =
+            categoriesSelectionnees.filter(
+                categorie =>
+                    categorie !== valeur
+            );
 
-            <div class="messageCategories">
+    }
 
-                ${
-                    recherche
-                    ? "🔎 Aucune catégorie trouvée."
-                    : "Aucune catégorie disponible."
-                }
+    else{
 
-            </div>
-
-        `;
-
-        return;
+        categoriesSelectionnees.push(
+            valeur
+        );
 
     }
 
 
-    /* ==============================================
-       CREER LES BOUTONS
-    ============================================== */
-
-    categoriesFiltrees.forEach(
-        categorie=>{
-
-            const bouton =
-                document.createElement("button");
-
-
-            bouton.type =
-                "button";
-
-
-            bouton.className =
-                "categorie";
-
-
-            bouton.textContent =
-                categorie.nom ||
-                categorie.id;
-
-
-            const valeur =
-                categorie.id ||
-                categorie.nom;
-
-
-            /* ==========================================
-               CATEGORIE SELECTIONNEE
-            ========================================== */
-
-            if(
-                categoriesSelectionnees.includes(
-                    valeur
-                )
-            ){
-
-                bouton.classList.add(
-                    "selectionnee"
-                );
-
-            }
-
-
-            /* ==========================================
-               CLIC
-            ========================================== */
-
-            bouton.addEventListener(
-                "click",
-                ()=>{
-
-                    if(
-                        categoriesSelectionnees.includes(
-                            valeur
-                        )
-                    ){
-
-                        categoriesSelectionnees =
-                            categoriesSelectionnees.filter(
-                                item =>
-                                    item !== valeur
-                            );
-
-                    }
-
-                    else{
-
-                        categoriesSelectionnees.push(
-                            valeur
-                        );
-
-                    }
-
-
-                    afficherCategories();
-
-                    afficherCategoriesSelectionnees();
-
-                }
-            );
-
-
-            categoriesContainer.appendChild(
-                bouton
-            );
-
-        }
-    );
+    afficherCategoriesSelectionnees();
 
 }
 
@@ -783,48 +978,12 @@ function afficherCategoriesSelectionnees(){
                 document.createElement("div");
 
 
+            tag.className =
+                "categorie-selectionnee";
+
+
             tag.textContent =
                 "🏷️ " + categorie;
-
-
-            tag.style.display =
-                "inline-flex";
-
-
-            tag.style.alignItems =
-                "center";
-
-
-            tag.style.gap =
-                "6px";
-
-
-            tag.style.padding =
-                "8px 12px";
-
-
-            tag.style.borderRadius =
-                "20px";
-
-
-            tag.style.background =
-                "#3ea6ff";
-
-
-            tag.style.color =
-                "white";
-
-
-            tag.style.fontSize =
-                "14px";
-
-
-            tag.style.fontWeight =
-                "bold";
-
-
-            tag.style.cursor =
-                "pointer";
 
 
             tag.title =
@@ -835,16 +994,12 @@ function afficherCategoriesSelectionnees(){
                 "click",
                 ()=>{
 
-                    categoriesSelectionnees =
-                        categoriesSelectionnees.filter(
-                            item =>
-                                item !== categorie
-                        );
+                    basculerCategorie(
+                        categorie
+                    );
 
 
-                    afficherCategories();
-
-                    afficherCategoriesSelectionnees();
+                    afficherToutesLesCategories();
 
                 }
             );
@@ -861,7 +1016,7 @@ function afficherCategoriesSelectionnees(){
 
 
 /* =========================================================
-   AJOUTER UN RESEAU
+   RESEAUX
 ========================================================= */
 
 if(ajouterReseau){
@@ -869,18 +1024,12 @@ if(ajouterReseau){
     ajouterReseau.addEventListener(
         "click",
         ()=>{
-
             ajouterBlocReseau();
-
         }
     );
 
 }
 
-
-/* =========================================================
-   CREER UN BLOC RESEAU
-========================================================= */
 
 function ajouterBlocReseau(
     typeValeur = "",
@@ -902,10 +1051,6 @@ function ajouterBlocReseau(
         "blocReseau";
 
 
-    /* ==============================================
-       TYPE
-    ============================================== */
-
     const type =
         document.createElement("input");
 
@@ -913,18 +1058,15 @@ function ajouterBlocReseau(
     type.type =
         "text";
 
-
     type.placeholder =
         "Réseau";
-
 
     type.value =
         typeValeur;
 
+    type.style.flex =
+        "0 0 30%";
 
-    /* ==============================================
-       LIEN
-    ============================================== */
 
     const lien =
         document.createElement("input");
@@ -933,18 +1075,15 @@ function ajouterBlocReseau(
     lien.type =
         "url";
 
-
     lien.placeholder =
         "https://...";
-
 
     lien.value =
         lienValeur;
 
+    lien.style.flex =
+        "1";
 
-    /* ==============================================
-       SUPPRIMER
-    ============================================== */
 
     const supprimer =
         document.createElement("button");
@@ -953,10 +1092,8 @@ function ajouterBlocReseau(
     supprimer.type =
         "button";
 
-
     supprimer.textContent =
         "✕";
-
 
     supprimer.title =
         "Supprimer ce réseau";
@@ -965,9 +1102,7 @@ function ajouterBlocReseau(
     supprimer.addEventListener(
         "click",
         ()=>{
-
             bloc.remove();
-
         }
     );
 
@@ -980,6 +1115,66 @@ function ajouterBlocReseau(
 
 
     reseaux.appendChild(bloc);
+
+}
+
+
+/* =========================================================
+   RECUPERER RESEAUX
+========================================================= */
+
+function recupererReseaux(){
+
+    if(!reseaux){
+
+        return [];
+
+    }
+
+
+    const resultat = [];
+
+
+    reseaux
+        .querySelectorAll(".blocReseau")
+        .forEach(
+            bloc=>{
+
+                const inputs =
+                    bloc.querySelectorAll("input");
+
+
+                if(inputs.length < 2){
+
+                    return;
+
+                }
+
+
+                const type =
+                    inputs[0].value.trim();
+
+
+                const lien =
+                    inputs[1].value.trim();
+
+
+                if(type || lien){
+
+                    resultat.push({
+
+                        type: type,
+                        lien: lien
+
+                    });
+
+                }
+
+            }
+        );
+
+
+    return resultat;
 
 }
 
@@ -1005,7 +1200,7 @@ if(pseudo){
             }
 
 
-            if(valeur === ""){
+            if(!valeur){
 
                 pseudoEtat.textContent =
                     "";
@@ -1028,18 +1223,11 @@ if(pseudo){
             }
 
 
-            /* ==========================================
-               VERIFIER FIRESTORE
-            ========================================== */
-
             try{
 
                 const q =
                     query(
-                        collection(
-                            db,
-                            "users"
-                        ),
+                        collection(db,"users"),
                         where(
                             "pseudo",
                             "==",
@@ -1052,8 +1240,7 @@ if(pseudo){
                     await getDocs(q);
 
 
-                let utiliseParQuelquun =
-                    false;
+                let utilise = false;
 
 
                 snapshot.forEach(
@@ -1061,11 +1248,10 @@ if(pseudo){
 
                         if(
                             profilDoc.id !==
-                            utilisateurActuel?.uid
+                            utilisateurActuel.uid
                         ){
 
-                            utiliseParQuelquun =
-                                true;
+                            utilise = true;
 
                         }
 
@@ -1073,7 +1259,7 @@ if(pseudo){
                 );
 
 
-                if(utiliseParQuelquun){
+                if(utilise){
 
                     pseudoEtat.textContent =
                         "❌ Ce pseudo est déjà utilisé.";
@@ -1098,13 +1284,10 @@ if(pseudo){
             catch(error){
 
                 console.error(
-                    "Erreur lors de la vérification du pseudo :",
+                    "Erreur vérification pseudo :",
                     error
                 );
 
-                pseudoEtat.textContent =
-                    "";
-
             }
 
         }
@@ -1114,76 +1297,7 @@ if(pseudo){
 
 
 /* =========================================================
-   RECUPERER LES RESEAUX
-========================================================= */
-
-function recupererReseaux(){
-
-    if(!reseaux){
-
-        return [];
-
-    }
-
-
-    const resultat = [];
-
-
-    const blocs =
-        reseaux.querySelectorAll(
-            ".blocReseau"
-        );
-
-
-    blocs.forEach(
-        bloc=>{
-
-            const inputs =
-                bloc.querySelectorAll(
-                    "input"
-                );
-
-
-            if(inputs.length < 2){
-
-                return;
-
-            }
-
-
-            const type =
-                inputs[0].value.trim();
-
-
-            const lien =
-                inputs[1].value.trim();
-
-
-            if(type || lien){
-
-                resultat.push({
-
-                    type:
-                        type,
-
-                    lien:
-                        lien
-
-                });
-
-            }
-
-        }
-    );
-
-
-    return resultat;
-
-}
-
-
-/* =========================================================
-   VERIFIER YOUTUBE
+   YOUTUBE
 ========================================================= */
 
 function verifierYoutube(url){
@@ -1204,7 +1318,7 @@ function verifierYoutube(url){
 
 
 /* =========================================================
-   SAUVEGARDER LE PROFIL
+   ENREGISTRER
 ========================================================= */
 
 if(saveProfile){
@@ -1212,10 +1326,6 @@ if(saveProfile){
     saveProfile.addEventListener(
         "click",
         async()=>{
-
-            /* ==========================================
-               UTILISATEUR
-            ========================================== */
 
             if(!utilisateurActuel){
 
@@ -1228,17 +1338,13 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
-               PSEUDO
-            ========================================== */
-
             const pseudoValeur =
                 pseudo
                     ? pseudo.value.trim()
                     : "";
 
 
-            if(pseudoValeur === ""){
+            if(!pseudoValeur){
 
                 alert(
                     "Veuillez choisir un pseudo."
@@ -1264,10 +1370,6 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
-               DESCRIPTIONS
-            ========================================== */
-
             const courte =
                 descriptionCourte
                     ? descriptionCourte.value.trim()
@@ -1280,19 +1382,13 @@ if(saveProfile){
                     : "";
 
 
-            /* ==========================================
-               VIDEO
-            ========================================== */
-
             const video =
                 videoYoutube
                     ? videoYoutube.value.trim()
                     : "";
 
 
-            if(
-                !verifierYoutube(video)
-            ){
+            if(!verifierYoutube(video)){
 
                 alert(
                     "Veuillez entrer un lien YouTube valide."
@@ -1305,18 +1401,15 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
+            /* =================================================
                VERIFIER PSEUDO
-            ========================================== */
+            ================================================= */
 
             try{
 
                 const q =
                     query(
-                        collection(
-                            db,
-                            "users"
-                        ),
+                        collection(db,"users"),
                         where(
                             "pseudo",
                             "==",
@@ -1329,8 +1422,7 @@ if(saveProfile){
                     await getDocs(q);
 
 
-                let pseudoDejaUtilise =
-                    false;
+                let dejaUtilise = false;
 
 
                 snapshot.forEach(
@@ -1341,8 +1433,7 @@ if(saveProfile){
                             utilisateurActuel.uid
                         ){
 
-                            pseudoDejaUtilise =
-                                true;
+                            dejaUtilise = true;
 
                         }
 
@@ -1350,25 +1441,11 @@ if(saveProfile){
                 );
 
 
-                if(pseudoDejaUtilise){
+                if(dejaUtilise){
 
                     alert(
                         "Ce pseudo est déjà utilisé."
                     );
-
-
-                    if(pseudoEtat){
-
-                        pseudoEtat.textContent =
-                            "❌ Ce pseudo est déjà utilisé.";
-
-                        pseudoEtat.style.color =
-                            "#ff5252";
-
-                    }
-
-
-                    pseudo?.focus();
 
                     return;
 
@@ -1378,11 +1455,7 @@ if(saveProfile){
 
             catch(error){
 
-                console.error(
-                    "Erreur lors de la vérification du pseudo :",
-                    error
-                );
-
+                console.error(error);
 
                 alert(
                     "Impossible de vérifier le pseudo."
@@ -1393,17 +1466,9 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
-               RESEAUX
-            ========================================== */
-
-            const listeReseaux =
-                recupererReseaux();
-
-
-            /* ==========================================
+            /* =================================================
                DONNEES
-            ========================================== */
+            ================================================= */
 
             const donneesProfil = {
 
@@ -1426,7 +1491,7 @@ if(saveProfile){
                     longue,
 
                 reseaux:
-                    listeReseaux,
+                    recupererReseaux(),
 
                 videoYoutube:
                     video,
@@ -1440,9 +1505,9 @@ if(saveProfile){
             };
 
 
-            /* ==========================================
-               SAUVEGARDE FIRESTORE
-            ========================================== */
+            /* =================================================
+               SAUVEGARDE
+            ================================================= */
 
             try{
 
@@ -1471,11 +1536,6 @@ if(saveProfile){
                 );
 
 
-                console.log(
-                    "Profil enregistré avec succès."
-                );
-
-
                 saveProfile.textContent =
                     "✅ Profil enregistré !";
 
@@ -1498,13 +1558,13 @@ if(saveProfile){
             catch(error){
 
                 console.error(
-                    "Erreur lors de la sauvegarde :",
+                    "Erreur sauvegarde profil :",
                     error
                 );
 
 
                 alert(
-                    "Une erreur est survenue lors de l'enregistrement du profil."
+                    "Une erreur est survenue lors de l'enregistrement."
                 );
 
 

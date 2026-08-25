@@ -101,6 +101,7 @@ body{
     cursor:pointer;
 
     font-size:15px;
+
     font-weight:bold;
 
     transition:.2s ease;
@@ -240,22 +241,7 @@ h1{
 
 
 /* =========================================================
-   SOUS-TITRES
-========================================================= */
-
-.section h3{
-
-    font-size:16px;
-
-    margin-bottom:12px;
-
-    color:#ddd;
-
-}
-
-
-/* =========================================================
-   LABELS
+   LABEL
 ========================================================= */
 
 label{
@@ -379,16 +365,11 @@ textarea{
 
     transform:scale(1.05);
 
-    box-shadow:
-        0 0 10px white,
-        0 0 25px rgba(255,255,255,.8),
-        0 0 45px rgba(255,255,255,.3);
-
 }
 
 
 /* =========================================================
-   ETAT PSEUDO
+   PSEUDO
 ========================================================= */
 
 #pseudoEtat{
@@ -421,8 +402,56 @@ textarea{
 }
 
 
+.blocReseau{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    background:#1e1e1e;
+
+    border:1px solid #383838;
+
+    border-radius:12px;
+
+}
+
+
+.blocReseau input{
+
+    margin:0;
+
+}
+
+
+.blocReseau button{
+
+    flex-shrink:0;
+
+    padding:10px 14px;
+
+    background:#333;
+
+    border:1px solid #555;
+
+}
+
+
+.blocReseau button:hover{
+
+    background:#ff1744;
+
+    border-color:#ff1744;
+
+}
+
+
 /* =========================================================
-   BOUTONS GENERAUX
+   BOUTONS
 ========================================================= */
 
 button{
@@ -470,17 +499,6 @@ button:active{
 }
 
 
-button:disabled{
-
-    opacity:.6;
-
-    cursor:not-allowed;
-
-    transform:none;
-
-}
-
-
 /* =========================================================
    AJOUTER RESEAU
 ========================================================= */
@@ -491,10 +509,6 @@ button:disabled{
 
     border:1px solid #484848;
 
-    color:white;
-
-    padding:10px 17px;
-
 }
 
 
@@ -502,15 +516,13 @@ button:disabled{
 
     background:#404040;
 
-    border-color:#555;
-
     box-shadow:none;
 
 }
 
 
 /* =========================================================
-   CATEGORIES SELECTIONNEES
+   CATEGORIES
 ========================================================= */
 
 #categoriesSelectionnees{
@@ -523,73 +535,115 @@ button:disabled{
 
     min-height:25px;
 
-    padding:5px 0 12px;
+    padding:5px 0 15px;
+
+}
+
+
+.categorie-selectionnee{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:8px 13px;
+
+    border-radius:20px;
+
+    background:#3ea6ff;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+
+.categorie-selectionnee:hover{
+
+    background:#ff5252;
+
+    transform:translateY(-2px);
 
 }
 
 
 /* =========================================================
-   RECHERCHE DES CATEGORIES
+   GROUPES DE CATEGORIES
 ========================================================= */
 
-#rechercheCategories{
+.categories-groupes{
 
-    width:100%;
+    display:flex;
 
-    margin-top:5px;
-    margin-bottom:18px;
+    flex-direction:column;
 
-    padding:13px 16px;
-
-    background:#181818;
-
-    border:1px solid #3b3b3b;
-
-    border-radius:12px;
-
-    color:white;
-
-    font-size:15px;
-
-    outline:none;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+    gap:25px;
 
 }
 
 
-#rechercheCategories:focus{
+.categorie-groupe{
+
+    background:#1d1d1d;
+
+    border:1px solid #363636;
+
+    border-radius:15px;
+
+    padding:18px;
+
+}
+
+
+.categorie-groupe-titre{
+
+    font-size:18px;
+
+    margin-bottom:12px;
+
+    color:#fff;
+
+}
+
+
+/* =========================================================
+   RECHERCHE CATEGORIE
+========================================================= */
+
+.recherche-categorie{
+
+    width:100%;
+
+    margin:0 0 15px;
+
+    padding:11px 14px;
+
+    background:#121212;
+
+    border:1px solid #3b3b3b;
+
+    border-radius:10px;
+
+    color:white;
+
+}
+
+
+.recherche-categorie:focus{
 
     border-color:#3ea6ff;
 
     box-shadow:
-        0 0 0 3px rgba(62,166,255,.12);
-
-}
-
-
-#rechercheCategories::placeholder{
-
-    color:#777;
-
-}
-
-
-/* =========================================================
-   CONTAINER CATEGORIES
-========================================================= */
-
-#categoriesContainer{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:9px;
-
-    margin-top:10px;
+        0 0 0 3px rgba(62,166,255,.1);
 
 }
 
@@ -598,7 +652,18 @@ button:disabled{
    BOUTONS CATEGORIES
 ========================================================= */
 
-#categoriesContainer .categorie{
+.categories-liste{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+
+}
+
+
+.categories-liste .categorie{
 
     margin:0;
 
@@ -621,7 +686,7 @@ button:disabled{
 }
 
 
-#categoriesContainer .categorie:hover{
+.categories-liste .categorie:hover{
 
     background:#3a3a3a;
 
@@ -629,46 +694,31 @@ button:disabled{
 
     color:white;
 
-    box-shadow:
-        0 0 12px rgba(62,166,255,.15);
-
 }
 
 
-/* =========================================================
-   CATEGORIE SELECTIONNEE
-========================================================= */
-
-#categoriesContainer
+.categories-liste
 .categorie.selectionnee{
 
-    background:#3ea6ff !important;
+    background:#3ea6ff;
 
-    border-color:#3ea6ff !important;
+    border-color:#3ea6ff;
 
-    color:white !important;
+    color:white;
 
     box-shadow:
-        0 0 12px rgba(62,166,255,.3) !important;
+        0 0 12px rgba(62,166,255,.3);
 
 }
 
 
-/* =========================================================
-   AUCUNE CATEGORIE
-========================================================= */
-
-.messageCategories{
-
-    width:100%;
-
-    text-align:center;
-
-    padding:15px;
+.categories-aucun-resultat{
 
     color:#777;
 
     font-size:14px;
+
+    padding:8px 0;
 
 }
 
@@ -687,86 +737,7 @@ hr{
 
 
 /* =========================================================
-   VIDEO
-========================================================= */
-
-#videoYoutube{
-
-    margin-bottom:0;
-
-}
-
-
-/* =========================================================
-   BLOC RESEAU
-========================================================= */
-
-.blocReseau{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:12px;
-
-    background:#1e1e1e;
-
-    border:1px solid #383838;
-
-    border-radius:12px;
-
-}
-
-
-.blocReseau input{
-
-    margin:0;
-
-}
-
-
-.blocReseau input:first-child{
-
-    flex:0 0 30%;
-
-}
-
-
-.blocReseau input:nth-child(2){
-
-    flex:1;
-
-}
-
-
-.blocReseau button{
-
-    flex-shrink:0;
-
-    padding:10px 14px;
-
-    background:#333;
-
-    border:1px solid #555;
-
-}
-
-
-.blocReseau button:hover{
-
-    background:#ff1744;
-
-    border-color:#ff1744;
-
-    box-shadow:none;
-
-}
-
-
-/* =========================================================
-   BOUTON SAUVEGARDE
+   SAUVEGARDE
 ========================================================= */
 
 .save-container{
@@ -794,19 +765,6 @@ hr{
 
     background:#3ea6ff;
 
-    box-shadow:
-        0 5px 20px rgba(62,166,255,.18);
-
-}
-
-
-#saveProfile:hover{
-
-    background:#61b8ff;
-
-    box-shadow:
-        0 8px 28px rgba(62,166,255,.3);
-
 }
 
 
@@ -821,15 +779,6 @@ hr{
         height:58px;
 
         padding:0 12px;
-
-    }
-
-
-    #deconnexion{
-
-        padding:9px 14px;
-
-        font-size:14px;
 
     }
 
@@ -857,33 +806,10 @@ hr{
     }
 
 
-    .section h2{
-
-        font-size:19px;
-
-    }
-
-
     #photo{
 
         width:120px;
         height:120px;
-
-    }
-
-
-    #categoriesContainer{
-
-        gap:7px;
-
-    }
-
-
-    #categoriesContainer .categorie{
-
-        padding:8px 12px;
-
-        font-size:13px;
 
     }
 
@@ -899,7 +825,7 @@ hr{
 
     .blocReseau input{
 
-        width:100% !important;
+        width:100%;
 
     }
 
@@ -922,27 +848,7 @@ hr{
 }
 
 
-/* =========================================================
-   PETITS TELEPHONES
-========================================================= */
-
 @media(max-width:450px){
-
-    #barreCompte{
-
-        padding:0 10px;
-
-    }
-
-
-    #deconnexion{
-
-        font-size:13px;
-
-        padding:8px 12px;
-
-    }
-
 
     main{
 
@@ -958,13 +864,6 @@ hr{
     }
 
 
-    .sousTitre{
-
-        font-size:14px;
-
-    }
-
-
     .section{
 
         padding:17px;
@@ -972,10 +871,9 @@ hr{
     }
 
 
-    input,
-    textarea{
+    .categorie-groupe{
 
-        font-size:14px;
+        padding:14px;
 
     }
 
@@ -989,25 +887,19 @@ hr{
 <body>
 
 
-<!-- =======================================================
-     BARRE DU COMPTE
-======================================================= -->
-
 <div id="barreCompte">
 
     <button
         id="deconnexion"
         type="button"
     >
+
         🚪 Déconnexion
+
     </button>
 
 </div>
 
-
-<!-- =======================================================
-     CONTENU
-======================================================= -->
 
 <main>
 
@@ -1032,7 +924,6 @@ hr{
             📸 Photo de profil
         </h2>
 
-
         <img
             id="photo"
             alt="Photo de profil"
@@ -1051,9 +942,7 @@ hr{
             👤 Pseudo
         </h2>
 
-
         <p id="pseudoEtat"></p>
-
 
         <input
             id="pseudo"
@@ -1076,11 +965,9 @@ hr{
             ✨ Présentation
         </h2>
 
-
         <label for="descriptionCourte">
             Description courte
         </label>
-
 
         <input
             id="descriptionCourte"
@@ -1088,11 +975,9 @@ hr{
             placeholder="Une courte phrase pour te présenter..."
         >
 
-
         <label for="descriptionLongue">
             Description complète
         </label>
-
 
         <textarea
             id="descriptionLongue"
@@ -1114,9 +999,7 @@ hr{
             🌐 Réseaux sociaux
         </h2>
 
-
         <div id="reseaux"></div>
-
 
         <button
             type="button"
@@ -1138,11 +1021,9 @@ hr{
             🎬 Vidéo mise en avant
         </h2>
 
-
         <label for="videoYoutube">
             Lien de ta vidéo YouTube
         </label>
-
 
         <input
             type="url"
@@ -1164,41 +1045,27 @@ hr{
         </h2>
 
 
-        <h3>
+        <h3 style="
+            font-size:16px;
+            margin-bottom:12px;
+            color:#ddd;
+        ">
             Catégories sélectionnées
         </h3>
 
 
+        <div id="categoriesSelectionnees"></div>
+
+
+        <hr style="margin:20px 0;">
+
+
         <div
-            id="categoriesSelectionnees"
-        ></div>
-
-
-        <hr
-            style="margin:20px 0;"
+            id="categoriesContainer"
+            class="categories-groupes"
         >
 
-
-        <h3>
-            Choisir tes catégories
-        </h3>
-
-
-        <!-- =================================================
-             SEULE BARRE DE RECHERCHE DU SITE
-        ================================================== -->
-
-        <input
-            type="search"
-            id="rechercheCategories"
-            placeholder="🔎 Rechercher une catégorie..."
-            autocomplete="off"
-        >
-
-
-        <div id="categoriesContainer">
-
-            Chargement...
+            Chargement des catégories...
 
         </div>
 
@@ -1206,7 +1073,7 @@ hr{
 
 
     <!-- =====================================================
-         ENREGISTREMENT
+         SAUVEGARDE
     ====================================================== -->
 
     <div class="save-container">
