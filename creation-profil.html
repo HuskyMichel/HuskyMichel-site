@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 
 <head>
@@ -13,20 +12,11 @@
 
 <style>
 
-/* =========================================================
-   RESET
-========================================================= */
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
-
-
-/* =========================================================
-   BODY
-========================================================= */
 
 body{
 
@@ -41,14 +31,9 @@ body{
         );
 
     color:white;
+
     min-height:100vh;
-
 }
-
-
-/* =========================================================
-   BARRE DU HAUT
-========================================================= */
 
 #barreCompte{
 
@@ -72,13 +57,7 @@ body{
 
     box-shadow:
         0 5px 25px rgba(0,0,0,.4);
-
 }
-
-
-/* =========================================================
-   DECONNEXION
-========================================================= */
 
 #deconnexion{
 
@@ -101,52 +80,39 @@ body{
     cursor:pointer;
 
     font-size:15px;
+
     font-weight:bold;
 
     transition:.2s ease;
-
 }
-
 
 #deconnexion:hover{
 
     background:#3a3a3a;
+
     border-color:#555;
 
     transform:translateY(-2px);
 
     box-shadow:
         0 6px 18px rgba(0,0,0,.4);
-
 }
-
 
 #deconnexion:active{
 
     transform:scale(.96);
-
 }
-
-
-/* =========================================================
-   CONTENU
-========================================================= */
 
 main{
 
     width:100%;
+
     max-width:900px;
 
     margin:auto;
 
     padding:45px 30px 80px;
-
 }
-
-
-/* =========================================================
-   TITRE
-========================================================= */
 
 h1{
 
@@ -167,9 +133,7 @@ h1{
 
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-
 }
-
 
 .sousTitre{
 
@@ -180,13 +144,7 @@ h1{
     font-size:15px;
 
     margin-bottom:40px;
-
 }
-
-
-/* =========================================================
-   SECTIONS
-========================================================= */
 
 .section{
 
@@ -212,9 +170,7 @@ h1{
         transform .2s ease,
         border-color .2s ease,
         box-shadow .2s ease;
-
 }
-
 
 .section:hover{
 
@@ -224,22 +180,14 @@ h1{
 
     box-shadow:
         0 12px 35px rgba(0,0,0,.3);
-
 }
-
 
 .section h2{
 
     margin-bottom:20px;
 
     font-size:21px;
-
 }
-
-
-/* =========================================================
-   LABEL
-========================================================= */
 
 label{
 
@@ -252,13 +200,7 @@ label{
     font-weight:bold;
 
     margin-bottom:8px;
-
 }
-
-
-/* =========================================================
-   INPUTS
-========================================================= */
 
 input,
 textarea{
@@ -268,6 +210,7 @@ textarea{
     padding:13px 15px;
 
     margin-top:8px;
+
     margin-bottom:16px;
 
     border-radius:11px;
@@ -288,9 +231,7 @@ textarea{
         border-color .2s ease,
         box-shadow .2s ease,
         background .2s ease;
-
 }
-
 
 input:focus,
 textarea:focus{
@@ -301,17 +242,13 @@ textarea:focus{
 
     box-shadow:
         0 0 0 3px rgba(62,166,255,.12);
-
 }
-
 
 input::placeholder,
 textarea::placeholder{
 
     color:#777;
-
 }
-
 
 textarea{
 
@@ -320,13 +257,7 @@ textarea{
     min-height:130px;
 
     line-height:1.5;
-
 }
-
-
-/* =========================================================
-   PHOTO
-========================================================= */
 
 #photo{
 
@@ -353,20 +284,12 @@ textarea{
     transition:
         transform .25s ease,
         box-shadow .25s ease;
-
 }
-
 
 #photo:hover{
 
     transform:scale(1.05);
-
 }
-
-
-/* =========================================================
-   PSEUDO
-========================================================= */
 
 #pseudoEtat{
 
@@ -377,29 +300,23 @@ textarea{
     color:#999;
 
     font-size:14px;
-
 }
-
-
-/* =========================================================
-   RESEAUX
-========================================================= */
 
 #reseaux{
 
     display:flex;
+
     flex-direction:column;
 
     gap:12px;
 
     margin-bottom:15px;
-
 }
-
 
 .blocReseau{
 
     display:flex;
+
     align-items:center;
 
     gap:10px;
@@ -411,16 +328,12 @@ textarea{
     border:1px solid #383838;
 
     border-radius:12px;
-
 }
-
 
 .blocReseau input{
 
     margin:0;
-
 }
-
 
 .blocReseau button{
 
@@ -431,22 +344,14 @@ textarea{
     background:#333;
 
     border:1px solid #555;
-
 }
-
 
 .blocReseau button:hover{
 
     background:#ff1744;
 
     border-color:#ff1744;
-
 }
-
-
-/* =========================================================
-   BOUTONS
-========================================================= */
 
 button{
 
@@ -470,9 +375,7 @@ button{
         background .2s ease,
         transform .2s ease,
         box-shadow .2s ease;
-
 }
-
 
 button:hover{
 
@@ -482,46 +385,40 @@ button:hover{
 
     box-shadow:
         0 5px 18px rgba(62,166,255,.25);
-
 }
-
 
 button:active{
 
     transform:scale(.97);
-
 }
 
+button:disabled{
 
-/* =========================================================
-   AJOUTER RESEAU
-========================================================= */
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
 
 #ajouterReseau{
 
     background:#333;
 
     border:1px solid #484848;
-
 }
-
 
 #ajouterReseau:hover{
 
     background:#404040;
 
     box-shadow:none;
-
 }
-
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
 
 #categoriesSelectionnees{
 
     display:flex;
+
     flex-wrap:wrap;
 
     gap:9px;
@@ -529,13 +426,12 @@ button:active{
     min-height:25px;
 
     padding:5px 0 15px;
-
 }
-
 
 .categorie-selectionnee{
 
     display:inline-flex;
+
     align-items:center;
 
     gap:6px;
@@ -549,37 +445,29 @@ button:active{
     color:white;
 
     font-size:14px;
+
     font-weight:bold;
 
     cursor:pointer;
 
     transition:.2s ease;
-
 }
-
 
 .categorie-selectionnee:hover{
 
     background:#ff5252;
 
     transform:translateY(-2px);
-
 }
-
-
-/* =========================================================
-   GROUPES
-========================================================= */
 
 .categories-groupes{
 
     display:flex;
+
     flex-direction:column;
 
     gap:25px;
-
 }
-
 
 .categorie-groupe{
 
@@ -590,9 +478,7 @@ button:active{
     border-radius:15px;
 
     padding:18px;
-
 }
-
 
 .categorie-groupe-titre{
 
@@ -601,13 +487,7 @@ button:active{
     margin-bottom:12px;
 
     color:#fff;
-
 }
-
-
-/* =========================================================
-   RECHERCHE
-========================================================= */
 
 .recherche-categorie{
 
@@ -624,9 +504,7 @@ button:active{
     border-radius:10px;
 
     color:white;
-
 }
-
 
 .recherche-categorie:focus{
 
@@ -634,23 +512,16 @@ button:active{
 
     box-shadow:
         0 0 0 3px rgba(62,166,255,.1);
-
 }
-
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
 
 .categories-liste{
 
     display:flex;
+
     flex-wrap:wrap;
 
     gap:9px;
-
 }
-
 
 .categories-liste .categorie{
 
@@ -667,12 +538,11 @@ button:active{
     color:#ddd;
 
     font-size:14px;
+
     font-weight:bold;
 
     box-shadow:none;
-
 }
-
 
 .categories-liste .categorie:hover{
 
@@ -681,12 +551,9 @@ button:active{
     border-color:#3ea6ff;
 
     color:white;
-
 }
 
-
-.categories-liste
-.categorie.selectionnee{
+.categories-liste .categorie.selectionnee{
 
     background:#3ea6ff;
 
@@ -696,9 +563,7 @@ button:active{
 
     box-shadow:
         0 0 12px rgba(62,166,255,.3);
-
 }
-
 
 .categories-aucun-resultat{
 
@@ -707,26 +572,14 @@ button:active{
     font-size:14px;
 
     padding:8px 0;
-
 }
-
-
-/* =========================================================
-   SEPARATEUR
-========================================================= */
 
 hr{
 
     border:none;
 
     border-top:1px solid #444;
-
 }
-
-
-/* =========================================================
-   SAUVEGARDE
-========================================================= */
 
 .save-container{
 
@@ -735,14 +588,13 @@ hr{
     flex-direction:column;
 
     justify-content:center;
-    align-items:center;
 
-    margin-top:35px;
+    align-items:center;
 
     gap:15px;
 
+    margin-top:35px;
 }
-
 
 #saveProfile{
 
@@ -755,25 +607,21 @@ hr{
     font-size:17px;
 
     background:#3ea6ff;
-
 }
 
 
 /* =========================================================
-   SUPPRESSION COMPTE
+   SUPPRESSION DU COMPTE
 ========================================================= */
 
 #suppressionCompteContainer{
 
-    display:none;
+    display:flex;
 
     justify-content:center;
-    align-items:center;
 
     width:100%;
-
 }
-
 
 #supprimerCompte{
 
@@ -783,20 +631,18 @@ hr{
 
     border:1px solid #6b2929;
 
+    min-width:240px;
+
     padding:13px 22px;
 
     border-radius:12px;
-
-    cursor:pointer;
 
     font-size:15px;
 
     font-weight:bold;
 
-    box-shadow:none;
-
+    transition:.2s ease;
 }
-
 
 #supprimerCompte:hover{
 
@@ -807,19 +653,22 @@ hr{
     color:#ff8a8a;
 
     box-shadow:
-        0 5px 18px rgba(255,40,40,.15);
-
+        0 5px 18px rgba(255,50,50,.15);
 }
-
 
 #supprimerCompte:disabled{
 
-    opacity:.6;
+    background:#291717;
+
+    color:#9a5555;
+
+    border-color:#4b2929;
 
     cursor:not-allowed;
 
     transform:none;
 
+    box-shadow:none;
 }
 
 
@@ -832,343 +681,268 @@ hr{
     #barreCompte{
 
         height:58px;
+
         padding:0 12px;
-
     }
-
 
     main{
 
         padding:30px 15px 60px;
-
     }
-
 
     h1{
 
         font-size:31px;
-
     }
-
 
     .section{
 
         padding:20px;
+
         border-radius:15px;
-
     }
-
 
     #photo{
 
         width:120px;
         height:120px;
-
     }
-
 
     .blocReseau{
 
         flex-direction:column;
+
         align-items:stretch;
-
     }
-
 
     .blocReseau input{
 
         width:100%;
-
     }
-
 
     .blocReseau button{
 
         width:100%;
-
     }
 
-
-    #saveProfile{
-
-        width:100%;
-        max-width:350px;
-
-    }
-
-
+    #saveProfile,
     #supprimerCompte{
 
         width:100%;
+
         max-width:350px;
-
     }
-
 }
-
 
 @media(max-width:450px){
 
     main{
 
         padding:25px 10px 50px;
-
     }
-
 
     h1{
 
         font-size:27px;
-
     }
-
 
     .section{
 
         padding:17px;
-
     }
-
 
     .categorie-groupe{
 
         padding:14px;
-
     }
-
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div id="barreCompte">
 
-```
-<button
-    id="deconnexion"
-    type="button"
->
-    🚪 Déconnexion
-</button>
-```
+    <button
+        id="deconnexion"
+        type="button"
+    >
+        🚪 Déconnexion
+    </button>
 
 </div>
+
 
 <main>
 
-```
-<h1>
-    Créer mon profil
-</h1>
+
+    <h1>
+        Créer mon profil
+    </h1>
 
 
-<p class="sousTitre">
-    Personnalise ton profil et présente-toi aux autres.
-</p>
+    <p class="sousTitre">
+        Personnalise ton profil et présente-toi aux autres.
+    </p>
 
 
-<!-- =====================================================
-     PHOTO
-====================================================== -->
+    <div class="section">
 
-<div class="section">
+        <h2>
+            📸 Photo de profil
+        </h2>
 
-    <h2>
-        📸 Photo de profil
-    </h2>
-
-    <img
-        id="photo"
-        alt="Photo de profil"
-    >
-
-</div>
-
-
-<!-- =====================================================
-     PSEUDO
-====================================================== -->
-
-<div class="section">
-
-    <h2>
-        👤 Pseudo
-    </h2>
-
-    <p id="pseudoEtat"></p>
-
-    <input
-        id="pseudo"
-        type="text"
-        maxlength="30"
-        placeholder="Votre pseudo"
-        autocomplete="off"
-    >
-
-</div>
-
-
-<!-- =====================================================
-     PRESENTATION
-====================================================== -->
-
-<div class="section">
-
-    <h2>
-        ✨ Présentation
-    </h2>
-
-    <label for="descriptionCourte">
-        Description courte
-    </label>
-
-    <input
-        id="descriptionCourte"
-        maxlength="50"
-        placeholder="Une courte phrase pour te présenter..."
-    >
-
-    <label for="descriptionLongue">
-        Description complète
-    </label>
-
-    <textarea
-        id="descriptionLongue"
-        maxlength="1000"
-        rows="8"
-        placeholder="Présente-toi, parle de tes passions, de ton contenu..."
-    ></textarea>
-
-</div>
-
-
-<!-- =====================================================
-     RESEAUX
-====================================================== -->
-
-<div class="section">
-
-    <h2>
-        🌐 Réseaux sociaux
-    </h2>
-
-    <div id="reseaux"></div>
-
-    <button
-        type="button"
-        id="ajouterReseau"
-    >
-        ＋ Ajouter un réseau
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     VIDEO
-====================================================== -->
-
-<div class="section">
-
-    <h2>
-        🎬 Vidéo mise en avant
-    </h2>
-
-    <label for="videoYoutube">
-        Lien de ta vidéo YouTube
-    </label>
-
-    <input
-        type="url"
-        id="videoYoutube"
-        placeholder="https://www.youtube.com/watch?v=..."
-    >
-
-</div>
-
-
-<!-- =====================================================
-     CATEGORIES
-====================================================== -->
-
-<div class="section">
-
-    <h2>
-        🏷️ Catégories
-    </h2>
-
-
-    <h3 style="
-        font-size:16px;
-        margin-bottom:12px;
-        color:#ddd;
-    ">
-        Catégories sélectionnées
-    </h3>
-
-
-    <div id="categoriesSelectionnees"></div>
-
-
-    <hr style="margin:20px 0;">
-
-
-    <div
-        id="categoriesContainer"
-        class="categories-groupes"
-    >
-
-        Chargement des catégories...
+        <img
+            id="photo"
+            alt="Photo de profil"
+        >
 
     </div>
 
-</div>
+
+    <div class="section">
+
+        <h2>
+            👤 Pseudo
+        </h2>
+
+        <p id="pseudoEtat"></p>
+
+        <input
+            id="pseudo"
+            type="text"
+            maxlength="30"
+            placeholder="Votre pseudo"
+            autocomplete="off"
+        >
+
+    </div>
 
 
-<!-- =====================================================
-     BOUTONS
-====================================================== -->
+    <div class="section">
 
-<div class="save-container">
+        <h2>
+            ✨ Présentation
+        </h2>
 
-    <button
-        id="saveProfile"
-        type="button"
-    >
-        💾 Créer mon profil
-    </button>
+        <label for="descriptionCourte">
+            Description courte
+        </label>
+
+        <input
+            id="descriptionCourte"
+            maxlength="50"
+            placeholder="Une courte phrase pour te présenter..."
+        >
+
+        <label for="descriptionLongue">
+            Description complète
+        </label>
+
+        <textarea
+            id="descriptionLongue"
+            maxlength="1000"
+            rows="8"
+            placeholder="Présente-toi, parle de tes passions, de ton contenu..."
+        ></textarea>
+
+    </div>
 
 
-    <!--
-        Le bouton existe directement dans le HTML.
-        Le JavaScript décide simplement s'il doit être affiché.
-    -->
+    <div class="section">
 
-    <div
-        id="suppressionCompteContainer"
-    >
+        <h2>
+            🌐 Réseaux sociaux
+        </h2>
+
+        <div id="reseaux"></div>
 
         <button
-            id="supprimerCompte"
             type="button"
+            id="ajouterReseau"
         >
-            🗑️ Supprimer mon compte
+            ＋ Ajouter un réseau
         </button>
 
     </div>
 
-</div>
-```
+
+    <div class="section">
+
+        <h2>
+            🎬 Vidéo mise en avant
+        </h2>
+
+        <label for="videoYoutube">
+            Lien de ta vidéo YouTube
+        </label>
+
+        <input
+            type="url"
+            id="videoYoutube"
+            placeholder="https://www.youtube.com/watch?v=..."
+        >
+
+    </div>
+
+
+    <div class="section">
+
+        <h2>
+            🏷️ Catégories
+        </h2>
+
+        <h3 style="
+            font-size:16px;
+            margin-bottom:12px;
+            color:#ddd;
+        ">
+            Catégories sélectionnées
+        </h3>
+
+        <div id="categoriesSelectionnees"></div>
+
+        <hr style="margin:20px 0;">
+
+        <div
+            id="categoriesContainer"
+            class="categories-groupes"
+        >
+            Chargement des catégories...
+        </div>
+
+    </div>
+
+
+    <div class="save-container">
+
+        <button
+            id="saveProfile"
+            type="button"
+        >
+            💾 Créer mon profil
+        </button>
+
+        <!--
+            Le bouton supprimer sera créé automatiquement
+            ici uniquement si un profil existe déjà.
+        -->
+
+    </div>
+
 
 </main>
+
 
 <script
     type="module"
     src="creer-profil.js"
 ></script>
+
 
 </body>
 
