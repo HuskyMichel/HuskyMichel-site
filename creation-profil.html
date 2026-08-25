@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Créer mon profil</title>
@@ -111,8 +110,7 @@ body{
 
     font-weight:bold;
 
-    transition:
-        .2s ease;
+    transition:.2s ease;
 
 }
 
@@ -156,7 +154,7 @@ main{
 
 
 /* =========================================================
-   TITRE
+   TITRE PRINCIPAL
 ========================================================= */
 
 h1{
@@ -242,7 +240,7 @@ h1{
 
 .section h2{
 
-    margin-bottom:20px;
+    margin-bottom:14px;
 
     font-size:21px;
 
@@ -250,7 +248,61 @@ h1{
 
 
 /* =========================================================
-   LABEL
+   BARRES DE RECHERCHE DES SECTIONS
+========================================================= */
+
+.recherche-section{
+
+    width:100%;
+
+    margin:0 0 20px;
+
+    padding:11px 15px;
+
+    background:#181818;
+
+    color:white;
+
+    border:1px solid #3a3a3a;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:14px;
+
+    transition:
+
+        border-color .2s ease,
+
+        box-shadow .2s ease,
+
+        background .2s ease;
+
+}
+
+
+.recherche-section::placeholder{
+
+    color:#707070;
+
+}
+
+
+.recherche-section:focus{
+
+    background:#151515;
+
+    border-color:#3ea6ff;
+
+    box-shadow:
+        0 0 0 3px rgba(62,166,255,.12);
+
+}
+
+
+/* =========================================================
+   LABELS
 ========================================================= */
 
 label{
@@ -425,7 +477,7 @@ textarea{
 
 
 /* =========================================================
-   BOUTONS GENERAUX
+   BOUTONS
 ========================================================= */
 
 button{
@@ -503,7 +555,7 @@ button:active{
 
 
 /* =========================================================
-   CATEGORIES
+   CATEGORIES SELECTIONNEES
 ========================================================= */
 
 #categoriesSelectionnees{
@@ -596,6 +648,35 @@ button:active{
     box-shadow:
         0 0 12px
         rgba(62,166,255,.3) !important;
+
+}
+
+
+/* =========================================================
+   TAGS SELECTIONNES
+========================================================= */
+
+.categorie-selectionnee{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:8px 12px;
+
+    border-radius:20px;
+
+    background:#3ea6ff;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    cursor:pointer;
 
 }
 
@@ -721,6 +802,25 @@ hr{
     border-color:#ff1744;
 
     box-shadow:none;
+
+}
+
+
+/* =========================================================
+   MESSAGE RECHERCHE VIDE
+========================================================= */
+
+.message-recherche{
+
+    width:100%;
+
+    padding:15px;
+
+    text-align:center;
+
+    color:#777;
+
+    font-size:14px;
 
 }
 
@@ -923,24 +1023,16 @@ hr{
 </div>
 
 
-<!-- =======================================================
-     CONTENU PRINCIPAL
-======================================================= -->
-
 <main>
 
 
     <h1>
-
         Créer mon profil
-
     </h1>
 
 
     <p class="sousTitre">
-
         Personnalise ton profil et présente-toi aux autres.
-
     </p>
 
 
@@ -951,11 +1043,16 @@ hr{
     <div class="section">
 
         <h2>
-
             📸 Photo de profil
-
         </h2>
 
+        <input
+            type="search"
+            class="recherche-section"
+            placeholder="🔎 Rechercher dans cette section..."
+            data-search-section="photo"
+            autocomplete="off"
+        >
 
         <img
             id="photo"
@@ -972,14 +1069,18 @@ hr{
     <div class="section">
 
         <h2>
-
             👤 Pseudo
-
         </h2>
 
+        <input
+            type="search"
+            class="recherche-section"
+            placeholder="🔎 Rechercher un pseudo..."
+            data-search-section="pseudo"
+            autocomplete="off"
+        >
 
         <p id="pseudoEtat"></p>
-
 
         <input
             id="pseudo"
@@ -999,18 +1100,20 @@ hr{
     <div class="section">
 
         <h2>
-
             ✨ Présentation
-
         </h2>
 
+        <input
+            type="search"
+            class="recherche-section"
+            placeholder="🔎 Rechercher dans ta présentation..."
+            data-search-section="presentation"
+            autocomplete="off"
+        >
 
         <label for="descriptionCourte">
-
             Description courte
-
         </label>
-
 
         <input
             id="descriptionCourte"
@@ -1018,13 +1121,9 @@ hr{
             placeholder="Une courte phrase pour te présenter..."
         >
 
-
         <label for="descriptionLongue">
-
             Description complète
-
         </label>
-
 
         <textarea
             id="descriptionLongue"
@@ -1043,22 +1142,24 @@ hr{
     <div class="section">
 
         <h2>
-
             🌐 Réseaux sociaux
-
         </h2>
 
+        <input
+            type="search"
+            id="rechercheReseaux"
+            class="recherche-section"
+            placeholder="🔎 Rechercher un réseau..."
+            autocomplete="off"
+        >
 
         <div id="reseaux"></div>
-
 
         <button
             type="button"
             id="ajouterReseau"
         >
-
             ＋ Ajouter un réseau
-
         </button>
 
     </div>
@@ -1071,18 +1172,20 @@ hr{
     <div class="section">
 
         <h2>
-
             🎬 Vidéo mise en avant
-
         </h2>
 
+        <input
+            type="search"
+            class="recherche-section"
+            placeholder="🔎 Rechercher une vidéo..."
+            data-search-section="video"
+            autocomplete="off"
+        >
 
         <label for="videoYoutube">
-
             Lien de ta vidéo YouTube
-
         </label>
-
 
         <input
             type="url"
@@ -1100,45 +1203,40 @@ hr{
     <div class="section">
 
         <h2>
-
             🏷️ Catégories
-
         </h2>
 
+        <input
+            type="search"
+            id="rechercheCategories"
+            class="recherche-section"
+            placeholder="🔎 Rechercher une catégorie..."
+            autocomplete="off"
+        >
 
         <h3 style="
             font-size:16px;
             margin-bottom:12px;
             color:#ddd;
         ">
-
             Catégories sélectionnées
-
         </h3>
-
 
         <div
             id="categoriesSelectionnees"
         ></div>
 
-
         <hr
-            style="
-                margin:20px 0;
-            "
+            style="margin:20px 0;"
         >
-
 
         <h3 style="
             font-size:16px;
             margin-bottom:8px;
             color:#aaa;
         ">
-
             Choisir tes catégories
-
         </h3>
-
 
         <div id="categoriesContainer">
 
@@ -1159,9 +1257,7 @@ hr{
             id="saveProfile"
             type="button"
         >
-
             💾 Créer mon profil
-
         </button>
 
     </div>
@@ -1169,10 +1265,6 @@ hr{
 
 </main>
 
-
-<!-- =======================================================
-     JAVASCRIPT
-======================================================= -->
 
 <script
     type="module"

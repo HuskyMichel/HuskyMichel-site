@@ -24,6 +24,8 @@ let utilisateurActuel = null;
 
 let categoriesDisponibles = [];
 
+let groupesCategories = [];
+
 let categoriesSelectionnees = [];
 
 let profilExiste = false;
@@ -61,9 +63,7 @@ const categoriesContainer =
     document.getElementById("categoriesContainer");
 
 const categoriesSelectionneesContainer =
-    document.getElementById(
-        "categoriesSelectionnees"
-    );
+    document.getElementById("categoriesSelectionnees");
 
 const saveProfile =
     document.getElementById("saveProfile");
@@ -73,7 +73,14 @@ const deconnexion =
 
 
 /* =========================================================
-   VERIFICATION DES ELEMENTS
+   VARIABLES RECHERCHE CATEGORIES
+========================================================= */
+
+const recherchesCategories = {};
+
+
+/* =========================================================
+   CHARGEMENT
 ========================================================= */
 
 console.log(
@@ -82,24 +89,19 @@ console.log(
 
 
 /* =========================================================
-   AFFICHER LA PHOTO GOOGLE
+   AFFICHER PHOTO UTILISATEUR
 ========================================================= */
 
 function afficherPhotoUtilisateur(user){
 
-    if(
-        !photo ||
-        !user
-    ){
+    if(!photo || !user){
 
         return;
 
     }
 
 
-    if(
-        user.photoURL
-    ){
+    if(user.photoURL){
 
         photo.src =
             user.photoURL.replace(
@@ -162,7 +164,7 @@ if(deconnexion){
 
 
 /* =========================================================
-   ETAT DE CONNEXION
+   ETAT AUTHENTIFICATION
 ========================================================= */
 
 onAuthStateChanged(
@@ -173,16 +175,11 @@ onAuthStateChanged(
             user;
 
 
-        /* ==============================================
-           PERSONNE NON CONNECTEE
-        ============================================== */
+        /* =========================
+           NON CONNECTE
+        ========================= */
 
         if(!user){
-
-            console.log(
-                "Aucun utilisateur connecté."
-            );
-
 
             alert(
                 "Tu dois être connecté pour créer ton profil."
@@ -198,9 +195,9 @@ onAuthStateChanged(
         }
 
 
-        /* ==============================================
-           UTILISATEUR CONNECTE
-        ============================================== */
+        /* =========================
+           CONNECTE
+        ========================= */
 
         console.log(
             "Utilisateur connecté :",
@@ -213,12 +210,7 @@ onAuthStateChanged(
         );
 
 
-        /* Charger le profil existant */
-
         await chargerProfilExistant();
-
-
-        /* Charger les catégories */
 
         await chargerCategories();
 
@@ -227,14 +219,12 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   CHARGER LE PROFIL EXISTANT
+   CHARGER PROFIL EXISTANT
 ========================================================= */
 
 async function chargerProfilExistant(){
 
-    if(
-        !utilisateurActuel
-    ){
+    if(!utilisateurActuel){
 
         return;
 
@@ -257,13 +247,7 @@ async function chargerProfilExistant(){
             );
 
 
-        /* ==============================================
-           PROFIL EXISTANT
-        ============================================== */
-
-        if(
-            profilSnap.exists()
-        ){
+        if(profilSnap.exists()){
 
             profilExiste =
                 true;
@@ -273,12 +257,6 @@ async function chargerProfilExistant(){
                 profilSnap.data();
 
 
-            console.log(
-                "Profil existant trouvé :",
-                data
-            );
-
-
             /* =========================
                PSEUDO
             ========================= */
@@ -286,8 +264,7 @@ async function chargerProfilExistant(){
             if(pseudo){
 
                 pseudo.value =
-                    data.pseudo ||
-                    "";
+                    data.pseudo || "";
 
             }
 
@@ -299,8 +276,7 @@ async function chargerProfilExistant(){
             if(descriptionCourte){
 
                 descriptionCourte.value =
-                    data.descriptionCourte ||
-                    "";
+                    data.descriptionCourte || "";
 
             }
 
@@ -312,8 +288,7 @@ async function chargerProfilExistant(){
             if(descriptionLongue){
 
                 descriptionLongue.value =
-                    data.descriptionLongue ||
-                    "";
+                    data.descriptionLongue || "";
 
             }
 
@@ -325,8 +300,7 @@ async function chargerProfilExistant(){
             if(videoYoutube){
 
                 videoYoutube.value =
-                    data.videoYoutube ||
-                    "";
+                    data.videoYoutube || "";
 
             }
 
@@ -358,13 +332,11 @@ async function chargerProfilExistant(){
             ){
 
                 data.reseaux.forEach(
-                    (reseau)=>{
+                    reseau=>{
 
                         ajouterBlocReseau(
-                            reseau.type ||
-                            "",
-                            reseau.lien ||
-                            ""
+                            reseau.type || "",
+                            reseau.lien || ""
                         );
 
                     }
@@ -372,10 +344,6 @@ async function chargerProfilExistant(){
 
             }
 
-
-            /* =========================
-               BOUTON
-            ========================= */
 
             if(saveProfile){
 
@@ -393,11 +361,6 @@ async function chargerProfilExistant(){
 
             profilExiste =
                 false;
-
-
-            console.log(
-                "Aucun profil existant."
-            );
 
 
             if(saveProfile){
@@ -429,9 +392,7 @@ async function chargerProfilExistant(){
 
 async function chargerCategories(){
 
-    if(
-        !categoriesContainer
-    ){
+    if(!categoriesContainer){
 
         return;
 
@@ -462,83 +423,182 @@ async function chargerCategories(){
             );
 
 
-        categoriesDisponibles =
-            [];
+        categoriesDisponibles = [];
+
+        groupesCategories = [];
 
 
-        /* ==============================================
-           PARCOURIR LES DOCUMENTS
-        ============================================== */
+        /* =================================================
+           PARCOURIR LES GROUPES
+        ================================================= */
 
         snapshot.forEach(
-            (categorieDoc)=>{
+            categorieDoc=>{
 
                 const data =
                     categorieDoc.data();
 
 
                 /*
-                   Structure prévue :
+                    Le nom du document Firestore
+                    devient le grand titre.
 
-                   categories/
-                       document
-                           liste: [
-                               "Gaming",
-                               "Minecraft",
-                               ...
-                           ]
+                    Exemple :
+
+                    categories/
+                      Gaming
+                        liste: [...]
+
+                      Création
+                        liste: [...]
                 */
 
 
-                if(
-                    Array.isArray(
-                        data.liste
-                    )
-                ){
+                const nomGroupe =
+                    categorieDoc.id;
 
-                    data.liste.forEach(
-                        (categorie)=>{
 
-                            if(
-                                typeof categorie ===
-                                "string"
-                            ){
+                const liste =
+                    Array.isArray(data.liste)
+                    ? data.liste
+                    : [];
 
-                                categoriesDisponibles.push({
+
+                const groupe = {
+
+                    id:
+                        categorieDoc.id,
+
+                    nom:
+                        nomGroupe,
+
+                    categories:
+                        []
+
+                };
+
+
+                liste.forEach(
+                    categorie=>{
+
+                        let nouvelleCategorie = null;
+
+
+                        /* =========================
+                           CATEGORIE TEXTE
+                        ========================= */
+
+                        if(
+                            typeof categorie ===
+                            "string"
+                        ){
+
+                            nouvelleCategorie = {
+
+                                id:
+                                    categorie,
+
+                                nom:
+                                    categorie
+
+                            };
+
+                        }
+
+
+                        /* =========================
+                           CATEGORIE OBJET
+                        ========================= */
+
+                        else if(
+                            categorie &&
+                            typeof categorie ===
+                            "object"
+                        ){
+
+                            const id =
+                                categorie.id ||
+                                categorie.nom ||
+                                categorie.name;
+
+
+                            const nom =
+                                categorie.nom ||
+                                categorie.name ||
+                                categorie.id;
+
+
+                            if(id){
+
+                                nouvelleCategorie = {
 
                                     id:
-                                        categorie,
+                                        id,
 
                                     nom:
-                                        categorie
+                                        nom
 
-                                });
-
-                            }
-
-                            else if(
-                                categorie &&
-                                typeof categorie ===
-                                "object"
-                            ){
-
-                                categoriesDisponibles.push({
-
-                                    id:
-                                        categorie.id ||
-                                        categorie.nom ||
-                                        categorie.name,
-
-                                    nom:
-                                        categorie.nom ||
-                                        categorie.name ||
-                                        categorie.id
-
-                                });
+                                };
 
                             }
 
                         }
+
+
+                        if(
+                            !nouvelleCategorie
+                        ){
+
+                            return;
+
+                        }
+
+
+                        /* =========================
+                           EVITER DOUBLONS
+                        ========================= */
+
+                        const existeDeja =
+                            categoriesDisponibles.some(
+                                item =>
+                                    item.id ===
+                                    nouvelleCategorie.id
+                            );
+
+
+                        if(
+                            !existeDeja
+                        ){
+
+                            categoriesDisponibles.push({
+
+                                ...nouvelleCategorie,
+
+                                groupeId:
+                                    groupe.id,
+
+                                groupeNom:
+                                    groupe.nom
+
+                            });
+
+                        }
+
+
+                        groupe.categories.push(
+                            nouvelleCategorie
+                        );
+
+                    }
+                );
+
+
+                if(
+                    groupe.categories.length > 0
+                ){
+
+                    groupesCategories.push(
+                        groupe
                     );
 
                 }
@@ -546,10 +606,6 @@ async function chargerCategories(){
             }
         );
 
-
-        /*
-           Si aucune catégorie n'a été trouvée
-        */
 
         if(
             categoriesDisponibles.length === 0
@@ -572,53 +628,9 @@ async function chargerCategories(){
         }
 
 
-        /* ==============================================
-           SUPPRIMER LES DOUBLONS
-        ============================================== */
-
-        const categoriesUniques =
-            [];
-
-
-        const dejaPresente =
-            new Set();
-
-
-        categoriesDisponibles.forEach(
-            (categorie)=>{
-
-                if(
-                    !categorie.id ||
-                    dejaPresente.has(
-                        categorie.id
-                    )
-                ){
-
-                    return;
-
-                }
-
-
-                dejaPresente.add(
-                    categorie.id
-                );
-
-
-                categoriesUniques.push(
-                    categorie
-                );
-
-            }
-        );
-
-
-        categoriesDisponibles =
-            categoriesUniques;
-
-
-        /* ==============================================
-           AFFICHER
-        ============================================== */
+        /* =================================================
+           AFFICHAGE
+        ================================================= */
 
         afficherCategories();
 
@@ -657,9 +669,7 @@ async function chargerCategories(){
 
 function afficherCategories(){
 
-    if(
-        !categoriesContainer
-    ){
+    if(!categoriesContainer){
 
         return;
 
@@ -670,165 +680,445 @@ function afficherCategories(){
         "";
 
 
-    categoriesDisponibles.forEach(
-        (categorie)=>{
+    groupesCategories.forEach(
+        groupe=>{
 
-            const bouton =
+            /* =================================================
+               SECTION DU GROUPE
+            ================================================= */
+
+            const section =
                 document.createElement(
-                    "button"
+                    "div"
                 );
 
 
-            bouton.type =
-                "button";
+            section.className =
+                "groupeCategorie";
 
 
-            bouton.className =
-                "categorie";
+            section.style.marginBottom =
+                "30px";
 
 
-            bouton.textContent =
-                categorie.nom ||
-                categorie.id;
+            /* =================================================
+               GRAND TITRE
+            ================================================= */
+
+            const titre =
+                document.createElement(
+                    "h3"
+                );
 
 
-            const valeur =
-                categorie.id ||
-                categorie.nom;
+            titre.textContent =
+                groupe.nom;
 
 
-            /* ==========================================
-               STYLE CATEGORIE
-            ========================================== */
-
-            bouton.style.margin =
-                "5px";
+            titre.style.fontSize =
+                "24px";
 
 
-            bouton.style.padding =
-                "9px 14px";
+            titre.style.margin =
+                "0 0 12px";
 
 
-            bouton.style.borderRadius =
-                "20px";
-
-
-            bouton.style.border =
-                "1px solid #444";
-
-
-            bouton.style.background =
-                "#333";
-
-
-            bouton.style.color =
+            titre.style.color =
                 "white";
 
 
-            bouton.style.cursor =
-                "pointer";
+            section.appendChild(
+                titre
+            );
 
 
-            bouton.style.transition =
-                ".2s";
+            /* =================================================
+               BARRE DE RECHERCHE
+            ================================================= */
 
-
-            /* ==========================================
-               CATEGORIE DEJA SELECTIONNEE
-            ========================================== */
-
-            if(
-                categoriesSelectionnees.includes(
-                    valeur
-                )
-            ){
-
-                bouton.classList.add(
-                    "selectionnee"
+            const recherche =
+                document.createElement(
+                    "input"
                 );
 
 
-                bouton.style.background =
-                    "#3ea6ff";
+            recherche.type =
+                "search";
 
 
-                bouton.style.borderColor =
-                    "#3ea6ff";
+            recherche.placeholder =
+                "🔍 Rechercher une catégorie...";
 
 
-                bouton.style.boxShadow =
-                    "0 0 12px rgba(62,166,255,.25)";
+            recherche.value =
+                recherchesCategories[
+                    groupe.id
+                ] || "";
+
+
+            recherche.style.width =
+                "100%";
+
+
+            recherche.style.padding =
+                "12px 15px";
+
+
+            recherche.style.margin =
+                "0 0 15px";
+
+
+            recherche.style.borderRadius =
+                "12px";
+
+
+            recherche.style.border =
+                "1px solid #444";
+
+
+            recherche.style.background =
+                "#181818";
+
+
+            recherche.style.color =
+                "white";
+
+
+            recherche.style.outline =
+                "none";
+
+
+            recherche.style.fontSize =
+                "14px";
+
+
+            recherche.style.boxSizing =
+                "border-box";
+
+
+            recherche.addEventListener(
+                "focus",
+                ()=>{
+
+                    recherche.style.borderColor =
+                        "#3ea6ff";
+
+                }
+            );
+
+
+            recherche.addEventListener(
+                "blur",
+                ()=>{
+
+                    recherche.style.borderColor =
+                        "#444";
+
+                }
+            );
+
+
+            section.appendChild(
+                recherche
+            );
+
+
+            /* =================================================
+               CONTENEUR CATEGORIES
+            ================================================= */
+
+            const categoriesGroupe =
+                document.createElement(
+                    "div"
+                );
+
+
+            categoriesGroupe.className =
+                "categoriesGroupe";
+
+
+            categoriesGroupe.style.display =
+                "flex";
+
+
+            categoriesGroupe.style.flexWrap =
+                "wrap";
+
+
+            categoriesGroupe.style.gap =
+                "8px";
+
+
+            /* =================================================
+               AFFICHER CATEGORIES
+            ================================================= */
+
+            function afficherCategoriesGroupe(){
+
+                categoriesGroupe.innerHTML =
+                    "";
+
+
+                const rechercheTexte =
+                    recherche.value
+                        .trim()
+                        .toLowerCase();
+
+
+                recherchesCategories[
+                    groupe.id
+                ] =
+                    rechercheTexte;
+
+
+                const categoriesFiltrees =
+                    groupe.categories.filter(
+                        categorie=>{
+
+                            if(
+                                !rechercheTexte
+                            ){
+
+                                return true;
+
+                            }
+
+
+                            return (
+                                String(
+                                    categorie.nom
+                                )
+                                .toLowerCase()
+                                .includes(
+                                    rechercheTexte
+                                )
+                            );
+
+                        }
+                    );
+
+
+                if(
+                    categoriesFiltrees.length ===
+                    0
+                ){
+
+                    const aucun =
+                        document.createElement(
+                            "p"
+                        );
+
+
+                    aucun.textContent =
+                        "Aucune catégorie trouvée.";
+
+
+                    aucun.style.color =
+                        "#777";
+
+
+                    aucun.style.fontSize =
+                        "14px";
+
+
+                    aucun.style.margin =
+                        "5px 0";
+
+
+                    categoriesGroupe.appendChild(
+                        aucun
+                    );
+
+
+                    return;
+
+                }
+
+
+                categoriesFiltrees.forEach(
+                    categorie=>{
+
+                        const bouton =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        bouton.type =
+                            "button";
+
+
+                        bouton.className =
+                            "categorie";
+
+
+                        bouton.textContent =
+                            categorie.nom ||
+                            categorie.id;
+
+
+                        const valeur =
+                            categorie.id ||
+                            categorie.nom;
+
+
+                        /* =========================
+                           STYLE
+                        ========================= */
+
+                        bouton.style.padding =
+                            "9px 14px";
+
+
+                        bouton.style.borderRadius =
+                            "20px";
+
+
+                        bouton.style.border =
+                            "1px solid #444";
+
+
+                        bouton.style.background =
+                            "#333";
+
+
+                        bouton.style.color =
+                            "white";
+
+
+                        bouton.style.cursor =
+                            "pointer";
+
+
+                        bouton.style.fontSize =
+                            "14px";
+
+
+                        bouton.style.transition =
+                            ".2s";
+
+
+                        /* =========================
+                           SELECTION
+                        ========================= */
+
+                        if(
+                            categoriesSelectionnees.includes(
+                                valeur
+                            )
+                        ){
+
+                            bouton.classList.add(
+                                "selectionnee"
+                            );
+
+
+                            bouton.style.background =
+                                "#3ea6ff";
+
+
+                            bouton.style.borderColor =
+                                "#3ea6ff";
+
+
+                            bouton.style.boxShadow =
+                                "0 0 12px rgba(62,166,255,.25)";
+
+                        }
+
+
+                        /* =========================
+                           SURVOL
+                        ========================= */
+
+                        bouton.addEventListener(
+                            "mouseenter",
+                            ()=>{
+
+                                bouton.style.transform =
+                                    "translateY(-2px)";
+
+                            }
+                        );
+
+
+                        bouton.addEventListener(
+                            "mouseleave",
+                            ()=>{
+
+                                bouton.style.transform =
+                                    "translateY(0)";
+
+                            }
+                        );
+
+
+                        /* =========================
+                           CLIC
+                        ========================= */
+
+                        bouton.addEventListener(
+                            "click",
+                            ()=>{
+
+                                if(
+                                    categoriesSelectionnees.includes(
+                                        valeur
+                                    )
+                                ){
+
+                                    categoriesSelectionnees =
+                                        categoriesSelectionnees.filter(
+                                            item =>
+                                                item !==
+                                                valeur
+                                        );
+
+                                }
+
+                                else{
+
+                                    categoriesSelectionnees.push(
+                                        valeur
+                                    );
+
+                                }
+
+
+                                afficherCategories();
+
+                                afficherCategoriesSelectionnees();
+
+                            }
+                        );
+
+
+                        categoriesGroupe.appendChild(
+                            bouton
+                        );
+
+                    }
+                );
 
             }
 
 
-            /* ==========================================
-               SURVOL
-            ========================================== */
-
-            bouton.addEventListener(
-                "mouseenter",
-                ()=>{
-
-                    bouton.style.transform =
-                        "translateY(-2px)";
-
-                }
+            recherche.addEventListener(
+                "input",
+                afficherCategoriesGroupe
             );
 
 
-            bouton.addEventListener(
-                "mouseleave",
-                ()=>{
-
-                    bouton.style.transform =
-                        "translateY(0)";
-
-                }
+            section.appendChild(
+                categoriesGroupe
             );
 
 
-            /* ==========================================
-               CLIC
-            ========================================== */
-
-            bouton.addEventListener(
-                "click",
-                ()=>{
-
-                    if(
-                        categoriesSelectionnees.includes(
-                            valeur
-                        )
-                    ){
-
-                        categoriesSelectionnees =
-                            categoriesSelectionnees.filter(
-                                item =>
-                                    item !== valeur
-                            );
-
-                    }
-
-                    else{
-
-                        categoriesSelectionnees.push(
-                            valeur
-                        );
-
-                    }
-
-
-                    afficherCategories();
-
-                    afficherCategoriesSelectionnees();
-
-                }
-            );
+            afficherCategoriesGroupe();
 
 
             categoriesContainer.appendChild(
-                bouton
+                section
             );
 
         }
@@ -838,7 +1128,7 @@ function afficherCategories(){
 
 
 /* =========================================================
-   AFFICHER LES CATEGORIES SELECTIONNEES
+   AFFICHER CATEGORIES SELECTIONNEES
 ========================================================= */
 
 function afficherCategoriesSelectionnees(){
@@ -877,7 +1167,7 @@ function afficherCategoriesSelectionnees(){
 
 
     categoriesSelectionnees.forEach(
-        (categorie)=>{
+        categorie=>{
 
             const tag =
                 document.createElement(
@@ -941,7 +1231,8 @@ function afficherCategoriesSelectionnees(){
                     categoriesSelectionnees =
                         categoriesSelectionnees.filter(
                             item =>
-                                item !== categorie
+                                item !==
+                                categorie
                         );
 
 
@@ -964,7 +1255,7 @@ function afficherCategoriesSelectionnees(){
 
 
 /* =========================================================
-   RESEAUX SOCIAUX
+   AJOUT RESEAU
 ========================================================= */
 
 if(ajouterReseau){
@@ -982,7 +1273,7 @@ if(ajouterReseau){
 
 
 /* =========================================================
-   AJOUTER UN BLOC RESEAU
+   AJOUTER BLOC RESEAU
 ========================================================= */
 
 function ajouterBlocReseau(
@@ -990,9 +1281,7 @@ function ajouterBlocReseau(
     lienValeur = ""
 ){
 
-    if(
-        !reseaux
-    ){
+    if(!reseaux){
 
         return;
 
@@ -1025,9 +1314,9 @@ function ajouterBlocReseau(
         "10px";
 
 
-    /* ==============================================
+    /* =================================================
        TYPE
-    ============================================== */
+    ================================================= */
 
     const type =
         document.createElement(
@@ -1051,9 +1340,9 @@ function ajouterBlocReseau(
         "0 0 30%";
 
 
-    /* ==============================================
+    /* =================================================
        LIEN
-    ============================================== */
+    ================================================= */
 
     const lien =
         document.createElement(
@@ -1077,9 +1366,9 @@ function ajouterBlocReseau(
         "1";
 
 
-    /* ==============================================
-       BOUTON SUPPRIMER
-    ============================================== */
+    /* =================================================
+       SUPPRIMER
+    ================================================= */
 
     const supprimer =
         document.createElement(
@@ -1148,7 +1437,7 @@ function ajouterBlocReseau(
 
 
 /* =========================================================
-   VERIFICATION DU PSEUDO
+   VERIFICATION PSEUDO
 ========================================================= */
 
 if(pseudo){
@@ -1161,18 +1450,14 @@ if(pseudo){
                 pseudo.value.trim();
 
 
-            if(
-                !pseudoEtat
-            ){
+            if(!pseudoEtat){
 
                 return;
 
             }
 
 
-            if(
-                valeur === ""
-            ){
+            if(valeur === ""){
 
                 pseudoEtat.textContent =
                     "";
@@ -1182,26 +1467,20 @@ if(pseudo){
             }
 
 
-            if(
-                valeur.length < 3
-            ){
+            if(valeur.length < 3){
 
                 pseudoEtat.textContent =
                     "⚠️ Le pseudo doit contenir au moins 3 caractères.";
 
+
                 pseudoEtat.style.color =
                     "#ffb347";
+
 
                 return;
 
             }
 
-
-            /*
-               Si le pseudo correspond déjà
-               à celui du profil actuel,
-               il est évidemment disponible.
-            */
 
             if(
                 profilExiste &&
@@ -1233,8 +1512,10 @@ if(pseudo){
                         pseudoEtat.textContent =
                             "✅ Ton pseudo actuel";
 
+
                         pseudoEtat.style.color =
                             "#4caf50";
+
 
                         return;
 
@@ -1275,12 +1556,11 @@ if(pseudo){
                     );
 
 
-                if(
-                    snapshot.empty
-                ){
+                if(snapshot.empty){
 
                     pseudoEtat.textContent =
                         "✅ Ce pseudo est disponible.";
+
 
                     pseudoEtat.style.color =
                         "#4caf50";
@@ -1292,6 +1572,7 @@ if(pseudo){
                     pseudoEtat.textContent =
                         "❌ Ce pseudo est déjà utilisé.";
 
+
                     pseudoEtat.style.color =
                         "#ff5252";
 
@@ -1302,7 +1583,7 @@ if(pseudo){
             catch(error){
 
                 console.error(
-                    "Erreur lors de la vérification du pseudo :",
+                    "Erreur vérification pseudo :",
                     error
                 );
 
@@ -1319,22 +1600,19 @@ if(pseudo){
 
 
 /* =========================================================
-   RECUPERER LES RESEAUX
+   RECUPERER RESEAUX
 ========================================================= */
 
 function recupererReseaux(){
 
-    if(
-        !reseaux
-    ){
+    if(!reseaux){
 
         return [];
 
     }
 
 
-    const resultat =
-        [];
+    const resultat = [];
 
 
     const blocs =
@@ -1344,7 +1622,7 @@ function recupererReseaux(){
 
 
     blocs.forEach(
-        (bloc)=>{
+        bloc=>{
 
             const inputs =
                 bloc.querySelectorAll(
@@ -1352,9 +1630,7 @@ function recupererReseaux(){
                 );
 
 
-            if(
-                inputs.length < 2
-            ){
+            if(inputs.length < 2){
 
                 return;
 
@@ -1369,10 +1645,7 @@ function recupererReseaux(){
                 inputs[1].value.trim();
 
 
-            if(
-                type ||
-                lien
-            ){
+            if(type || lien){
 
                 resultat.push({
 
@@ -1396,16 +1669,12 @@ function recupererReseaux(){
 
 
 /* =========================================================
-   VERIFIER LE LIEN YOUTUBE
+   VERIFIER YOUTUBE
 ========================================================= */
 
-function verifierYoutube(
-    url
-){
+function verifierYoutube(url){
 
-    if(
-        !url
-    ){
+    if(!url){
 
         return true;
 
@@ -1413,19 +1682,15 @@ function verifierYoutube(
 
 
     return (
-        url.includes(
-            "youtube.com"
-        ) ||
-        url.includes(
-            "youtu.be"
-        )
+        url.includes("youtube.com") ||
+        url.includes("youtu.be")
     );
 
 }
 
 
 /* =========================================================
-   ENREGISTRER LE PROFIL
+   ENREGISTRER PROFIL
 ========================================================= */
 
 if(saveProfile){
@@ -1434,13 +1699,11 @@ if(saveProfile){
         "click",
         async()=>{
 
-            /* ==========================================
-               UTILISATEUR
-            ========================================== */
+            /* =========================
+               CONNEXION
+            ========================= */
 
-            if(
-                !utilisateurActuel
-            ){
+            if(!utilisateurActuel){
 
                 alert(
                     "Tu dois être connecté."
@@ -1451,9 +1714,9 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
+            /* =========================
                PSEUDO
-            ========================================== */
+            ========================= */
 
             const pseudoValeur =
                 pseudo
@@ -1461,9 +1724,7 @@ if(saveProfile){
                     : "";
 
 
-            if(
-                pseudoValeur === ""
-            ){
+            if(pseudoValeur === ""){
 
                 alert(
                     "Veuillez choisir un pseudo."
@@ -1482,9 +1743,7 @@ if(saveProfile){
             }
 
 
-            if(
-                pseudoValeur.length < 3
-            ){
+            if(pseudoValeur.length < 3){
 
                 alert(
                     "Le pseudo doit contenir au moins 3 caractères."
@@ -1503,9 +1762,9 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
-               DESCRIPTION
-            ========================================== */
+            /* =========================
+               DESCRIPTIONS
+            ========================= */
 
             const courte =
                 descriptionCourte
@@ -1519,9 +1778,9 @@ if(saveProfile){
                     : "";
 
 
-            /* ==========================================
+            /* =========================
                VIDEO
-            ========================================== */
+            ========================= */
 
             const video =
                 videoYoutube
@@ -1539,20 +1798,22 @@ if(saveProfile){
                     "Veuillez entrer un lien YouTube valide."
                 );
 
+
                 if(videoYoutube){
 
                     videoYoutube.focus();
 
                 }
 
+
                 return;
 
             }
 
 
-            /* ==========================================
-               VERIFIER LE PSEUDO DANS FIRESTORE
-            ========================================== */
+            /* =========================
+               VERIFIER PSEUDO
+            ========================= */
 
             try{
 
@@ -1581,12 +1842,7 @@ if(saveProfile){
 
 
                 snapshot.forEach(
-                    (profilDoc)=>{
-
-                        /*
-                           On ignore notre propre profil
-                           lorsqu'on le modifie.
-                        */
+                    profilDoc=>{
 
                         if(
                             profilDoc.id !==
@@ -1602,9 +1858,7 @@ if(saveProfile){
                 );
 
 
-                if(
-                    pseudoDejaUtilise
-                ){
+                if(pseudoDejaUtilise){
 
                     alert(
                         "Ce pseudo est déjà utilisé."
@@ -1615,6 +1869,7 @@ if(saveProfile){
 
                         pseudoEtat.textContent =
                             "❌ Ce pseudo est déjà utilisé.";
+
 
                         pseudoEtat.style.color =
                             "#ff5252";
@@ -1653,17 +1908,17 @@ if(saveProfile){
             }
 
 
-            /* ==========================================
+            /* =========================
                RESEAUX
-            ========================================== */
+            ========================= */
 
             const listeReseaux =
                 recupererReseaux();
 
 
-            /* ==========================================
-               DONNEES DU PROFIL
-            ========================================== */
+            /* =========================
+               DONNEES
+            ========================= */
 
             const donneesProfil = {
 
@@ -1674,12 +1929,10 @@ if(saveProfile){
                     pseudoValeur,
 
                 email:
-                    utilisateurActuel.email ||
-                    "",
+                    utilisateurActuel.email || "",
 
                 photo:
-                    utilisateurActuel.photoURL ||
-                    "",
+                    utilisateurActuel.photoURL || "",
 
                 descriptionCourte:
                     courte,
@@ -1702,9 +1955,9 @@ if(saveProfile){
             };
 
 
-            /* ==========================================
+            /* =========================
                SAUVEGARDE
-            ========================================== */
+            ========================= */
 
             try{
 
@@ -1723,13 +1976,6 @@ if(saveProfile){
                         utilisateurActuel.uid
                     );
 
-
-                /*
-                   merge:true permet de conserver
-                   les données déjà présentes dans
-                   le document, notamment les sous-
-                   collections likes/favoris.
-                */
 
                 await setDoc(
                     profilRef,
@@ -1795,7 +2041,7 @@ if(saveProfile){
 
 
 /* =========================================================
-   INITIALISATION
+   FIN
 ========================================================= */
 
 console.log(
