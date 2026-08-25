@@ -24,8 +24,6 @@ let utilisateurActuel = null;
 
 let categoriesDisponibles = [];
 
-let groupesCategories = [];
-
 let categoriesSelectionnees = [];
 
 let profilExiste = false;
@@ -63,7 +61,9 @@ const categoriesContainer =
     document.getElementById("categoriesContainer");
 
 const categoriesSelectionneesContainer =
-    document.getElementById("categoriesSelectionnees");
+    document.getElementById(
+        "categoriesSelectionnees"
+    );
 
 const saveProfile =
     document.getElementById("saveProfile");
@@ -73,14 +73,22 @@ const deconnexion =
 
 
 /* =========================================================
-   VARIABLES RECHERCHE CATEGORIES
+   BARRES DE RECHERCHE
 ========================================================= */
 
-const recherchesCategories = {};
+const rechercheCategories =
+    document.getElementById(
+        "rechercheCategories"
+    );
+
+const rechercheReseaux =
+    document.getElementById(
+        "rechercheReseaux"
+    );
 
 
 /* =========================================================
-   CHARGEMENT
+   INITIALISATION
 ========================================================= */
 
 console.log(
@@ -89,19 +97,24 @@ console.log(
 
 
 /* =========================================================
-   AFFICHER PHOTO UTILISATEUR
+   AFFICHER LA PHOTO
 ========================================================= */
 
 function afficherPhotoUtilisateur(user){
 
-    if(!photo || !user){
+    if(
+        !photo ||
+        !user
+    ){
 
         return;
 
     }
 
 
-    if(user.photoURL){
+    if(
+        user.photoURL
+    ){
 
         photo.src =
             user.photoURL.replace(
@@ -164,7 +177,7 @@ if(deconnexion){
 
 
 /* =========================================================
-   ETAT AUTHENTIFICATION
+   ETAT DE CONNEXION
 ========================================================= */
 
 onAuthStateChanged(
@@ -175,11 +188,12 @@ onAuthStateChanged(
             user;
 
 
-        /* =========================
-           NON CONNECTE
-        ========================= */
-
         if(!user){
+
+            console.log(
+                "Aucun utilisateur connecté."
+            );
+
 
             alert(
                 "Tu dois être connecté pour créer ton profil."
@@ -194,10 +208,6 @@ onAuthStateChanged(
 
         }
 
-
-        /* =========================
-           CONNECTE
-        ========================= */
 
         console.log(
             "Utilisateur connecté :",
@@ -219,7 +229,7 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   CHARGER PROFIL EXISTANT
+   CHARGER LE PROFIL EXISTANT
 ========================================================= */
 
 async function chargerProfilExistant(){
@@ -264,7 +274,8 @@ async function chargerProfilExistant(){
             if(pseudo){
 
                 pseudo.value =
-                    data.pseudo || "";
+                    data.pseudo ||
+                    "";
 
             }
 
@@ -276,7 +287,8 @@ async function chargerProfilExistant(){
             if(descriptionCourte){
 
                 descriptionCourte.value =
-                    data.descriptionCourte || "";
+                    data.descriptionCourte ||
+                    "";
 
             }
 
@@ -288,7 +300,8 @@ async function chargerProfilExistant(){
             if(descriptionLongue){
 
                 descriptionLongue.value =
-                    data.descriptionLongue || "";
+                    data.descriptionLongue ||
+                    "";
 
             }
 
@@ -300,7 +313,8 @@ async function chargerProfilExistant(){
             if(videoYoutube){
 
                 videoYoutube.value =
-                    data.videoYoutube || "";
+                    data.videoYoutube ||
+                    "";
 
             }
 
@@ -332,11 +346,13 @@ async function chargerProfilExistant(){
             ){
 
                 data.reseaux.forEach(
-                    reseau=>{
+                    (reseau)=>{
 
                         ajouterBlocReseau(
-                            reseau.type || "",
-                            reseau.lien || ""
+                            reseau.type ||
+                            "",
+                            reseau.lien ||
+                            ""
                         );
 
                     }
@@ -403,11 +419,7 @@ async function chargerCategories(){
 
         categoriesContainer.innerHTML = `
 
-            <p style="
-                color:#888;
-                text-align:center;
-                padding:15px;
-            ">
+            <p class="message-recherche">
                 Chargement des catégories...
             </p>
 
@@ -423,182 +435,91 @@ async function chargerCategories(){
             );
 
 
-        categoriesDisponibles = [];
+        categoriesDisponibles =
+            [];
 
-        groupesCategories = [];
-
-
-        /* =================================================
-           PARCOURIR LES GROUPES
-        ================================================= */
 
         snapshot.forEach(
-            categorieDoc=>{
+            (categorieDoc)=>{
 
                 const data =
                     categorieDoc.data();
 
 
                 /*
-                    Le nom du document Firestore
-                    devient le grand titre.
-
-                    Exemple :
+                    Structure :
 
                     categories/
-                      Gaming
-                        liste: [...]
-
-                      Création
-                        liste: [...]
+                        document
+                            liste: [
+                                "Gaming",
+                                "Minecraft",
+                                ...
+                            ]
                 */
 
 
-                const nomGroupe =
-                    categorieDoc.id;
+                if(
+                    Array.isArray(
+                        data.liste
+                    )
+                ){
 
+                    data.liste.forEach(
+                        (categorie)=>{
 
-                const liste =
-                    Array.isArray(data.liste)
-                    ? data.liste
-                    : [];
+                            if(
+                                typeof categorie ===
+                                "string"
+                            ){
 
-
-                const groupe = {
-
-                    id:
-                        categorieDoc.id,
-
-                    nom:
-                        nomGroupe,
-
-                    categories:
-                        []
-
-                };
-
-
-                liste.forEach(
-                    categorie=>{
-
-                        let nouvelleCategorie = null;
-
-
-                        /* =========================
-                           CATEGORIE TEXTE
-                        ========================= */
-
-                        if(
-                            typeof categorie ===
-                            "string"
-                        ){
-
-                            nouvelleCategorie = {
-
-                                id:
-                                    categorie,
-
-                                nom:
-                                    categorie
-
-                            };
-
-                        }
-
-
-                        /* =========================
-                           CATEGORIE OBJET
-                        ========================= */
-
-                        else if(
-                            categorie &&
-                            typeof categorie ===
-                            "object"
-                        ){
-
-                            const id =
-                                categorie.id ||
-                                categorie.nom ||
-                                categorie.name;
-
-
-                            const nom =
-                                categorie.nom ||
-                                categorie.name ||
-                                categorie.id;
-
-
-                            if(id){
-
-                                nouvelleCategorie = {
+                                categoriesDisponibles.push({
 
                                     id:
-                                        id,
+                                        categorie,
 
                                     nom:
-                                        nom
+                                        categorie
 
-                                };
+                                });
+
+                            }
+
+                            else if(
+                                categorie &&
+                                typeof categorie ===
+                                "object"
+                            ){
+
+                                const id =
+                                    categorie.id ||
+                                    categorie.nom ||
+                                    categorie.name;
+
+
+                                const nom =
+                                    categorie.nom ||
+                                    categorie.name ||
+                                    categorie.id;
+
+
+                                if(id){
+
+                                    categoriesDisponibles.push({
+
+                                        id:
+                                            id,
+
+                                        nom:
+                                            nom
+
+                                    });
+
+                                }
 
                             }
 
                         }
-
-
-                        if(
-                            !nouvelleCategorie
-                        ){
-
-                            return;
-
-                        }
-
-
-                        /* =========================
-                           EVITER DOUBLONS
-                        ========================= */
-
-                        const existeDeja =
-                            categoriesDisponibles.some(
-                                item =>
-                                    item.id ===
-                                    nouvelleCategorie.id
-                            );
-
-
-                        if(
-                            !existeDeja
-                        ){
-
-                            categoriesDisponibles.push({
-
-                                ...nouvelleCategorie,
-
-                                groupeId:
-                                    groupe.id,
-
-                                groupeNom:
-                                    groupe.nom
-
-                            });
-
-                        }
-
-
-                        groupe.categories.push(
-                            nouvelleCategorie
-                        );
-
-                    }
-                );
-
-
-                if(
-                    groupe.categories.length > 0
-                ){
-
-                    groupesCategories.push(
-                        groupe
                     );
 
                 }
@@ -607,30 +528,47 @@ async function chargerCategories(){
         );
 
 
-        if(
-            categoriesDisponibles.length === 0
-        ){
+        /* =====================================================
+           SUPPRIMER DOUBLONS
+        ===================================================== */
 
-            categoriesContainer.innerHTML = `
+        const uniques = [];
 
-                <p style="
-                    color:#888;
-                    text-align:center;
-                    padding:15px;
-                ">
-                    Aucune catégorie disponible.
-                </p>
-
-            `;
-
-            return;
-
-        }
+        const dejaPresente =
+            new Set();
 
 
-        /* =================================================
-           AFFICHAGE
-        ================================================= */
+        categoriesDisponibles.forEach(
+            (categorie)=>{
+
+                if(
+                    !categorie.id ||
+                    dejaPresente.has(
+                        categorie.id
+                    )
+                ){
+
+                    return;
+
+                }
+
+
+                dejaPresente.add(
+                    categorie.id
+                );
+
+
+                uniques.push(
+                    categorie
+                );
+
+            }
+        );
+
+
+        categoriesDisponibles =
+            uniques;
+
 
         afficherCategories();
 
@@ -648,12 +586,8 @@ async function chargerCategories(){
 
         categoriesContainer.innerHTML = `
 
-            <p style="
-                color:#ff6b6b;
-                text-align:center;
-                padding:15px;
-            ">
-                Impossible de charger les catégories.
+            <p class="message-recherche">
+                ❌ Impossible de charger les catégories.
             </p>
 
         `;
@@ -667,7 +601,9 @@ async function chargerCategories(){
    AFFICHER LES CATEGORIES
 ========================================================= */
 
-function afficherCategories(){
+function afficherCategories(
+    recherche = ""
+){
 
     if(!categoriesContainer){
 
@@ -680,445 +616,131 @@ function afficherCategories(){
         "";
 
 
-    groupesCategories.forEach(
-        groupe=>{
+    const rechercheNormalisee =
+        recherche
+            .trim()
+            .toLowerCase();
 
-            /* =================================================
-               SECTION DU GROUPE
-            ================================================= */
 
-            const section =
+    const categoriesFiltrees =
+        categoriesDisponibles.filter(
+            (categorie)=>{
+
+                const nom =
+                    String(
+                        categorie.nom ||
+                        categorie.id ||
+                        ""
+                    ).toLowerCase();
+
+
+                return nom.includes(
+                    rechercheNormalisee
+                );
+
+            }
+        );
+
+
+    if(
+        categoriesFiltrees.length === 0
+    ){
+
+        categoriesContainer.innerHTML = `
+
+            <div class="message-recherche">
+                🔎 Aucune catégorie trouvée.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    categoriesFiltrees.forEach(
+        (categorie)=>{
+
+            const bouton =
                 document.createElement(
-                    "div"
+                    "button"
                 );
 
 
-            section.className =
-                "groupeCategorie";
+            bouton.type =
+                "button";
 
 
-            section.style.marginBottom =
-                "30px";
+            bouton.className =
+                "categorie";
 
 
-            /* =================================================
-               GRAND TITRE
-            ================================================= */
+            bouton.textContent =
+                categorie.nom ||
+                categorie.id;
 
-            const titre =
-                document.createElement(
-                    "h3"
-                );
 
+            const valeur =
+                categorie.id ||
+                categorie.nom;
 
-            titre.textContent =
-                groupe.nom;
 
+            if(
+                categoriesSelectionnees.includes(
+                    valeur
+                )
+            ){
 
-            titre.style.fontSize =
-                "24px";
-
-
-            titre.style.margin =
-                "0 0 12px";
-
-
-            titre.style.color =
-                "white";
-
-
-            section.appendChild(
-                titre
-            );
-
-
-            /* =================================================
-               BARRE DE RECHERCHE
-            ================================================= */
-
-            const recherche =
-                document.createElement(
-                    "input"
-                );
-
-
-            recherche.type =
-                "search";
-
-
-            recherche.placeholder =
-                "🔍 Rechercher une catégorie...";
-
-
-            recherche.value =
-                recherchesCategories[
-                    groupe.id
-                ] || "";
-
-
-            recherche.style.width =
-                "100%";
-
-
-            recherche.style.padding =
-                "12px 15px";
-
-
-            recherche.style.margin =
-                "0 0 15px";
-
-
-            recherche.style.borderRadius =
-                "12px";
-
-
-            recherche.style.border =
-                "1px solid #444";
-
-
-            recherche.style.background =
-                "#181818";
-
-
-            recherche.style.color =
-                "white";
-
-
-            recherche.style.outline =
-                "none";
-
-
-            recherche.style.fontSize =
-                "14px";
-
-
-            recherche.style.boxSizing =
-                "border-box";
-
-
-            recherche.addEventListener(
-                "focus",
-                ()=>{
-
-                    recherche.style.borderColor =
-                        "#3ea6ff";
-
-                }
-            );
-
-
-            recherche.addEventListener(
-                "blur",
-                ()=>{
-
-                    recherche.style.borderColor =
-                        "#444";
-
-                }
-            );
-
-
-            section.appendChild(
-                recherche
-            );
-
-
-            /* =================================================
-               CONTENEUR CATEGORIES
-            ================================================= */
-
-            const categoriesGroupe =
-                document.createElement(
-                    "div"
-                );
-
-
-            categoriesGroupe.className =
-                "categoriesGroupe";
-
-
-            categoriesGroupe.style.display =
-                "flex";
-
-
-            categoriesGroupe.style.flexWrap =
-                "wrap";
-
-
-            categoriesGroupe.style.gap =
-                "8px";
-
-
-            /* =================================================
-               AFFICHER CATEGORIES
-            ================================================= */
-
-            function afficherCategoriesGroupe(){
-
-                categoriesGroupe.innerHTML =
-                    "";
-
-
-                const rechercheTexte =
-                    recherche.value
-                        .trim()
-                        .toLowerCase();
-
-
-                recherchesCategories[
-                    groupe.id
-                ] =
-                    rechercheTexte;
-
-
-                const categoriesFiltrees =
-                    groupe.categories.filter(
-                        categorie=>{
-
-                            if(
-                                !rechercheTexte
-                            ){
-
-                                return true;
-
-                            }
-
-
-                            return (
-                                String(
-                                    categorie.nom
-                                )
-                                .toLowerCase()
-                                .includes(
-                                    rechercheTexte
-                                )
-                            );
-
-                        }
-                    );
-
-
-                if(
-                    categoriesFiltrees.length ===
-                    0
-                ){
-
-                    const aucun =
-                        document.createElement(
-                            "p"
-                        );
-
-
-                    aucun.textContent =
-                        "Aucune catégorie trouvée.";
-
-
-                    aucun.style.color =
-                        "#777";
-
-
-                    aucun.style.fontSize =
-                        "14px";
-
-
-                    aucun.style.margin =
-                        "5px 0";
-
-
-                    categoriesGroupe.appendChild(
-                        aucun
-                    );
-
-
-                    return;
-
-                }
-
-
-                categoriesFiltrees.forEach(
-                    categorie=>{
-
-                        const bouton =
-                            document.createElement(
-                                "button"
-                            );
-
-
-                        bouton.type =
-                            "button";
-
-
-                        bouton.className =
-                            "categorie";
-
-
-                        bouton.textContent =
-                            categorie.nom ||
-                            categorie.id;
-
-
-                        const valeur =
-                            categorie.id ||
-                            categorie.nom;
-
-
-                        /* =========================
-                           STYLE
-                        ========================= */
-
-                        bouton.style.padding =
-                            "9px 14px";
-
-
-                        bouton.style.borderRadius =
-                            "20px";
-
-
-                        bouton.style.border =
-                            "1px solid #444";
-
-
-                        bouton.style.background =
-                            "#333";
-
-
-                        bouton.style.color =
-                            "white";
-
-
-                        bouton.style.cursor =
-                            "pointer";
-
-
-                        bouton.style.fontSize =
-                            "14px";
-
-
-                        bouton.style.transition =
-                            ".2s";
-
-
-                        /* =========================
-                           SELECTION
-                        ========================= */
-
-                        if(
-                            categoriesSelectionnees.includes(
-                                valeur
-                            )
-                        ){
-
-                            bouton.classList.add(
-                                "selectionnee"
-                            );
-
-
-                            bouton.style.background =
-                                "#3ea6ff";
-
-
-                            bouton.style.borderColor =
-                                "#3ea6ff";
-
-
-                            bouton.style.boxShadow =
-                                "0 0 12px rgba(62,166,255,.25)";
-
-                        }
-
-
-                        /* =========================
-                           SURVOL
-                        ========================= */
-
-                        bouton.addEventListener(
-                            "mouseenter",
-                            ()=>{
-
-                                bouton.style.transform =
-                                    "translateY(-2px)";
-
-                            }
-                        );
-
-
-                        bouton.addEventListener(
-                            "mouseleave",
-                            ()=>{
-
-                                bouton.style.transform =
-                                    "translateY(0)";
-
-                            }
-                        );
-
-
-                        /* =========================
-                           CLIC
-                        ========================= */
-
-                        bouton.addEventListener(
-                            "click",
-                            ()=>{
-
-                                if(
-                                    categoriesSelectionnees.includes(
-                                        valeur
-                                    )
-                                ){
-
-                                    categoriesSelectionnees =
-                                        categoriesSelectionnees.filter(
-                                            item =>
-                                                item !==
-                                                valeur
-                                        );
-
-                                }
-
-                                else{
-
-                                    categoriesSelectionnees.push(
-                                        valeur
-                                    );
-
-                                }
-
-
-                                afficherCategories();
-
-                                afficherCategoriesSelectionnees();
-
-                            }
-                        );
-
-
-                        categoriesGroupe.appendChild(
-                            bouton
-                        );
-
-                    }
+                bouton.classList.add(
+                    "selectionnee"
                 );
 
             }
 
 
-            recherche.addEventListener(
-                "input",
-                afficherCategoriesGroupe
+            bouton.addEventListener(
+                "click",
+                ()=>{
+
+                    if(
+                        categoriesSelectionnees.includes(
+                            valeur
+                        )
+                    ){
+
+                        categoriesSelectionnees =
+                            categoriesSelectionnees.filter(
+                                item =>
+                                    item !== valeur
+                            );
+
+                    }
+
+                    else{
+
+                        categoriesSelectionnees.push(
+                            valeur
+                        );
+
+                    }
+
+
+                    afficherCategories(
+                        rechercheCategories
+                            ? rechercheCategories.value
+                            : ""
+                    );
+
+
+                    afficherCategoriesSelectionnees();
+
+                }
             );
-
-
-            section.appendChild(
-                categoriesGroupe
-            );
-
-
-            afficherCategoriesGroupe();
 
 
             categoriesContainer.appendChild(
-                section
+                bouton
             );
 
         }
@@ -1128,7 +750,7 @@ function afficherCategories(){
 
 
 /* =========================================================
-   AFFICHER CATEGORIES SELECTIONNEES
+   CATEGORIES SELECTIONNEES
 ========================================================= */
 
 function afficherCategoriesSelectionnees(){
@@ -1167,7 +789,7 @@ function afficherCategoriesSelectionnees(){
 
 
     categoriesSelectionnees.forEach(
-        categorie=>{
+        (categorie)=>{
 
             const tag =
                 document.createElement(
@@ -1175,49 +797,13 @@ function afficherCategoriesSelectionnees(){
                 );
 
 
+            tag.className =
+                "categorie-selectionnee";
+
+
             tag.textContent =
                 "🏷️ " +
                 categorie;
-
-
-            tag.style.display =
-                "inline-flex";
-
-
-            tag.style.alignItems =
-                "center";
-
-
-            tag.style.gap =
-                "6px";
-
-
-            tag.style.padding =
-                "8px 12px";
-
-
-            tag.style.borderRadius =
-                "20px";
-
-
-            tag.style.background =
-                "#3ea6ff";
-
-
-            tag.style.color =
-                "white";
-
-
-            tag.style.fontSize =
-                "14px";
-
-
-            tag.style.fontWeight =
-                "bold";
-
-
-            tag.style.cursor =
-                "pointer";
 
 
             tag.title =
@@ -1231,12 +817,16 @@ function afficherCategoriesSelectionnees(){
                     categoriesSelectionnees =
                         categoriesSelectionnees.filter(
                             item =>
-                                item !==
-                                categorie
+                                item !== categorie
                         );
 
 
-                    afficherCategories();
+                    afficherCategories(
+                        rechercheCategories
+                            ? rechercheCategories.value
+                            : ""
+                    );
+
 
                     afficherCategoriesSelectionnees();
 
@@ -1255,7 +845,27 @@ function afficherCategoriesSelectionnees(){
 
 
 /* =========================================================
-   AJOUT RESEAU
+   RECHERCHE CATEGORIES
+========================================================= */
+
+if(rechercheCategories){
+
+    rechercheCategories.addEventListener(
+        "input",
+        ()=>{
+
+            afficherCategories(
+                rechercheCategories.value
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RESEAUX SOCIAUX
 ========================================================= */
 
 if(ajouterReseau){
@@ -1273,7 +883,7 @@ if(ajouterReseau){
 
 
 /* =========================================================
-   AJOUTER BLOC RESEAU
+   AJOUTER UN RESEAU
 ========================================================= */
 
 function ajouterBlocReseau(
@@ -1298,25 +908,9 @@ function ajouterBlocReseau(
         "blocReseau";
 
 
-    bloc.style.display =
-        "flex";
-
-
-    bloc.style.gap =
-        "10px";
-
-
-    bloc.style.alignItems =
-        "center";
-
-
-    bloc.style.marginBottom =
-        "10px";
-
-
-    /* =================================================
+    /* =====================================================
        TYPE
-    ================================================= */
+    ===================================================== */
 
     const type =
         document.createElement(
@@ -1336,13 +930,13 @@ function ajouterBlocReseau(
         typeValeur;
 
 
-    type.style.flex =
-        "0 0 30%";
+    type.className =
+        "reseau-type";
 
 
-    /* =================================================
+    /* =====================================================
        LIEN
-    ================================================= */
+    ===================================================== */
 
     const lien =
         document.createElement(
@@ -1362,13 +956,13 @@ function ajouterBlocReseau(
         lienValeur;
 
 
-    lien.style.flex =
-        "1";
+    lien.className =
+        "reseau-lien";
 
 
-    /* =================================================
+    /* =====================================================
        SUPPRIMER
-    ================================================= */
+    ===================================================== */
 
     const supprimer =
         document.createElement(
@@ -1386,22 +980,6 @@ function ajouterBlocReseau(
 
     supprimer.title =
         "Supprimer ce réseau";
-
-
-    supprimer.style.padding =
-        "10px 14px";
-
-
-    supprimer.style.background =
-        "#333";
-
-
-    supprimer.style.border =
-        "1px solid #555";
-
-
-    supprimer.style.color =
-        "white";
 
 
     supprimer.addEventListener(
@@ -1437,161 +1015,58 @@ function ajouterBlocReseau(
 
 
 /* =========================================================
-   VERIFICATION PSEUDO
+   RECHERCHE RESEAUX
 ========================================================= */
 
-if(pseudo){
+if(rechercheReseaux){
 
-    pseudo.addEventListener(
+    rechercheReseaux.addEventListener(
         "input",
-        async()=>{
+        ()=>{
 
-            const valeur =
-                pseudo.value.trim();
-
-
-            if(!pseudoEtat){
-
-                return;
-
-            }
+            const recherche =
+                rechercheReseaux.value
+                    .trim()
+                    .toLowerCase();
 
 
-            if(valeur === ""){
-
-                pseudoEtat.textContent =
-                    "";
-
-                return;
-
-            }
+            const blocs =
+                reseaux
+                    ? reseaux.querySelectorAll(
+                        ".blocReseau"
+                    )
+                    : [];
 
 
-            if(valeur.length < 3){
+            blocs.forEach(
+                (bloc)=>{
 
-                pseudoEtat.textContent =
-                    "⚠️ Le pseudo doit contenir au moins 3 caractères.";
-
-
-                pseudoEtat.style.color =
-                    "#ffb347";
-
-
-                return;
-
-            }
-
-
-            if(
-                profilExiste &&
-                utilisateurActuel
-            ){
-
-                try{
-
-                    const profilRef =
-                        doc(
-                            db,
-                            "users",
-                            utilisateurActuel.uid
-                        );
-
-
-                    const profilSnap =
-                        await getDoc(
-                            profilRef
-                        );
+                    const texte =
+                        bloc.textContent
+                            .toLowerCase();
 
 
                     if(
-                        profilSnap.exists() &&
-                        profilSnap.data().pseudo ===
-                            valeur
+                        recherche === "" ||
+                        texte.includes(
+                            recherche
+                        )
                     ){
 
-                        pseudoEtat.textContent =
-                            "✅ Ton pseudo actuel";
+                        bloc.style.display =
+                            "flex";
 
+                    }
 
-                        pseudoEtat.style.color =
-                            "#4caf50";
+                    else{
 
-
-                        return;
+                        bloc.style.display =
+                            "none";
 
                     }
 
                 }
-
-                catch(error){
-
-                    console.error(
-                        error
-                    );
-
-                }
-
-            }
-
-
-            try{
-
-                const q =
-                    query(
-                        collection(
-                            db,
-                            "users"
-                        ),
-                        where(
-                            "pseudo",
-                            "==",
-                            valeur
-                        )
-                    );
-
-
-                const snapshot =
-                    await getDocs(
-                        q
-                    );
-
-
-                if(snapshot.empty){
-
-                    pseudoEtat.textContent =
-                        "✅ Ce pseudo est disponible.";
-
-
-                    pseudoEtat.style.color =
-                        "#4caf50";
-
-                }
-
-                else{
-
-                    pseudoEtat.textContent =
-                        "❌ Ce pseudo est déjà utilisé.";
-
-
-                    pseudoEtat.style.color =
-                        "#ff5252";
-
-                }
-
-            }
-
-            catch(error){
-
-                console.error(
-                    "Erreur vérification pseudo :",
-                    error
-                );
-
-
-                pseudoEtat.textContent =
-                    "";
-
-            }
+            );
 
         }
     );
@@ -1600,7 +1075,260 @@ if(pseudo){
 
 
 /* =========================================================
-   RECUPERER RESEAUX
+   BARRES DE RECHERCHE GENERALES
+========================================================= */
+
+const recherchesGenerales =
+    document.querySelectorAll(
+        ".recherche-section[data-search-section]"
+    );
+
+
+recherchesGenerales.forEach(
+    (barre)=>{
+
+        barre.addEventListener(
+            "input",
+            ()=>{
+
+                const valeur =
+                    barre.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const section =
+                    barre.closest(
+                        ".section"
+                    );
+
+
+                if(!section){
+
+                    return;
+
+                }
+
+
+                /*
+                   On ne cache jamais la barre
+                   de recherche elle-même.
+                */
+
+                const elements =
+                    section.querySelectorAll(
+                        "label, input:not(.recherche-section), textarea, img, p"
+                    );
+
+
+                elements.forEach(
+                    (element)=>{
+
+                        /*
+                           Pour les sections de formulaire,
+                           la recherche sert surtout à
+                           rechercher du texte déjà présent.
+                           On évite donc de cacher les
+                           champs principaux.
+                        */
+
+                        if(
+                            element.id === "pseudoEtat"
+                        ){
+
+                            return;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   VERIFICATION DU PSEUDO
+========================================================= */
+
+if(pseudo){
+
+    let verificationPseudoTimer =
+        null;
+
+
+    pseudo.addEventListener(
+        "input",
+        ()=>{
+
+            clearTimeout(
+                verificationPseudoTimer
+            );
+
+
+            verificationPseudoTimer =
+                setTimeout(
+                    verifierDisponibilitePseudo,
+                    400
+                );
+
+        }
+    );
+
+}
+
+
+async function verifierDisponibilitePseudo(){
+
+    if(!pseudo || !pseudoEtat){
+
+        return;
+
+    }
+
+
+    const valeur =
+        pseudo.value.trim();
+
+
+    if(valeur === ""){
+
+        pseudoEtat.textContent =
+            "";
+
+        return;
+
+    }
+
+
+    if(valeur.length < 3){
+
+        pseudoEtat.textContent =
+            "⚠️ Le pseudo doit contenir au moins 3 caractères.";
+
+        pseudoEtat.style.color =
+            "#ffb347";
+
+        return;
+
+    }
+
+
+    if(
+        profilExiste &&
+        utilisateurActuel
+    ){
+
+        try{
+
+            const profilRef =
+                doc(
+                    db,
+                    "users",
+                    utilisateurActuel.uid
+                );
+
+
+            const profilSnap =
+                await getDoc(
+                    profilRef
+                );
+
+
+            if(
+                profilSnap.exists() &&
+                profilSnap.data().pseudo ===
+                    valeur
+            ){
+
+                pseudoEtat.textContent =
+                    "✅ Ton pseudo actuel";
+
+                pseudoEtat.style.color =
+                    "#4caf50";
+
+                return;
+
+            }
+
+        }
+
+        catch(error){
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    try{
+
+        const q =
+            query(
+                collection(
+                    db,
+                    "users"
+                ),
+                where(
+                    "pseudo",
+                    "==",
+                    valeur
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(
+                q
+            );
+
+
+        if(snapshot.empty){
+
+            pseudoEtat.textContent =
+                "✅ Ce pseudo est disponible.";
+
+            pseudoEtat.style.color =
+                "#4caf50";
+
+        }
+
+        else{
+
+            pseudoEtat.textContent =
+                "❌ Ce pseudo est déjà utilisé.";
+
+            pseudoEtat.style.color =
+                "#ff5252";
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Erreur lors de la vérification du pseudo :",
+            error
+        );
+
+
+        pseudoEtat.textContent =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
+   RECUPERER LES RESEAUX
 ========================================================= */
 
 function recupererReseaux(){
@@ -1612,7 +1340,8 @@ function recupererReseaux(){
     }
 
 
-    const resultat = [];
+    const resultat =
+        [];
 
 
     const blocs =
@@ -1622,7 +1351,7 @@ function recupererReseaux(){
 
 
     blocs.forEach(
-        bloc=>{
+        (bloc)=>{
 
             const inputs =
                 bloc.querySelectorAll(
@@ -1645,7 +1374,10 @@ function recupererReseaux(){
                 inputs[1].value.trim();
 
 
-            if(type || lien){
+            if(
+                type ||
+                lien
+            ){
 
                 resultat.push({
 
@@ -1690,7 +1422,7 @@ function verifierYoutube(url){
 
 
 /* =========================================================
-   ENREGISTRER PROFIL
+   ENREGISTRER LE PROFIL
 ========================================================= */
 
 if(saveProfile){
@@ -1698,10 +1430,6 @@ if(saveProfile){
     saveProfile.addEventListener(
         "click",
         async()=>{
-
-            /* =========================
-               CONNEXION
-            ========================= */
 
             if(!utilisateurActuel){
 
@@ -1713,10 +1441,6 @@ if(saveProfile){
 
             }
 
-
-            /* =========================
-               PSEUDO
-            ========================= */
 
             const pseudoValeur =
                 pseudo
@@ -1762,10 +1486,6 @@ if(saveProfile){
             }
 
 
-            /* =========================
-               DESCRIPTIONS
-            ========================= */
-
             const courte =
                 descriptionCourte
                     ? descriptionCourte.value.trim()
@@ -1777,10 +1497,6 @@ if(saveProfile){
                     ? descriptionLongue.value.trim()
                     : "";
 
-
-            /* =========================
-               VIDEO
-            ========================= */
 
             const video =
                 videoYoutube
@@ -1811,9 +1527,9 @@ if(saveProfile){
             }
 
 
-            /* =========================
-               VERIFIER PSEUDO
-            ========================= */
+            /* =================================================
+               VERIFIER LE PSEUDO
+            ================================================= */
 
             try{
 
@@ -1842,7 +1558,7 @@ if(saveProfile){
 
 
                 snapshot.forEach(
-                    profilDoc=>{
+                    (profilDoc)=>{
 
                         if(
                             profilDoc.id !==
@@ -1869,7 +1585,6 @@ if(saveProfile){
 
                         pseudoEtat.textContent =
                             "❌ Ce pseudo est déjà utilisé.";
-
 
                         pseudoEtat.style.color =
                             "#ff5252";
@@ -1908,17 +1623,17 @@ if(saveProfile){
             }
 
 
-            /* =========================
+            /* =================================================
                RESEAUX
-            ========================= */
+            ================================================= */
 
             const listeReseaux =
                 recupererReseaux();
 
 
-            /* =========================
+            /* =================================================
                DONNEES
-            ========================= */
+            ================================================= */
 
             const donneesProfil = {
 
@@ -1929,10 +1644,12 @@ if(saveProfile){
                     pseudoValeur,
 
                 email:
-                    utilisateurActuel.email || "",
+                    utilisateurActuel.email ||
+                    "",
 
                 photo:
-                    utilisateurActuel.photoURL || "",
+                    utilisateurActuel.photoURL ||
+                    "",
 
                 descriptionCourte:
                     courte,
@@ -1955,9 +1672,9 @@ if(saveProfile){
             };
 
 
-            /* =========================
+            /* =================================================
                SAUVEGARDE
-            ========================= */
+            ================================================= */
 
             try{
 
@@ -1976,6 +1693,11 @@ if(saveProfile){
                         utilisateurActuel.uid
                     );
 
+
+                /*
+                   merge:true conserve les autres
+                   données du document.
+                */
 
                 await setDoc(
                     profilRef,
