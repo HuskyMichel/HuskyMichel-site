@@ -132,9 +132,7 @@ const params =
 const pseudoRecherche =
     params.get("pseudo");
 	
-	if (pseudoRecherche) {
-    document.title = pseudoRecherche;
-}
+	
 
 
 /* =========================================================
@@ -556,7 +554,11 @@ if(
                     (profilDoc)=>{
 
                         const data =
-                            profilDoc.data();
+    profilActuel;
+
+// Modifier le titre de l'onglet
+document.title =
+    (data.pseudo || "Profil") + " - HuskyMichel";
 
 
                         const nomProfil =
