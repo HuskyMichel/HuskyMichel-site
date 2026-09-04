@@ -131,6 +131,10 @@ const params =
 
 const pseudoRecherche =
     params.get("pseudo");
+	
+	if (pseudoRecherche) {
+    document.title = pseudoRecherche;
+}
 
 
 /* =========================================================
